@@ -25,32 +25,79 @@
 #include "ext/standard/info.h"
 #include "php_sapnwrfc.h"
 
-/* Every user-visible function in PHP should document itself in the source */
-/* {{{ proto string confirm_sapnwrfc_compiled(string arg)
-   Return a string to confirm that the module is compiled in */
-PHP_FUNCTION(confirm_sapnwrfc_compiled)
+#include "sapnwrfc.h"
+
+zend_class_entry *sapnwrfc_connection_ce;
+zend_object_handlers sapnwrfc_connection_ce_handlers;
+
+// connection object
+typedef struct _sapnwrfc_connection_object {
+    RFC_CONNECTION_HANDLE *rfc_handle;
+    zend_object zobj;
+} sapnwrfc_connection_object;
+
+static zend_object *sapnwrfc_connection_object_create(zend_class_entry *ce)
 {
-	char *arg = NULL;
-	size_t arg_len, len;
-	zend_string *strg;
+    sapnwrfc_connection_object *obj;
+    obj= ecalloc(1, sizeof(obj) + zend_object_properties_size(ce));
+    obj->rfc_handle = ecalloc(1, sizeof(RFC_CONNECTION_HANDLE));
 
-	if (zend_parse_parameters(ZEND_NUM_ARGS(), "s", &arg, &arg_len) == FAILURE) {
-		return;
-	}
+    zend_object_std_init(&obj->zobj, ce);
+    object_properties_init(&obj->zobj, ce);
 
-	strg = strpprintf(0, "Congratulations! You have successfully modified ext/%.78s/config.m4. Module %.78s is now compiled into PHP.", "sapnwrfc", arg);
+    obj->zobj.handlers = &sapnwrfc_connection_ce_handlers;
 
-	RETURN_STR(strg);
+    return &obj->zobj;
 }
-/* }}} */
+
+static void sapnwrfc_connection_object_destroy(zend_object *object)
+{
+    sapnwrfc_connection_object *obj;
+
+    obj = (sapnwrfc_connection_object *)((char *)object - XtOffsetOf(sapnwrfc_connection_object, zobj));
+
+    /* we could do something with obj->rfc_handle here (closing it?), but
+       not free it here */
+
+    /* call __destruct() from userland */
+    zend_objects_destroy_object(object);
+}
+
+static void sapnwrfc_connection_object_free(zend_object *object)
+{
+    sapnwrfc_connection_object *obj;
+
+    obj = (sapnwrfc_connection_object *)((char *)object - XtOffsetOf(sapnwrfc_connection_object, zobj));
+
+    /* free the RFC handle */
+    efree(obj->rfc_handle);
+
+    /* call Zend's free handler, which will free the object properties */
+    zend_object_std_dtor(object);
+}
+
 
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(sapnwrfc)
 {
-	/* If you have INI entries, uncomment these lines
-	REGISTER_INI_ENTRIES();
-	*/
+    zend_class_entry ce;
+
+    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Connection", NULL);
+    sapnwrfc_connection_ce = zend_register_internal_class(&ce);
+
+    /* create handler */
+    sapnwrfc_connection_ce->create_object = sapnwrfc_connection_object_create;
+
+    memcpy(&sapnwrfc_connection_ce_handlers, zend_get_std_object_handlers(), sizeof(sapnwrfc_connection_ce_handlers));
+
+    /* free handler */
+    sapnwrfc_connection_ce_handlers.free_obj = sapnwrfc_connection_object_free;
+    /* dtor handler */
+    sapnwrfc_connection_ce_handlers.dtor_obj = sapnwrfc_connection_object_destroy;
+    /* declare the offset of the internal object */
+    sapnwrfc_connection_ce_handlers.offset = XtOffsetOf(sapnwrfc_connection_object, zobj);
+
 	return SUCCESS;
 }
 /* }}} */
@@ -59,9 +106,7 @@ PHP_MINIT_FUNCTION(sapnwrfc)
  */
 PHP_MSHUTDOWN_FUNCTION(sapnwrfc)
 {
-	/* uncomment this line if you have INI entries
-	UNREGISTER_INI_ENTRIES();
-	*/
+
 	return SUCCESS;
 }
 /* }}} */
@@ -102,7 +147,6 @@ PHP_MINFO_FUNCTION(sapnwrfc)
  * Every user visible function must have an entry in sapnwrfc_functions[].
  */
 const zend_function_entry sapnwrfc_functions[] = {
-	PHP_FE(confirm_sapnwrfc_compiled,	NULL)		/* For testing, remove later. */
 	PHP_FE_END	/* Must be the last line in sapnwrfc_functions[] */
 };
 /* }}} */
