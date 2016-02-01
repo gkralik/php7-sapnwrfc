@@ -1,4 +1,5 @@
 .deps
+.libs/
 Makefile
 Makefile.fragments
 Makefile.global
@@ -15,9 +16,15 @@ config.status
 config.sub
 configure
 configure.in
+dev_rfc.trc
 install-sh
 libtool
 ltmain.sh
 missing
 mkinstalldirs
+modules/
 run-tests.php
+*.c.i
+*.ii
+*.la
+*.lo
