@@ -24,10 +24,13 @@
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_sapnwrfc.h"
+#include "ext/spl/spl_exceptions.h"
 
 #include "sapnwrfc.h"
 
 zend_class_entry *sapnwrfc_connection_ce;
+zend_class_entry *sapnwrfc_connection_exception_ce;
+
 zend_object_handlers sapnwrfc_connection_ce_handlers;
 
 // connection object
@@ -35,6 +38,11 @@ typedef struct _sapnwrfc_connection_object {
     RFC_CONNECTION_HANDLE *rfc_handle;
     zend_object zobj;
 } sapnwrfc_connection_object;
+
+// connection exception object
+typedef struct _sapnwrfc_connection_exception_object {
+    zend_object zobj;
+} sapnwrfc_connection_exception_object;
 
 static zend_object *sapnwrfc_connection_object_create(zend_class_entry *ce)
 {
@@ -77,9 +85,7 @@ static void sapnwrfc_connection_object_free(zend_object *object)
 }
 
 
-/* {{{ PHP_MINIT_FUNCTION
- */
-PHP_MINIT_FUNCTION(sapnwrfc)
+static void register_sapnwrfc_connection_object()
 {
     zend_class_entry ce;
 
@@ -97,6 +103,23 @@ PHP_MINIT_FUNCTION(sapnwrfc)
     sapnwrfc_connection_ce_handlers.dtor_obj = sapnwrfc_connection_object_destroy;
     /* declare the offset of the internal object */
     sapnwrfc_connection_ce_handlers.offset = XtOffsetOf(sapnwrfc_connection_object, zobj);
+}
+
+static void register_sapnwrfc_connection_exception_object()
+{
+    zend_class_entry ce;
+
+    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\ConnectionException", NULL);
+    sapnwrfc_connection_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
+    sapnwrfc_connection_exception_ce->ce_flags |= ZEND_ACC_FINAL;
+}
+
+/* {{{ PHP_MINIT_FUNCTION
+ */
+PHP_MINIT_FUNCTION(sapnwrfc)
+{
+    register_sapnwrfc_connection_object();
+    register_sapnwrfc_connection_exception_object();
 
 	return SUCCESS;
 }
