@@ -30,6 +30,7 @@
 
 zend_class_entry *sapnwrfc_connection_ce;
 zend_class_entry *sapnwrfc_connection_exception_ce;
+zend_class_entry *sapnwrfc_functioncall_exception_ce;
 
 zend_object_handlers sapnwrfc_connection_ce_handlers;
 
@@ -43,6 +44,11 @@ typedef struct _sapnwrfc_connection_object {
 typedef struct _sapnwrfc_connection_exception_object {
     zend_object zobj;
 } sapnwrfc_connection_exception_object;
+
+// function call exception object
+typedef struct _sapnwrfc_functioncall_exception_object {
+    zend_object zobj;
+} sapnwrfc_functioncall_exception_object;
 
 static zend_object *sapnwrfc_connection_object_create(zend_class_entry *ce)
 {
@@ -114,12 +120,22 @@ static void register_sapnwrfc_connection_exception_object()
     sapnwrfc_connection_exception_ce->ce_flags |= ZEND_ACC_FINAL;
 }
 
+static void register_sapnwrfc_functioncall_exception_object()
+{
+    zend_class_entry ce;
+
+    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\FunctionCallException", NULL);
+    sapnwrfc_functioncall_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
+    sapnwrfc_functioncall_exception_ce->ce_flags |= ZEND_ACC_FINAL;
+}
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(sapnwrfc)
 {
     register_sapnwrfc_connection_object();
     register_sapnwrfc_connection_exception_object();
+    register_sapnwrfc_functioncall_exception_object();
 
 	return SUCCESS;
 }
