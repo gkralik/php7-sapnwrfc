@@ -28,6 +28,7 @@
 
 #include "sapnwrfc.h"
 
+// class entries
 zend_class_entry *sapnwrfc_connection_ce;
 zend_class_entry *sapnwrfc_connection_exception_ce;
 zend_class_entry *sapnwrfc_functioncall_exception_ce;
@@ -50,6 +51,18 @@ typedef struct _sapnwrfc_functioncall_exception_object {
     zend_object zobj;
 } sapnwrfc_functioncall_exception_object;
 
+// forward declaration of class methods
+PHP_METHOD(Connection, version);
+PHP_METHOD(Connection, rfcVersion);
+
+// class method tables
+static zend_function_entry sapnwrfc_connection_class_functions[] = {
+    PHP_ME(Connection, version, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    PHP_ME(Connection, rfcVersion, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    PHP_FE_END
+};
+
+// connection object handlers
 static zend_object *sapnwrfc_connection_object_create(zend_class_entry *ce)
 {
     sapnwrfc_connection_object *obj;
@@ -90,12 +103,36 @@ static void sapnwrfc_connection_object_free(zend_object *object)
     zend_object_std_dtor(object);
 }
 
+// Connection class methods
+PHP_METHOD(Connection, version)
+{
+    char *version;
+    int len;
+
+    len = spprintf(&version, 0, "%s", PHP_SAPNWRFC_VERSION);
+
+    RETURN_STRINGL(version, len);
+}
+
+PHP_METHOD(Connection, rfcVersion)
+{
+    char *version;
+    int len;
+    unsigned int major, minor, patch;
+
+    RfcGetVersion(&major, &minor, &patch);
+
+    len = spprintf(&version, 0, "%d.%d.%d", major, minor, patch);
+
+    RETURN_STRINGL(version, len);
+}
+
 
 static void register_sapnwrfc_connection_object()
 {
     zend_class_entry ce;
 
-    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Connection", NULL);
+    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Connection", sapnwrfc_connection_class_functions);
     sapnwrfc_connection_ce = zend_register_internal_class(&ce);
 
     /* create handler */
