@@ -24,7 +24,10 @@
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_sapnwrfc.h"
+#include "Zend/zend_exceptions.h"
 #include "ext/spl/spl_exceptions.h"
+
+#include "string_helper.h"
 
 #include "sapnwrfc.h"
 
@@ -33,11 +36,14 @@ zend_class_entry *sapnwrfc_connection_ce;
 zend_class_entry *sapnwrfc_connection_exception_ce;
 zend_class_entry *sapnwrfc_functioncall_exception_ce;
 
-zend_object_handlers sapnwrfc_connection_ce_handlers;
+zend_object_handlers sapnwrfc_connection_object_handlers;
 
 // connection object
 typedef struct _sapnwrfc_connection_object {
-    RFC_CONNECTION_HANDLE *rfc_handle;
+    RFC_CONNECTION_HANDLE rfc_handle;
+    RFC_CONNECTION_PARAMETER *rfc_login_params;
+    int rfc_login_params_len;
+    zval *connection_params;
     zend_object zobj;
 } sapnwrfc_connection_object;
 
@@ -52,11 +58,15 @@ typedef struct _sapnwrfc_functioncall_exception_object {
 } sapnwrfc_functioncall_exception_object;
 
 // forward declaration of class methods
+PHP_METHOD(Connection, __construct);
+PHP_METHOD(Connection, close);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
+    PHP_ME(Connection, __construct, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(Connection, close, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, version, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, rfcVersion, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_FE_END
@@ -65,42 +75,164 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
 // connection object handlers
 static zend_object *sapnwrfc_connection_object_create(zend_class_entry *ce)
 {
-    sapnwrfc_connection_object *obj;
-    obj= ecalloc(1, sizeof(obj) + zend_object_properties_size(ce));
-    obj->rfc_handle = ecalloc(1, sizeof(RFC_CONNECTION_HANDLE));
+    sapnwrfc_connection_object *intern;
 
-    zend_object_std_init(&obj->zobj, ce);
-    object_properties_init(&obj->zobj, ce);
+    intern = ecalloc(1, sizeof(sapnwrfc_connection_object) + zend_object_properties_size(ce));
+    zend_object_std_init(&intern->zobj, ce);
+    object_properties_init(&intern->zobj, ce);
+    intern->zobj.handlers = &sapnwrfc_connection_object_handlers;
 
-    obj->zobj.handlers = &sapnwrfc_connection_ce_handlers;
-
-    return &obj->zobj;
-}
-
-static void sapnwrfc_connection_object_destroy(zend_object *object)
-{
-    sapnwrfc_connection_object *obj;
-
-    obj = (sapnwrfc_connection_object *)((char *)object - XtOffsetOf(sapnwrfc_connection_object, zobj));
-
-    /* we could do something with obj->rfc_handle here (closing it?), but
-       not free it here */
-
-    /* call __destruct() from userland */
-    zend_objects_destroy_object(object);
+    return &intern->zobj;
 }
 
 static void sapnwrfc_connection_object_free(zend_object *object)
 {
-    sapnwrfc_connection_object *obj;
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+    sapnwrfc_connection_object *intern;
 
-    obj = (sapnwrfc_connection_object *)((char *)object - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    intern = (sapnwrfc_connection_object *)((char *)object - XtOffsetOf(sapnwrfc_connection_object, zobj));
 
     /* free the RFC handle */
-    efree(obj->rfc_handle);
+    if(intern->rfc_handle) {
+        rc = RfcCloseConnection(intern->rfc_handle, &error_info);
+        intern->rfc_handle = NULL;
+
+        // FIXME remove
+        if (rc != RFC_OK) {
+            php_printf("ERROR failed to close connection in free handler\n");
+        }
+
+        php_printf("free handler: closed connection\n");
+    }
+
+    intern->rfc_handle = NULL;
+
+    // free login parameters
+    if(intern->rfc_login_params) {
+        for(int i = 0; i < intern->rfc_login_params_len; i++) {
+            free((char *)intern->rfc_login_params[i].name);
+            free((char *)intern->rfc_login_params[i].value);
+        }
+        efree(intern->rfc_login_params);
+    }
+
+    // NOTE: we dont need to free intern->connection_params. they come from
+    // zend_parse_parameters() and are freed by the engine.
 
     /* call Zend's free handler, which will free the object properties */
-    zend_object_std_dtor(object);
+    zend_object_std_dtor(&intern->zobj);
+}
+
+static void sapnwrfc_throw_connection_exception(char *msg, int code)
+{
+    zval connection_exception;
+    zend_string *exception_message;
+
+    exception_message = zend_string_init(msg, strlen(msg), 0);
+
+    TSRMLS_FETCH();
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+
+    object_init_ex(&connection_exception, sapnwrfc_connection_exception_ce);
+    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "message", sizeof("message") - 1, ZSTR_VAL(exception_message) TSRMLS_CC);
+    zend_update_property_long(sapnwrfc_connection_exception_ce, &connection_exception, "code", sizeof("code") - 1, code TSRMLS_CC);
+
+    zend_throw_exception_object(&connection_exception TSRMLS_CC);
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
+static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *connection_params)
+{
+    RFC_ERROR_INFO error_info;
+    HashTable *connection_params_hash;
+    int i = 0;
+    zend_string *key;
+    zval *val;
+
+    connection_params_hash = Z_ARRVAL_P(connection_params);
+    intern->rfc_login_params_len = zend_hash_num_elements(connection_params_hash);
+
+    intern->rfc_login_params = ecalloc(intern->rfc_login_params_len, sizeof(RFC_CONNECTION_PARAMETER));
+
+    ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params_hash, key, val) {
+        if (key) { // is string
+            intern->rfc_login_params[i].name = zend_string_to_sapuc(key);
+            intern->rfc_login_params[i].value = char_to_sapuc(Z_STRVAL_P(val));
+
+            i++;
+        }
+    } ZEND_HASH_FOREACH_END();
+
+    intern->rfc_handle = RfcOpenConnection(intern->rfc_login_params, intern->rfc_login_params_len, &error_info);
+
+    if (intern->rfc_handle) {
+        php_printf("SUCCESS connected\n");
+        intern->connection_params = connection_params;
+    } else {
+        php_printf("FAILED to connect\n");
+        // FIXME throw exception
+    }
+}
+
+PHP_METHOD(Connection, __construct)
+{
+    zend_object *zobj = Z_OBJ_P(getThis());
+    sapnwrfc_connection_object *intern;
+    zval *connection_params;
+    long len;
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+
+    // get the connection parameters
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &connection_params) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    len = zend_hash_num_elements(Z_ARRVAL_P(connection_params));
+    if (len == 0) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        sapnwrfc_throw_connection_exception("No connection parameters given", 0);
+        return;
+    }
+
+    // get the connection object (we need access to the rfc_handle)
+    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+
+    // open connection
+    sapnwrfc_open_connection(intern, connection_params);
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
+PHP_METHOD(Connection, close)
+{
+    zend_object *zobj = Z_OBJ_P(getThis());
+    sapnwrfc_connection_object *intern;
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+
+    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+
+    if(intern->rfc_handle == NULL) {
+        // no connection open, return false.
+        RETURN_FALSE;
+    }
+
+    rc = RfcCloseConnection(intern->rfc_handle, &error_info);
+    if (rc == RFC_OK) {
+        intern->rfc_handle = NULL;
+        RETURN_TRUE;
+    }
+
+    // we got an error, throw an exception with details
+    // FIXME error_info has a key and a message describing the error -> extend ConnectionException and populate it with the info
+    sapnwrfc_throw_connection_exception("Could not close connection", error_info.code);
+
+    // FIXME replace error handling during the whole op??
 }
 
 // Connection class methods
@@ -132,20 +264,14 @@ static void register_sapnwrfc_connection_object()
 {
     zend_class_entry ce;
 
+    memcpy(&sapnwrfc_connection_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    sapnwrfc_connection_object_handlers.offset = XtOffsetOf(sapnwrfc_connection_object, zobj);
+    sapnwrfc_connection_object_handlers.free_obj = sapnwrfc_connection_object_free;
+    sapnwrfc_connection_object_handlers.clone_obj = NULL;
+
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Connection", sapnwrfc_connection_class_functions);
+    ce.create_object = sapnwrfc_connection_object_create;
     sapnwrfc_connection_ce = zend_register_internal_class(&ce);
-
-    /* create handler */
-    sapnwrfc_connection_ce->create_object = sapnwrfc_connection_object_create;
-
-    memcpy(&sapnwrfc_connection_ce_handlers, zend_get_std_object_handlers(), sizeof(sapnwrfc_connection_ce_handlers));
-
-    /* free handler */
-    sapnwrfc_connection_ce_handlers.free_obj = sapnwrfc_connection_object_free;
-    /* dtor handler */
-    sapnwrfc_connection_ce_handlers.dtor_obj = sapnwrfc_connection_object_destroy;
-    /* declare the offset of the internal object */
-    sapnwrfc_connection_ce_handlers.offset = XtOffsetOf(sapnwrfc_connection_object, zobj);
 }
 
 static void register_sapnwrfc_connection_exception_object()
@@ -154,7 +280,7 @@ static void register_sapnwrfc_connection_exception_object()
 
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\ConnectionException", NULL);
     sapnwrfc_connection_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
-    sapnwrfc_connection_exception_ce->ce_flags |= ZEND_ACC_FINAL;
+    //sapnwrfc_connection_exception_ce->ce_flags |= ZEND_ACC_FINAL;
 }
 
 static void register_sapnwrfc_functioncall_exception_object()

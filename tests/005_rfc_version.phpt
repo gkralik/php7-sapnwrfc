@@ -1,7 +1,7 @@
 --TEST--
 Check for SAPNWRFC\Connection::rfcVersion()
 --SKIPIF--
-<?php if (!extension_loaded("sapnwrfc")) print "skip"; ?>
+<?php include("skipif.inc"); ?>
 --FILE--
 <?php
 echo \SAPNWRFC\Connection::rfcVersion();

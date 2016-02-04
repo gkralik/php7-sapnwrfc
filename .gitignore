@@ -28,3 +28,4 @@ run-tests.php
 *.ii
 *.la
 *.lo
+*.trc

@@ -1,9 +1,9 @@
 --TEST--
 Check for sapnwrfc presence
 --SKIPIF--
-<?php if (!extension_loaded("sapnwrfc")) print "skip"; ?>
+<?php include("skipif.inc"); ?>
 --FILE--
-<?php 
+<?php
 echo "sapnwrfc extension is available";
 /*
 	you can add regression tests for your extension here
