@@ -324,7 +324,7 @@ PHP_MINIT_FUNCTION(sapnwrfc)
     register_sapnwrfc_connection_exception_object();
     register_sapnwrfc_functioncall_exception_object();
 
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -333,7 +333,7 @@ PHP_MINIT_FUNCTION(sapnwrfc)
 PHP_MSHUTDOWN_FUNCTION(sapnwrfc)
 {
 
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -343,9 +343,9 @@ PHP_MSHUTDOWN_FUNCTION(sapnwrfc)
 PHP_RINIT_FUNCTION(sapnwrfc)
 {
 #if defined(COMPILE_DL_SAPNWRFC) && defined(ZTS)
-	ZEND_TSRMLS_CACHE_UPDATE();
+    ZEND_TSRMLS_CACHE_UPDATE();
 #endif
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -354,7 +354,7 @@ PHP_RINIT_FUNCTION(sapnwrfc)
  */
 PHP_RSHUTDOWN_FUNCTION(sapnwrfc)
 {
-	return SUCCESS;
+    return SUCCESS;
 }
 /* }}} */
 
@@ -362,9 +362,9 @@ PHP_RSHUTDOWN_FUNCTION(sapnwrfc)
  */
 PHP_MINFO_FUNCTION(sapnwrfc)
 {
-	php_info_print_table_start();
-	php_info_print_table_header(2, "sapnwrfc support", "enabled");
-	php_info_print_table_end();
+    php_info_print_table_start();
+    php_info_print_table_header(2, "sapnwrfc support", "enabled");
+    php_info_print_table_end();
 }
 /* }}} */
 
@@ -373,23 +373,23 @@ PHP_MINFO_FUNCTION(sapnwrfc)
  * Every user visible function must have an entry in sapnwrfc_functions[].
  */
 const zend_function_entry sapnwrfc_functions[] = {
-	PHP_FE_END	/* Must be the last line in sapnwrfc_functions[] */
+    PHP_FE_END    /* Must be the last line in sapnwrfc_functions[] */
 };
 /* }}} */
 
 /* {{{ sapnwrfc_module_entry
  */
 zend_module_entry sapnwrfc_module_entry = {
-	STANDARD_MODULE_HEADER,
-	"sapnwrfc",
-	sapnwrfc_functions,
-	PHP_MINIT(sapnwrfc),
-	PHP_MSHUTDOWN(sapnwrfc),
-	NULL,
-	NULL,
-	PHP_MINFO(sapnwrfc),
-	PHP_SAPNWRFC_VERSION,
-	STANDARD_MODULE_PROPERTIES
+    STANDARD_MODULE_HEADER,
+    "sapnwrfc",
+    sapnwrfc_functions,
+    PHP_MINIT(sapnwrfc),
+    PHP_MSHUTDOWN(sapnwrfc),
+    NULL,
+    NULL,
+    PHP_MINFO(sapnwrfc),
+    PHP_SAPNWRFC_VERSION,
+    STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
 
