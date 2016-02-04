@@ -164,11 +164,8 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
 
     intern->rfc_handle = RfcOpenConnection(intern->rfc_login_params, intern->rfc_login_params_len, &error_info);
 
-    if (intern->rfc_handle) {
-        php_printf("SUCCESS connected\n");
-    } else {
-        php_printf("FAILED to connect\n");
-        // FIXME throw exception
+    if (!intern->rfc_handle) {
+        sapnwrfc_throw_connection_exception("Could not open connection", error_info.code);
     }
 }
 
@@ -226,7 +223,7 @@ PHP_METHOD(Connection, close)
     // we got an error, throw an exception with details
     // FIXME error_info has a key and a message describing the error -> extend ConnectionException and populate it with the info
     sapnwrfc_throw_connection_exception("Could not close connection", error_info.code);
-
+    RETURN_NULL();
     // FIXME replace error handling during the whole op??
 }
 
