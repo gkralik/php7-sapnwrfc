@@ -43,7 +43,6 @@ typedef struct _sapnwrfc_connection_object {
     RFC_CONNECTION_HANDLE rfc_handle;
     RFC_CONNECTION_PARAMETER *rfc_login_params;
     int rfc_login_params_len;
-    zval *connection_params;
     zend_object zobj;
 } sapnwrfc_connection_object;
 
@@ -117,9 +116,6 @@ static void sapnwrfc_connection_object_free(zend_object *object)
         efree(intern->rfc_login_params);
     }
 
-    // NOTE: we dont need to free intern->connection_params. they come from
-    // zend_parse_parameters() and are freed by the engine.
-
     /* call Zend's free handler, which will free the object properties */
     zend_object_std_dtor(&intern->zobj);
 }
@@ -170,7 +166,6 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
 
     if (intern->rfc_handle) {
         php_printf("SUCCESS connected\n");
-        intern->connection_params = connection_params;
     } else {
         php_printf("FAILED to connect\n");
         // FIXME throw exception
