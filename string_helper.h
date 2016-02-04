@@ -24,6 +24,6 @@
 SAP_UC *char_to_sapuc(char *str);
 SAP_UC *zend_string_to_sapuc(zend_string *str);
 
-// zend_string *sapuc_to_zend_string(SAP_UC *str);
+zend_string *sapuc_to_zend_string(SAP_UC *str);
 
 #endif /* STRING_HELPER_H_ */

@@ -140,6 +140,28 @@ static void sapnwrfc_throw_connection_exception(char *msg, int code)
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }
 
+static void sapnwrfc_throw_connection_exception_ex(char *msg, int code, zend_string *rfcKey, zend_string *rfcMessage)
+{
+    zval connection_exception;
+    zend_string *exception_message;
+
+    exception_message = zend_string_init(msg, strlen(msg), 0);
+
+    TSRMLS_FETCH();
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+
+    object_init_ex(&connection_exception, sapnwrfc_connection_exception_ce);
+    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "message", sizeof("message") - 1, ZSTR_VAL(exception_message) TSRMLS_CC);
+    zend_update_property_long(sapnwrfc_connection_exception_ce, &connection_exception, "code", sizeof("code") - 1, code TSRMLS_CC);
+    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "rfcKey", sizeof("rfcKey") - 1, ZSTR_VAL(rfcKey) TSRMLS_CC);
+    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "rfcMessage", sizeof("rfcMessage") - 1, ZSTR_VAL(rfcMessage) TSRMLS_CC);
+
+    zend_throw_exception_object(&connection_exception TSRMLS_CC);
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
 static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *connection_params)
 {
     RFC_ERROR_INFO error_info;
@@ -165,7 +187,10 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
     intern->rfc_handle = RfcOpenConnection(intern->rfc_login_params, intern->rfc_login_params_len, &error_info);
 
     if (!intern->rfc_handle) {
-        sapnwrfc_throw_connection_exception("Could not open connection", error_info.code);
+        sapnwrfc_throw_connection_exception_ex("Could not open connection",
+                                            error_info.code,
+                                            sapuc_to_zend_string(error_info.key),
+                                            sapuc_to_zend_string(error_info.message));
     }
 }
 
@@ -187,6 +212,7 @@ PHP_METHOD(Connection, __construct)
     len = zend_hash_num_elements(Z_ARRVAL_P(connection_params));
     if (len == 0) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+
         sapnwrfc_throw_connection_exception("No connection parameters given", 0);
         return;
     }
@@ -221,8 +247,10 @@ PHP_METHOD(Connection, close)
     }
 
     // we got an error, throw an exception with details
-    // FIXME error_info has a key and a message describing the error -> extend ConnectionException and populate it with the info
-    sapnwrfc_throw_connection_exception("Could not close connection", error_info.code);
+    sapnwrfc_throw_connection_exception_ex("Could not close connection",
+                                        error_info.code,
+                                        sapuc_to_zend_string(error_info.key),
+                                        sapuc_to_zend_string(error_info.message));
     RETURN_NULL();
     // FIXME replace error handling during the whole op??
 }
@@ -272,7 +300,9 @@ static void register_sapnwrfc_connection_exception_object()
 
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\ConnectionException", NULL);
     sapnwrfc_connection_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
-    //sapnwrfc_connection_exception_ce->ce_flags |= ZEND_ACC_FINAL;
+    sapnwrfc_connection_exception_ce->ce_flags |= ZEND_ACC_FINAL;
+    zend_declare_property_string(sapnwrfc_connection_exception_ce, "rfcKey", sizeof("rfcKey") - 1, "", ZEND_ACC_PUBLIC);
+    zend_declare_property_string(sapnwrfc_connection_exception_ce, "rfcMessage", sizeof("rfcMessage") - 1, "", ZEND_ACC_PUBLIC);
 }
 
 static void register_sapnwrfc_functioncall_exception_object()
@@ -282,6 +312,8 @@ static void register_sapnwrfc_functioncall_exception_object()
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\FunctionCallException", NULL);
     sapnwrfc_functioncall_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
     sapnwrfc_functioncall_exception_ce->ce_flags |= ZEND_ACC_FINAL;
+    zend_declare_property_string(sapnwrfc_functioncall_exception_ce, "rfcKey", sizeof("rfcKey") - 1, "", ZEND_ACC_PUBLIC);
+    zend_declare_property_string(sapnwrfc_functioncall_exception_ce, "rfcMessage", sizeof("rfcMessage") - 1, "", ZEND_ACC_PUBLIC);
 }
 
 /* {{{ PHP_MINIT_FUNCTION
