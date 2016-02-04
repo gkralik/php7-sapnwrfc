@@ -58,6 +58,7 @@ typedef struct _sapnwrfc_functioncall_exception_object {
 
 // forward declaration of class methods
 PHP_METHOD(Connection, __construct);
+PHP_METHOD(Connection, attributes);
 PHP_METHOD(Connection, close);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
@@ -65,6 +66,7 @@ PHP_METHOD(Connection, rfcVersion);
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, __construct, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(Connection, attributes, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, close, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, version, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, rfcVersion, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
@@ -227,10 +229,56 @@ PHP_METHOD(Connection, close)
 
     // we got an error, throw an exception with details
     sapnwrfc_throw_connection_exception_ex("Could not close connection",
-                                        error_info.code,
-                                        sapuc_to_zend_string(error_info.key),
-                                        sapuc_to_zend_string(error_info.message));
+                                           error_info.code,
+                                           sapuc_to_zend_string(error_info.key),
+                                           sapuc_to_zend_string(error_info.message));
     RETURN_NULL();
+}
+
+PHP_METHOD(Connection, attributes)
+{
+    zend_object *zobj = Z_OBJ_P(getThis());
+    sapnwrfc_connection_object *intern;
+    RFC_ATTRIBUTES attributes;
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+
+    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_connection_exception_ex("Could not fetch connection attributes", error_info.code,
+                                               sapuc_to_zend_string(error_info.key),
+                                               sapuc_to_zend_string(error_info.message));
+        RETURN_NULL();
+    }
+
+    array_init(return_value);
+    add_assoc_str(return_value, "dest", sapuc_to_zend_string(attributes.dest));
+    add_assoc_str(return_value, "host", sapuc_to_zend_string(attributes.host));
+    add_assoc_str(return_value, "partnerHost", sapuc_to_zend_string(attributes.partnerHost));
+    add_assoc_str(return_value, "sysNumber", sapuc_to_zend_string(attributes.sysNumber));
+    add_assoc_str(return_value, "sysId", sapuc_to_zend_string(attributes.sysId));
+    add_assoc_str(return_value, "client", sapuc_to_zend_string(attributes.client));
+    add_assoc_str(return_value, "user", sapuc_to_zend_string(attributes.user));
+    add_assoc_str(return_value, "language", sapuc_to_zend_string(attributes.language));
+    add_assoc_str(return_value, "trace", sapuc_to_zend_string(attributes.trace));
+    add_assoc_str(return_value, "isoLanguage", sapuc_to_zend_string(attributes.isoLanguage));
+    add_assoc_str(return_value, "codepage", sapuc_to_zend_string(attributes.codepage));
+    add_assoc_str(return_value, "partnerCodepage", sapuc_to_zend_string(attributes.partnerCodepage));
+    add_assoc_str(return_value, "rfcRole", sapuc_to_zend_string(attributes.rfcRole));
+    add_assoc_str(return_value, "type", sapuc_to_zend_string(attributes.type));
+    add_assoc_str(return_value, "partnerType", sapuc_to_zend_string(attributes.partnerType));
+    add_assoc_str(return_value, "rel", sapuc_to_zend_string(attributes.rel));
+    add_assoc_str(return_value, "partnerRel", sapuc_to_zend_string(attributes.partnerRel));
+    add_assoc_str(return_value, "kernelRel", sapuc_to_zend_string(attributes.kernelRel));
+    add_assoc_str(return_value, "cpicConvId", sapuc_to_zend_string(attributes.cpicConvId));
+    add_assoc_str(return_value, "progName", sapuc_to_zend_string(attributes.progName));
+    add_assoc_str(return_value, "partnerBytesPerChar", sapuc_to_zend_string(attributes.partnerBytesPerChar));
+    add_assoc_str(return_value, "partnerSystemCodepage", sapuc_to_zend_string(attributes.partnerSystemCodepage));
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }
 
 // Connection class methods
