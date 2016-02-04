@@ -96,13 +96,6 @@ static void sapnwrfc_connection_object_free(zend_object *object)
     if(intern->rfc_handle) {
         rc = RfcCloseConnection(intern->rfc_handle, &error_info);
         intern->rfc_handle = NULL;
-
-        // FIXME remove
-        if (rc != RFC_OK) {
-            php_printf("ERROR failed to close connection in free handler\n");
-        }
-
-        php_printf("free handler: closed connection\n");
     }
 
     intern->rfc_handle = NULL;
@@ -252,7 +245,6 @@ PHP_METHOD(Connection, close)
                                         sapuc_to_zend_string(error_info.key),
                                         sapuc_to_zend_string(error_info.message));
     RETURN_NULL();
-    // FIXME replace error handling during the whole op??
 }
 
 // Connection class methods
