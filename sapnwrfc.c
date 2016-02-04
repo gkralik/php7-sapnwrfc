@@ -87,14 +87,13 @@ static zend_object *sapnwrfc_connection_object_create(zend_class_entry *ce)
 static void sapnwrfc_connection_object_free(zend_object *object)
 {
     RFC_ERROR_INFO error_info;
-    RFC_RC rc = RFC_OK;
     sapnwrfc_connection_object *intern;
 
     intern = (sapnwrfc_connection_object *)((char *)object - XtOffsetOf(sapnwrfc_connection_object, zobj));
 
     /* free the RFC handle */
     if(intern->rfc_handle) {
-        rc = RfcCloseConnection(intern->rfc_handle, &error_info);
+        RfcCloseConnection(intern->rfc_handle, &error_info);
         intern->rfc_handle = NULL;
     }
 
@@ -111,26 +110,6 @@ static void sapnwrfc_connection_object_free(zend_object *object)
 
     /* call Zend's free handler, which will free the object properties */
     zend_object_std_dtor(&intern->zobj);
-}
-
-static void sapnwrfc_throw_connection_exception(char *msg, int code)
-{
-    zval connection_exception;
-    zend_string *exception_message;
-
-    exception_message = zend_string_init(msg, strlen(msg), 0);
-
-    TSRMLS_FETCH();
-
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
-
-    object_init_ex(&connection_exception, sapnwrfc_connection_exception_ce);
-    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "message", sizeof("message") - 1, ZSTR_VAL(exception_message) TSRMLS_CC);
-    zend_update_property_long(sapnwrfc_connection_exception_ce, &connection_exception, "code", sizeof("code") - 1, code TSRMLS_CC);
-
-    zend_throw_exception_object(&connection_exception TSRMLS_CC);
-
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }
 
 static void sapnwrfc_throw_connection_exception_ex(char *msg, int code, zend_string *rfcKey, zend_string *rfcMessage)
@@ -153,6 +132,13 @@ static void sapnwrfc_throw_connection_exception_ex(char *msg, int code, zend_str
     zend_throw_exception_object(&connection_exception TSRMLS_CC);
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
+static void sapnwrfc_throw_connection_exception(char *msg, int code)
+{
+    sapnwrfc_throw_connection_exception_ex(msg, code,
+        zend_string_init("", strlen(""), 0),
+        zend_string_init("", strlen(""), 0));
 }
 
 static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *connection_params)
