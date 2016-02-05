@@ -198,9 +198,8 @@ PHP_METHOD(Connection, __construct)
 
     len = zend_hash_num_elements(Z_ARRVAL_P(connection_params));
     if (len == 0) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-
         sapnwrfc_throw_connection_exception("No connection parameters given", 0);
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
     }
 
@@ -221,6 +220,9 @@ PHP_METHOD(Connection, close)
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
 
+    zend_replace_error_handling(EH_THROW, NULL, NULL);
+    zend_parse_parameters_none();
+
     intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
 
     if(intern->rfc_handle == NULL) {
@@ -231,6 +233,8 @@ PHP_METHOD(Connection, close)
     rc = RfcCloseConnection(intern->rfc_handle, &error_info);
     if (rc == RFC_OK) {
         intern->rfc_handle = NULL;
+
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         RETURN_TRUE;
     }
 
@@ -239,6 +243,7 @@ PHP_METHOD(Connection, close)
                                            error_info.code,
                                            sapuc_to_zend_string(error_info.key),
                                            sapuc_to_zend_string(error_info.message));
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
     RETURN_NULL();
 }
 
@@ -258,6 +263,7 @@ PHP_METHOD(Connection, attributes)
         sapnwrfc_throw_connection_exception_ex("Could not fetch connection attributes", error_info.code,
                                                sapuc_to_zend_string(error_info.key),
                                                sapuc_to_zend_string(error_info.message));
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         RETURN_NULL();
     }
 
@@ -295,12 +301,21 @@ PHP_METHOD(Connection, ping)
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
 
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_parse_parameters_none();
+
     intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
     rc = RfcPing(intern->rfc_handle, &error_info);
     if (rc != RFC_OK) {
-        RETURN_FALSE;
+        sapnwrfc_throw_connection_exception_ex("Failed to reload INI file", error_info.code,
+                                               sapuc_to_zend_string(error_info.key),
+                                               sapuc_to_zend_string(error_info.message));
+
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        RETURN_NULL();
     }
 
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
     RETURN_TRUE;
 }
 
@@ -358,6 +373,8 @@ PHP_METHOD(Connection, version)
     char *version;
     int len;
 
+    zend_parse_parameters_none();
+
     len = spprintf(&version, 0, "%s", PHP_SAPNWRFC_VERSION);
 
     RETURN_STRINGL(version, len);
@@ -368,6 +385,8 @@ PHP_METHOD(Connection, rfcVersion)
     char *version;
     int len;
     unsigned int major, minor, patch;
+
+    zend_parse_parameters_none();
 
     RfcGetVersion(&major, &minor, &patch);
 
