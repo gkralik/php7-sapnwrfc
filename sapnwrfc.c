@@ -59,6 +59,7 @@ typedef struct _sapnwrfc_functioncall_exception_object {
 // forward declaration of class methods
 PHP_METHOD(Connection, __construct);
 PHP_METHOD(Connection, attributes);
+PHP_METHOD(Connection, ping);
 PHP_METHOD(Connection, close);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
@@ -67,6 +68,7 @@ PHP_METHOD(Connection, rfcVersion);
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, __construct, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, attributes, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(Connection, ping, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, close, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, version, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, rfcVersion, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
@@ -202,6 +204,7 @@ PHP_METHOD(Connection, __construct)
     intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
 
     // open connection
+    // TODO inline?
     sapnwrfc_open_connection(intern, connection_params);
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
@@ -279,6 +282,22 @@ PHP_METHOD(Connection, attributes)
     add_assoc_str(return_value, "partnerSystemCodepage", sapuc_to_zend_string(attributes.partnerSystemCodepage));
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
+PHP_METHOD(Connection, ping)
+{
+    zend_object *zobj = Z_OBJ_P(getThis());
+    sapnwrfc_connection_object *intern;
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+
+    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    rc = RfcPing(intern->rfc_handle, &error_info);
+    if (rc != RFC_OK) {
+        RETURN_FALSE;
+    }
+
+    RETURN_TRUE;
 }
 
 // Connection class methods
