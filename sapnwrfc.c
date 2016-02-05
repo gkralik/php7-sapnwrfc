@@ -33,10 +33,13 @@
 
 // class entries
 zend_class_entry *sapnwrfc_connection_ce;
+zend_class_entry *sapnwrfc_function_ce;
 zend_class_entry *sapnwrfc_connection_exception_ce;
 zend_class_entry *sapnwrfc_functioncall_exception_ce;
 
+// object handlers
 zend_object_handlers sapnwrfc_connection_object_handlers;
+zend_object_handlers sapnwrfc_function_object_handlers;
 
 // connection object
 typedef struct _sapnwrfc_connection_object {
@@ -45,6 +48,11 @@ typedef struct _sapnwrfc_connection_object {
     int rfc_login_params_len;
     zend_object zobj;
 } sapnwrfc_connection_object;
+
+// function object
+typedef struct _sapnwrfc_function_object {
+    zend_object zobj;
+} sapnwrfc_function_object;
 
 // connection exception object
 typedef struct _sapnwrfc_connection_exception_object {
@@ -66,6 +74,8 @@ PHP_METHOD(Connection, reloadIniFile);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
+PHP_METHOD(Function, __construct);
+
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, __construct, NULL, ZEND_ACC_PUBLIC)
@@ -76,6 +86,11 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, reloadIniFile, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, version, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, rfcVersion, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    PHP_FE_END
+};
+
+static zend_function_entry sapnwrfc_function_class_functions[] = {
+    PHP_ME(Function, __construct, NULL, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 
@@ -120,6 +135,30 @@ static void sapnwrfc_connection_object_free(zend_object *object)
     zend_object_std_dtor(&intern->zobj);
 }
 
+// function object handlers
+static zend_object *sapnwrfc_function_object_create(zend_class_entry *ce)
+{
+    sapnwrfc_function_object *intern;
+
+    intern = ecalloc(1, sizeof(sapnwrfc_function_object) + zend_object_properties_size(ce));
+    zend_object_std_init(&intern->zobj, ce);
+    object_properties_init(&intern->zobj, ce);
+    intern->zobj.handlers = &sapnwrfc_function_object_handlers;
+
+    return &intern->zobj;
+}
+
+static void sapnwrfc_function_object_free(zend_object *object)
+{
+    sapnwrfc_function_object *intern;
+
+    intern = (sapnwrfc_function_object *)((char *)object - XtOffsetOf(sapnwrfc_function_object, zobj));
+
+    /* call Zend's free handler, which will free the object properties */
+    zend_object_std_dtor(&intern->zobj);
+}
+
+// exception factories
 static void sapnwrfc_throw_connection_exception_ex(char *msg, int code, zend_string *rfcKey, zend_string *rfcMessage)
 {
     zval connection_exception;
@@ -396,6 +435,11 @@ PHP_METHOD(Connection, rfcVersion)
 }
 
 
+PHP_METHOD(Function, __construct)
+{
+
+}
+
 static void register_sapnwrfc_connection_object()
 {
     zend_class_entry ce;
@@ -408,6 +452,21 @@ static void register_sapnwrfc_connection_object()
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Connection", sapnwrfc_connection_class_functions);
     ce.create_object = sapnwrfc_connection_object_create;
     sapnwrfc_connection_ce = zend_register_internal_class(&ce);
+}
+
+static void register_sapnwrfc_function_object()
+{
+    zend_class_entry ce;
+
+    memcpy(&sapnwrfc_function_object_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    sapnwrfc_function_object_handlers.offset = XtOffsetOf(sapnwrfc_function_object, zobj);
+    sapnwrfc_function_object_handlers.free_obj = sapnwrfc_function_object_free;
+    sapnwrfc_function_object_handlers.clone_obj = NULL;
+
+    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\FunctionEntry", sapnwrfc_function_class_functions);
+    ce.create_object = sapnwrfc_function_object_create;
+    sapnwrfc_function_ce = zend_register_internal_class(&ce);
+    sapnwrfc_function_ce->ce_flags |= ZEND_ACC_FINAL;
 }
 
 static void register_sapnwrfc_connection_exception_object()
@@ -437,6 +496,7 @@ static void register_sapnwrfc_functioncall_exception_object()
 PHP_MINIT_FUNCTION(sapnwrfc)
 {
     register_sapnwrfc_connection_object();
+    register_sapnwrfc_function_object();
     register_sapnwrfc_connection_exception_object();
     register_sapnwrfc_functioncall_exception_object();
 
@@ -449,27 +509,6 @@ PHP_MINIT_FUNCTION(sapnwrfc)
 PHP_MSHUTDOWN_FUNCTION(sapnwrfc)
 {
 
-    return SUCCESS;
-}
-/* }}} */
-
-/* Remove if there's nothing to do at request start */
-/* {{{ PHP_RINIT_FUNCTION
- */
-PHP_RINIT_FUNCTION(sapnwrfc)
-{
-#if defined(COMPILE_DL_SAPNWRFC) && defined(ZTS)
-    ZEND_TSRMLS_CACHE_UPDATE();
-#endif
-    return SUCCESS;
-}
-/* }}} */
-
-/* Remove if there's nothing to do at request end */
-/* {{{ PHP_RSHUTDOWN_FUNCTION
- */
-PHP_RSHUTDOWN_FUNCTION(sapnwrfc)
-{
     return SUCCESS;
 }
 /* }}} */

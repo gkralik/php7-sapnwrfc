@@ -75,7 +75,7 @@ class Connection {
     public static function rfcVersion() {}
 }
 
-class Function {
+class FunctionEntry {
     public function invoke(array $parameters) {}
 
     public function activate($parameterName) {}
