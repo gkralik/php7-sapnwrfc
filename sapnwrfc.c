@@ -61,6 +61,8 @@ PHP_METHOD(Connection, __construct);
 PHP_METHOD(Connection, attributes);
 PHP_METHOD(Connection, ping);
 PHP_METHOD(Connection, close);
+PHP_METHOD(Connection, setIniPath);
+PHP_METHOD(Connection, reloadIniFile);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
@@ -70,6 +72,8 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, attributes, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, ping, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, close, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(Connection, setIniPath, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    PHP_ME(Connection, reloadIniFile, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, version, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, rfcVersion, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_FE_END
@@ -297,6 +301,54 @@ PHP_METHOD(Connection, ping)
         RETURN_FALSE;
     }
 
+    RETURN_TRUE;
+}
+
+PHP_METHOD(Connection, setIniPath)
+{
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+    zend_string *path;
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &path) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    rc = RfcSetIniPath(zend_string_to_sapuc(path), &error_info);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_connection_exception_ex("Failed to reload INI file", error_info.code,
+                                               sapuc_to_zend_string(error_info.key),
+                                               sapuc_to_zend_string(error_info.message));
+
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        RETURN_NULL();
+    }
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    RETURN_TRUE;
+}
+
+PHP_METHOD(Connection, reloadIniFile)
+{
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_parse_parameters_none();
+
+    rc = RfcReloadIniFile(&error_info);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_connection_exception_ex("Failed to reload INI file", error_info.code,
+                                               sapuc_to_zend_string(error_info.key),
+                                               sapuc_to_zend_string(error_info.message));
+
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        RETURN_NULL();
+    }
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
     RETURN_TRUE;
 }
 
