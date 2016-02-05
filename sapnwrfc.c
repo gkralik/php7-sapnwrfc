@@ -64,10 +64,26 @@ typedef struct _sapnwrfc_functioncall_exception_object {
     zend_object zobj;
 } sapnwrfc_functioncall_exception_object;
 
+// helpers for accessing the internal objects
+static inline sapnwrfc_connection_object *sapnwrfc_connection_object_fetch(zend_object *obj)
+{
+    return (sapnwrfc_connection_object *)((char *)obj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+}
+#define SAPNWRFC_CONNECTION_OBJ_P(zv) SAPNWRFC_CONNECTION_OBJ(Z_OBJ_P(zv))
+#define SAPNWRFC_CONNECTION_OBJ(zo) sapnwrfc_connection_object_fetch(zo)
+
+static inline sapnwrfc_function_object *sapnwrfc_function_object_fetch(zend_object *obj)
+{
+    return (sapnwrfc_function_object *)((char *)obj - XtOffsetOf(sapnwrfc_function_object, zobj));
+}
+#define SAPNWRFC_FUNCTION_OBJ_P(zv) SAPNWRFC_FUNCTION_OBJ(Z_OBJ_P(zv))
+#define SAPNWRFC_FUNCTION_OBJ(zo) sapnwrfc_function_object_fetch(zo)
+
 // forward declaration of class methods
 PHP_METHOD(Connection, __construct);
 PHP_METHOD(Connection, attributes);
 PHP_METHOD(Connection, ping);
+PHP_METHOD(Connection, getFunction);
 PHP_METHOD(Connection, close);
 PHP_METHOD(Connection, setIniPath);
 PHP_METHOD(Connection, reloadIniFile);
@@ -81,6 +97,7 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, __construct, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, attributes, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, ping, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(Connection, getFunction, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, close, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(Connection, setIniPath, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_ME(Connection, reloadIniFile, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
@@ -112,7 +129,7 @@ static void sapnwrfc_connection_object_free(zend_object *object)
     RFC_ERROR_INFO error_info;
     sapnwrfc_connection_object *intern;
 
-    intern = (sapnwrfc_connection_object *)((char *)object - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    intern = SAPNWRFC_CONNECTION_OBJ(object);
 
     /* free the RFC handle */
     if(intern->rfc_handle) {
@@ -152,7 +169,7 @@ static void sapnwrfc_function_object_free(zend_object *object)
 {
     sapnwrfc_function_object *intern;
 
-    intern = (sapnwrfc_function_object *)((char *)object - XtOffsetOf(sapnwrfc_function_object, zobj));
+    intern = SAPNWRFC_FUNCTION_OBJ(object);
 
     /* call Zend's free handler, which will free the object properties */
     zend_object_std_dtor(&intern->zobj);
@@ -222,7 +239,6 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
 
 PHP_METHOD(Connection, __construct)
 {
-    zend_object *zobj = Z_OBJ_P(getThis());
     sapnwrfc_connection_object *intern;
     zval *connection_params;
     long len;
@@ -243,7 +259,7 @@ PHP_METHOD(Connection, __construct)
     }
 
     // get the connection object (we need access to the rfc_handle)
-    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
 
     // open connection
     // TODO inline?
@@ -254,7 +270,6 @@ PHP_METHOD(Connection, __construct)
 
 PHP_METHOD(Connection, close)
 {
-    zend_object *zobj = Z_OBJ_P(getThis());
     sapnwrfc_connection_object *intern;
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -262,7 +277,7 @@ PHP_METHOD(Connection, close)
     zend_replace_error_handling(EH_THROW, NULL, NULL);
     zend_parse_parameters_none();
 
-    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
 
     if(intern->rfc_handle == NULL) {
         // no connection open, return false.
@@ -288,7 +303,6 @@ PHP_METHOD(Connection, close)
 
 PHP_METHOD(Connection, attributes)
 {
-    zend_object *zobj = Z_OBJ_P(getThis());
     sapnwrfc_connection_object *intern;
     RFC_ATTRIBUTES attributes;
     RFC_ERROR_INFO error_info;
@@ -296,7 +310,7 @@ PHP_METHOD(Connection, attributes)
 
     zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
 
-    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception_ex("Could not fetch connection attributes", error_info.code,
@@ -335,7 +349,6 @@ PHP_METHOD(Connection, attributes)
 
 PHP_METHOD(Connection, ping)
 {
-    zend_object *zobj = Z_OBJ_P(getThis());
     sapnwrfc_connection_object *intern;
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
@@ -343,7 +356,7 @@ PHP_METHOD(Connection, ping)
     zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
     zend_parse_parameters_none();
 
-    intern = (sapnwrfc_connection_object *)((char *)zobj - XtOffsetOf(sapnwrfc_connection_object, zobj));
+    intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcPing(intern->rfc_handle, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception_ex("Failed to reload INI file", error_info.code,
@@ -356,6 +369,11 @@ PHP_METHOD(Connection, ping)
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
     RETURN_TRUE;
+}
+
+PHP_METHOD(Connection, getFunction)
+{
+
 }
 
 PHP_METHOD(Connection, setIniPath)
