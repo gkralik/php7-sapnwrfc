@@ -25,7 +25,7 @@ class Connection {
      *
      * @return array Array of connection attributes.
      * @throws ConnectionException if the connection attributes could not be
-                                   fetched.
+     *                             fetched.
      */
     public function attributes() {}
 
@@ -48,7 +48,7 @@ class Connection {
      * Close the connection.
      *
      * @return bool True if the connection was closed, false if the connection
-                    is closed already.
+     *              is closed already.
      * @throws ConnectionException if the connection could not be closed.
      */
     public function close() {}
