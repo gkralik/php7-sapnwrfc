@@ -5,7 +5,7 @@
 ```php
 <?php
 
-namespace SAPNWRFC {
+namespace SAPNWRFC;
 
 class ConnectionException extends \RuntimeException {}
 
@@ -39,6 +39,7 @@ class Connection {
      * Lookup a RFC function and return a FunctionEntry object.
      *
      * @param string $functionName Name of the function.
+     * @return FunctionEntry A FunctionEntry class for the RFC function.
      * @throws FunctionCallException if the lookup fails or an error is
      *                               returned during parameter parsing.
      */
@@ -93,10 +94,22 @@ class Connection {
 class FunctionEntry {
     public function invoke(array $parameters) {}
 
-    public function activate($parameterName) {}
+    /**
+     * Make a parameter active or inactive.
+     *
+     * @param string $parameterName The parameter to modify.
+     * @param bool $isActive True to activate the parameter, false to deactivate.
+     * @return void
+     * @throws FunctionCallException if the parameter status could not be set.
+     */
+    public function setParameterActive($parameterName, $isActive) {}
 
-    public function deactivate($parameterName) {}
-}
-
+    /**
+     * Check if a parameter is active or inactive.
+     *
+     * @param string $parameterName The parameter to check.
+     * @return bool True if parameter is active, false if not.
+     */
+    public function isParameterActive($parameterName) {}
 }
 ```

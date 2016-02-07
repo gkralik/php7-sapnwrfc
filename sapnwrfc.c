@@ -52,7 +52,8 @@ typedef struct _sapnwrfc_connection_object {
 // function object
 typedef struct _sapnwrfc_function_object {
     RFC_CONNECTION_HANDLE rfc_handle;
-    RFC_FUNCTION_DESC_HANDLE function_handle;
+    RFC_FUNCTION_HANDLE function_handle;
+    RFC_FUNCTION_DESC_HANDLE function_desc_handle;
     zend_string *name;
     zend_object zobj;
 } sapnwrfc_function_object;
@@ -93,6 +94,8 @@ PHP_METHOD(Connection, reloadIniFile);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
+PHP_METHOD(FunctionEntry, setParameterActive);
+PHP_METHOD(FunctionEntry, isParameterActive);
 
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
@@ -109,6 +112,8 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
 };
 
 static zend_function_entry sapnwrfc_function_class_functions[] = {
+    PHP_ME(FunctionEntry, setParameterActive, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(FunctionEntry, isParameterActive, NULL, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 
@@ -173,11 +178,17 @@ static void sapnwrfc_function_object_free(zend_object *object)
 
     intern = SAPNWRFC_FUNCTION_OBJ(object);
 
-    if (intern->function_handle) {
-        (void) RfcDestroyFunctionDesc(intern->function_handle, &error_info);
-        intern->function_handle = NULL;
-        intern->rfc_handle = NULL;
+    if (intern->function_desc_handle) {
+        (void) RfcDestroyFunctionDesc(intern->function_desc_handle, &error_info);
+        intern->function_desc_handle = NULL;
     }
+
+    if (intern->function_handle) {
+        (void) RfcDestroyFunction(intern->function_handle, &error_info);
+        intern->function_handle = NULL;
+    }
+
+    intern->rfc_handle = NULL;
 
     zend_string_release(intern->name);
 
@@ -451,12 +462,12 @@ PHP_METHOD(Connection, getFunction)
     object_init_ex(return_value, sapnwrfc_function_ce);
     func_intern = SAPNWRFC_FUNCTION_OBJ_P(return_value);
     func_intern->rfc_handle = intern->rfc_handle;
-    func_intern->function_handle = function_desc_handle;
+    func_intern->function_desc_handle = function_desc_handle;
     func_intern->name = function_name;
     add_property_str(return_value, "name", function_name);
 
     // get nr of parameters
-    rc = RfcGetParameterCount(func_intern->function_handle, &parameter_count, &error_info);
+    rc = RfcGetParameterCount(func_intern->function_desc_handle, &parameter_count, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_function_exception_ex("Failed to get parameter count",
                                           error_info.code,
@@ -468,7 +479,7 @@ PHP_METHOD(Connection, getFunction)
 
     for (i = 0; i < parameter_count; i++) {
         // get parameter information
-        rc = RfcGetParameterDescByIndex(func_intern->function_handle, i, &parameter_desc, &error_info);
+        rc = RfcGetParameterDescByIndex(func_intern->function_desc_handle, i, &parameter_desc, &error_info);
         if (rc != RFC_OK) {
             sapnwrfc_throw_function_exception_ex("Failed to get parameter description",
                                               error_info.code,
@@ -485,6 +496,17 @@ PHP_METHOD(Connection, getFunction)
         add_assoc_bool(&parameter_description, "optional", parameter_desc.optional);
         add_assoc_str(&parameter_description, "defaultValue", sapuc_to_zend_string(parameter_desc.defaultValue));
         add_property_zval(return_value, ZSTR_VAL(sapuc_to_zend_string(parameter_desc.name)), &parameter_description);
+    }
+
+    // create the function handle
+    func_intern->function_handle = RfcCreateFunction(func_intern->function_desc_handle, &error_info);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_function_exception_ex("Failed to create function data container",
+                                          error_info.code,
+                                          sapuc_to_zend_string(error_info.key),
+                                          sapuc_to_zend_string(error_info.message));
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        RETURN_NULL();
     }
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
@@ -565,6 +587,78 @@ PHP_METHOD(Connection, rfcVersion)
     len = spprintf(&version, 0, "%d.%d.%d", major, minor, patch);
 
     RETURN_STRINGL(version, len);
+}
+
+PHP_METHOD(FunctionEntry, setParameterActive)
+{
+    sapnwrfc_function_object *intern;
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    zend_string *parameter_name;
+    zend_bool parameter_active;
+    SAP_UC *parameter_name_u;
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Sb", &parameter_name, &parameter_active) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
+
+    rc = RfcSetParameterActive(intern->function_handle, (parameter_name_u = zend_string_to_sapuc(parameter_name)), parameter_active, &error_info);
+    free((char *)parameter_name_u);
+
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_function_exception_ex("Failed to set parameter status",
+                                          error_info.code,
+                                          sapuc_to_zend_string(error_info.key),
+                                          sapuc_to_zend_string(error_info.message));
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        RETURN_NULL();
+    }
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
+PHP_METHOD(FunctionEntry, isParameterActive)
+{
+    sapnwrfc_function_object *intern;
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    zend_string *parameter_name;
+    SAP_UC *parameter_name_u;
+    int is_active;
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &parameter_name) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
+
+    rc = RfcIsParameterActive(intern->function_handle, (parameter_name_u = zend_string_to_sapuc(parameter_name)), &is_active, &error_info);
+    free((char *)parameter_name_u);
+
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_function_exception_ex("Failed to get parameter status",
+                                          error_info.code,
+                                          sapuc_to_zend_string(error_info.key),
+                                          sapuc_to_zend_string(error_info.message));
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        RETURN_NULL();
+    }
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+
+    if (is_active) {
+        RETURN_TRUE;
+    }
+
+    RETURN_FALSE;
 }
 
 static void register_sapnwrfc_connection_object()
