@@ -1,5 +1,7 @@
 # php7-sapnwrfc API
 
+**NOTE: As the extension is a work in progress, this document may not always be up to date.**
+
 ```php
 <?php
 
@@ -10,7 +12,13 @@ class ConnectionException extends \RuntimeException {}
 class FunctionCallException extends \RuntimeException {}
 
 class Connection {
-    public function __construct(array $loginParams) {}
+    /**
+     * Connect to the system using the given parameters.
+     *
+     * @params array $connectionParams Connection parameters.
+     * @throw ConnectionException if the connection fails.
+     */
+    public function __construct(array $connectionParams) {}
 
     /**
      * Get the connection attributes.
@@ -27,6 +35,13 @@ class Connection {
      */
     public function ping() {}
 
+    /**
+     * Lookup a RFC function and return a FunctionEntry object.
+     *
+     * @param string $functionName Name of the function.
+     * @throws FunctionCallException if the lookup fails or an error is
+     *                               returned during parameter parsing.
+     */
     public function getFunction($functionName) {}
 
     /**
