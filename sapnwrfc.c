@@ -23,10 +23,10 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
-#include "php_sapnwrfc.h"
 #include "Zend/zend_exceptions.h"
 #include "ext/spl/spl_exceptions.h"
 
+#include "php_sapnwrfc.h"
 #include "string_helper.h"
 
 #include "sapnwrfc.h"
@@ -54,6 +54,7 @@ typedef struct _sapnwrfc_function_object {
     RFC_CONNECTION_HANDLE rfc_handle;
     RFC_FUNCTION_HANDLE function_handle;
     RFC_FUNCTION_DESC_HANDLE function_desc_handle;
+    unsigned int parameter_count;
     zend_string *name;
     zend_object zobj;
 } sapnwrfc_function_object;
@@ -94,6 +95,7 @@ PHP_METHOD(Connection, reloadIniFile);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
+PHP_METHOD(FunctionEntry, invoke);
 PHP_METHOD(FunctionEntry, setParameterActive);
 PHP_METHOD(FunctionEntry, isParameterActive);
 
@@ -112,6 +114,7 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
 };
 
 static zend_function_entry sapnwrfc_function_class_functions[] = {
+    PHP_ME(FunctionEntry, invoke, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(FunctionEntry, setParameterActive, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(FunctionEntry, isParameterActive, NULL, ZEND_ACC_PUBLIC)
     PHP_FE_END
@@ -189,6 +192,7 @@ static void sapnwrfc_function_object_free(zend_object *object)
     }
 
     intern->rfc_handle = NULL;
+    intern->parameter_count = 0;
 
     zend_string_release(intern->name);
 
@@ -432,7 +436,6 @@ PHP_METHOD(Connection, getFunction)
     SAP_UC *function_name_u;
     RFC_PARAMETER_DESC parameter_desc;
     zval parameter_description;
-    unsigned parameter_count;
     int i;
 
     zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
@@ -467,7 +470,7 @@ PHP_METHOD(Connection, getFunction)
     add_property_str(return_value, "name", function_name);
 
     // get nr of parameters
-    rc = RfcGetParameterCount(func_intern->function_desc_handle, &parameter_count, &error_info);
+    rc = RfcGetParameterCount(func_intern->function_desc_handle, &func_intern->parameter_count, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_function_exception_ex("Failed to get parameter count",
                                           error_info.code,
@@ -477,7 +480,7 @@ PHP_METHOD(Connection, getFunction)
         RETURN_NULL();
     }
 
-    for (i = 0; i < parameter_count; i++) {
+    for (i = 0; i < func_intern->parameter_count; i++) {
         // get parameter information
         rc = RfcGetParameterDescByIndex(func_intern->function_desc_handle, i, &parameter_desc, &error_info);
         if (rc != RFC_OK) {
