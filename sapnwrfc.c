@@ -27,15 +27,15 @@
 #include "ext/spl/spl_exceptions.h"
 
 #include "php_sapnwrfc.h"
+#include "exceptions.h"
 #include "string_helper.h"
+#include "rfc_parameters.h"
 
 #include "sapnwrfc.h"
 
 // class entries
 zend_class_entry *sapnwrfc_connection_ce;
 zend_class_entry *sapnwrfc_function_ce;
-zend_class_entry *sapnwrfc_connection_exception_ce;
-zend_class_entry *sapnwrfc_function_exception_ce;
 
 // object handlers
 zend_object_handlers sapnwrfc_connection_object_handlers;
@@ -58,16 +58,6 @@ typedef struct _sapnwrfc_function_object {
     zend_string *name;
     zend_object zobj;
 } sapnwrfc_function_object;
-
-// connection exception object
-typedef struct _sapnwrfc_connection_exception_object {
-    zend_object zobj;
-} sapnwrfc_connection_exception_object;
-
-// function call exception object
-typedef struct _sapnwrfc_function_exception_object {
-    zend_object zobj;
-} sapnwrfc_functioncall_exception_object;
 
 // helpers for accessing the internal objects
 static inline sapnwrfc_connection_object *sapnwrfc_connection_object_fetch(zend_object *obj)
@@ -200,65 +190,6 @@ static void sapnwrfc_function_object_free(zend_object *object)
     zend_object_std_dtor(&intern->zobj);
 }
 
-// exception factories
-static void sapnwrfc_throw_connection_exception_ex(char *msg, int code, zend_string *rfcKey, zend_string *rfcMessage)
-{
-    zval connection_exception;
-    zend_string *exception_message;
-
-    exception_message = zend_string_init(msg, strlen(msg), 0);
-
-    TSRMLS_FETCH();
-
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
-
-    object_init_ex(&connection_exception, sapnwrfc_connection_exception_ce);
-    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "message", sizeof("message") - 1, ZSTR_VAL(exception_message) TSRMLS_CC);
-    zend_update_property_long(sapnwrfc_connection_exception_ce, &connection_exception, "code", sizeof("code") - 1, code TSRMLS_CC);
-    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "rfcKey", sizeof("rfcKey") - 1, ZSTR_VAL(rfcKey) TSRMLS_CC);
-    zend_update_property_string(sapnwrfc_connection_exception_ce, &connection_exception, "rfcMessage", sizeof("rfcMessage") - 1, ZSTR_VAL(rfcMessage) TSRMLS_CC);
-
-    zend_throw_exception_object(&connection_exception TSRMLS_CC);
-
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-}
-
-static void sapnwrfc_throw_connection_exception(char *msg, int code)
-{
-    sapnwrfc_throw_connection_exception_ex(msg, code,
-        zend_string_init("", strlen(""), 0),
-        zend_string_init("", strlen(""), 0));
-}
-
-static void sapnwrfc_throw_function_exception_ex(char *msg, int code, zend_string *rfcKey, zend_string *rfcMessage)
-{
-    zval function_exception;
-    zend_string *exception_message;
-
-    exception_message = zend_string_init(msg, strlen(msg), 0);
-
-    TSRMLS_FETCH();
-
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
-
-    object_init_ex(&function_exception, sapnwrfc_function_exception_ce);
-    zend_update_property_string(sapnwrfc_function_exception_ce, &function_exception, "message", sizeof("message") - 1, ZSTR_VAL(exception_message) TSRMLS_CC);
-    zend_update_property_long(sapnwrfc_function_exception_ce, &function_exception, "code", sizeof("code") - 1, code TSRMLS_CC);
-    zend_update_property_string(sapnwrfc_function_exception_ce, &function_exception, "rfcKey", sizeof("rfcKey") - 1, ZSTR_VAL(rfcKey) TSRMLS_CC);
-    zend_update_property_string(sapnwrfc_function_exception_ce, &function_exception, "rfcMessage", sizeof("rfcMessage") - 1, ZSTR_VAL(rfcMessage) TSRMLS_CC);
-
-    zend_throw_exception_object(&function_exception TSRMLS_CC);
-
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-}
-
-static void sapnwrfc_throw_function_exception(char *msg, int code)
-{
-    sapnwrfc_throw_function_exception_ex(msg, code,
-        zend_string_init("", strlen(""), 0),
-        zend_string_init("", strlen(""), 0));
-}
-
 static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *connection_params)
 {
     RFC_ERROR_INFO error_info;
@@ -275,7 +206,7 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
     ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params_hash, key, val) {
         if (key) { // is string
             intern->rfc_login_params[i].name = zend_string_to_sapuc(key);
-            intern->rfc_login_params[i].value = char_to_sapuc(Z_STRVAL_P(val));
+            intern->rfc_login_params[i].value = zval_to_sapuc(val);
 
             i++;
         }
@@ -484,7 +415,7 @@ PHP_METHOD(Connection, getFunction)
         // get parameter information
         rc = RfcGetParameterDescByIndex(func_intern->function_desc_handle, i, &parameter_desc, &error_info);
         if (rc != RFC_OK) {
-            sapnwrfc_throw_function_exception_ex("Failed to get parameter description",
+            sapnwrfc_throw_function_exception_ex("Failed to get parameter descriptor",
                                               error_info.code,
                                               sapuc_to_zend_string(error_info.key),
                                               sapuc_to_zend_string(error_info.message));
@@ -592,6 +523,88 @@ PHP_METHOD(Connection, rfcVersion)
     RETURN_STRINGL(version, len);
 }
 
+PHP_METHOD(FunctionEntry, invoke)
+{
+    sapnwrfc_function_object *intern;
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    RFC_PARAMETER_DESC parameter_desc;
+    int is_active;
+    zval *in_parameters;
+    HashTable *in_parameters_hash;
+    zend_string *key;
+    zval *val;
+    SAP_UC *parameter_name_u;
+
+    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "a", &in_parameters) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
+
+    in_parameters_hash = Z_ARRVAL_P(in_parameters);
+
+    ZEND_HASH_FOREACH_STR_KEY_VAL(in_parameters_hash, key, val) {
+        if (!key) {
+            // not a string key
+            sapnwrfc_throw_function_exception("All parameter keys must be strings.", 0);
+            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            RETURN_NULL();
+        }
+
+        // get parameter desc by name
+        rc = RfcGetParameterDescByName(intern->function_desc_handle, (parameter_name_u = zend_string_to_sapuc(key)), &parameter_desc, &error_info);
+        free((char *)parameter_name_u);
+
+        if (rc != RFC_OK) {
+            sapnwrfc_throw_function_exception_ex("Failed to get parameter descriptor",
+                                              error_info.code,
+                                              sapuc_to_zend_string(error_info.key),
+                                              sapuc_to_zend_string(error_info.message));
+            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            RETURN_NULL();
+        }
+
+        // check if the parameter is active
+        rc = RfcIsParameterActive(intern->function_handle, parameter_desc.name, &is_active, &error_info);
+        if (rc != RFC_OK) {
+            sapnwrfc_throw_function_exception_ex("Failed to get parameter status",
+                                              error_info.code,
+                                              sapuc_to_zend_string(error_info.key),
+                                              sapuc_to_zend_string(error_info.message));
+            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            RETURN_NULL();
+        }
+
+        if (is_active == 0) {
+            continue;
+        }
+
+        // set the parameter value
+        switch(parameter_desc.direction) {
+            case RFC_EXPORT:
+                break;
+            case RFC_IMPORT:
+            case RFC_CHANGING:
+                if (rfc_set_parameter_value(intern->function_handle, intern->function_desc_handle, key, val) != 1) {
+                    // setting the parameter failed; an exception has been thrown
+                    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                    RETURN_NULL();
+                }
+                break;
+            case RFC_TABLES:
+                zend_error(E_ERROR, "RFC_TABLE direction not implemented");
+                break;
+        }
+
+    } ZEND_HASH_FOREACH_END();
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
 PHP_METHOD(FunctionEntry, setParameterActive)
 {
     sapnwrfc_function_object *intern;
@@ -693,27 +706,6 @@ static void register_sapnwrfc_function_object()
     sapnwrfc_function_ce->ce_flags |= ZEND_ACC_FINAL;
 }
 
-static void register_sapnwrfc_connection_exception_object()
-{
-    zend_class_entry ce;
-
-    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\ConnectionException", NULL);
-    sapnwrfc_connection_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
-    sapnwrfc_connection_exception_ce->ce_flags |= ZEND_ACC_FINAL;
-    zend_declare_property_string(sapnwrfc_connection_exception_ce, "rfcKey", sizeof("rfcKey") - 1, "", ZEND_ACC_PUBLIC);
-    zend_declare_property_string(sapnwrfc_connection_exception_ce, "rfcMessage", sizeof("rfcMessage") - 1, "", ZEND_ACC_PUBLIC);
-}
-
-static void register_sapnwrfc_function_exception_object()
-{
-    zend_class_entry ce;
-
-    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\FunctionCallException", NULL);
-    sapnwrfc_function_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
-    sapnwrfc_function_exception_ce->ce_flags |= ZEND_ACC_FINAL;
-    zend_declare_property_string(sapnwrfc_function_exception_ce, "rfcKey", sizeof("rfcKey") - 1, "", ZEND_ACC_PUBLIC);
-    zend_declare_property_string(sapnwrfc_function_exception_ce, "rfcMessage", sizeof("rfcMessage") - 1, "", ZEND_ACC_PUBLIC);
-}
 
 /* {{{ PHP_MINIT_FUNCTION
  */
@@ -721,8 +713,8 @@ PHP_MINIT_FUNCTION(sapnwrfc)
 {
     register_sapnwrfc_connection_object();
     register_sapnwrfc_function_object();
-    register_sapnwrfc_connection_exception_object();
-    register_sapnwrfc_function_exception_object();
+
+    sapnwrfc_register_exceptions();
 
     return SUCCESS;
 }
