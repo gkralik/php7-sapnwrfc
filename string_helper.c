@@ -20,15 +20,15 @@
 #include "sapnwrfc.h"
 
 
-SAP_UC *char_to_sapuc(char *str)
+SAP_UC *zval_to_sapuc(zval *zv)
 {
     RFC_ERROR_INFO error_info;
     SAP_UC *sapuc;
     unsigned sapuc_size, result_length = 0;
 
-    sapuc_size = strlen(str) + 1;
+    sapuc_size = Z_STRLEN_P(zv) + 1;
     sapuc = callocU(1, sapuc_size);
-    RfcUTF8ToSAPUC((RFC_BYTE *) str, strlen(str), sapuc, &sapuc_size,
+    RfcUTF8ToSAPUC((RFC_BYTE *) Z_STRVAL_P(zv), Z_STRLEN_P(zv), sapuc, &sapuc_size,
             &result_length, &error_info);
     return sapuc;
 }
