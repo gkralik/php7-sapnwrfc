@@ -36,6 +36,9 @@ rfc_set_value_return_t rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *
 rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
 rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
 
+rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value);
+rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE, RFC_FIELD_DESC field_desc, zval *value);
+
 RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
                                RFC_FUNCTION_DESC_HANDLE function_desc_handle,
                                zend_string *name,

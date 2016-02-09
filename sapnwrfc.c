@@ -589,15 +589,16 @@ PHP_METHOD(FunctionEntry, invoke)
                 break;
             case RFC_IMPORT:
             case RFC_CHANGING:
+            case RFC_TABLES:
                 if (rfc_set_parameter_value(intern->function_handle, intern->function_desc_handle, key, val) != 1) {
                     // setting the parameter failed; an exception has been thrown
                     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
                     RETURN_NULL();
                 }
                 break;
-            case RFC_TABLES:
-                zend_error(E_ERROR, "RFC_TABLE direction not implemented");
-                break;
+            // case RFC_TABLES:
+            //     zend_error(E_ERROR, "RFC_TABLE direction not implemented");
+            //     break;
         }
 
     } ZEND_HASH_FOREACH_END();
