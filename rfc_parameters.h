@@ -19,20 +19,22 @@
 #ifndef RFC_PARAMETERS_H
 #define RFC_PARAMETERS_H
 
-unsigned int rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_bcd_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max);
-unsigned int rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max);
-unsigned int rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
-unsigned int rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+typedef enum { RFC_SET_VALUE_ERROR, RFC_SET_VALUE_OK} rfc_set_value_return_t;
+
+rfc_set_value_return_t rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_bcd_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max);
+rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max);
+rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
 
 RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
                                RFC_FUNCTION_DESC_HANDLE function_desc_handle,

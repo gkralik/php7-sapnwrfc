@@ -25,7 +25,7 @@
 #include "sapnwrfc.h"
 
 
-unsigned int rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -36,7 +36,7 @@ unsigned int rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     value_u = zval_to_sapuc(value);
@@ -48,13 +48,13 @@ unsigned int rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -66,7 +66,7 @@ unsigned int rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_STRLEN_P(value) != 8) {
@@ -74,7 +74,7 @@ unsigned int rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     value_u = zval_to_sapuc(value);
@@ -87,13 +87,13 @@ unsigned int rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_bcd_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_bcd_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -104,7 +104,7 @@ unsigned int rfc_set_bcd_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *valu
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     value_u = zval_to_sapuc(value);
@@ -116,13 +116,13 @@ unsigned int rfc_set_bcd_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *valu
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -134,7 +134,7 @@ unsigned int rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_STRLEN_P(value) != 6) {
@@ -142,7 +142,7 @@ unsigned int rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     value_u = zval_to_sapuc(value);
@@ -155,13 +155,13 @@ unsigned int rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max)
+rfc_set_value_return_t rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -171,7 +171,7 @@ unsigned int rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_STRLEN_P(value) > max) {
@@ -179,7 +179,7 @@ unsigned int rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetBytes(h, name, (SAP_RAW *)Z_STRVAL_P(value), Z_STRLEN_P(value), &error_info);
@@ -188,19 +188,19 @@ unsigned int rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     zend_error(E_ERROR, "RFCTYPE_TABLE not implemented\n");
-    return 0;
+    return RFC_SET_VALUE_ERROR;
 }
 
-unsigned int rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max)
+rfc_set_value_return_t rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value, unsigned max)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -211,7 +211,7 @@ unsigned int rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *valu
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_STRLEN_P(value) > max) {
@@ -219,7 +219,7 @@ unsigned int rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *valu
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     value_u = zval_to_sapuc(value);
@@ -232,13 +232,13 @@ unsigned int rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *valu
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -248,7 +248,7 @@ unsigned int rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *va
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetFloat(h, name, (RFC_FLOAT)Z_DVAL_P(value), &error_info);
@@ -258,13 +258,13 @@ unsigned int rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *va
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -274,7 +274,7 @@ unsigned int rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *valu
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetInt(h, name, (RFC_INT)Z_LVAL_P(value), &error_info);
@@ -284,13 +284,13 @@ unsigned int rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *valu
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -300,7 +300,7 @@ unsigned int rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_LVAL_P(value) > 255) {
@@ -308,7 +308,7 @@ unsigned int rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetInt1(h, name, (RFC_INT1)Z_LVAL_P(value), &error_info);
@@ -318,13 +318,13 @@ unsigned int rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -334,7 +334,7 @@ unsigned int rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_LVAL_P(value) > 65535) {
@@ -342,7 +342,7 @@ unsigned int rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetInt2(h, name, (RFC_INT2)Z_LVAL_P(value), &error_info);
@@ -352,19 +352,19 @@ unsigned int rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *val
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     zend_error(E_ERROR, "RFCTYPE_STRUCTURE not implemented\n");
-    return 0;
+    return RFC_SET_VALUE_ERROR;
 }
 
-unsigned int rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -375,7 +375,7 @@ unsigned int rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *v
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     value_u = zval_to_sapuc(value);
@@ -387,13 +387,13 @@ unsigned int rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *v
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
-unsigned int rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -403,7 +403,7 @@ unsigned int rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetXString(h, name, (SAP_RAW *)Z_STRVAL_P(value), Z_STRLEN_P(value), &error_info);
@@ -413,10 +413,10 @@ unsigned int rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
-    return 1;
+    return RFC_SET_VALUE_OK;
 }
 
 RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
@@ -428,7 +428,7 @@ RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
     RFC_ERROR_INFO error_info;
     RFC_PARAMETER_DESC parameter_desc;
     SAP_UC *parameter_name_u;
-    int ret = 1;
+    int ret = RFC_SET_VALUE_OK;
 
 
     rc = RfcGetParameterDescByName(function_desc_handle,
@@ -438,13 +438,13 @@ RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
 
     if (rc != RFC_OK) {
         free((char *)parameter_name_u);
-        
+
         sapnwrfc_throw_function_exception_ex("Failed to get parameter description",
                                              error_info.code,
                                              sapuc_to_zend_string(error_info.key),
                                              sapuc_to_zend_string(error_info.message));
 
-        return 0;
+        return RFC_SET_VALUE_ERROR;
     }
 
     switch(parameter_desc.type) {
@@ -492,7 +492,7 @@ RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
             break;
         default:
             zend_error(E_ERROR, "Unknown parameter type\n");
-            ret = 0;
+            ret = RFC_SET_VALUE_ERROR;
             return FALSE;
 
     }
