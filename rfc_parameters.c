@@ -583,7 +583,7 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
     return ret;
 }
 
-RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
+rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
                                RFC_FUNCTION_DESC_HANDLE function_desc_handle,
                                zend_string *name,
                                zval *value)
@@ -595,6 +595,7 @@ RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
     SAP_UC *parameter_name_u;
     int ret = RFC_SET_VALUE_OK;
 
+    // TODO if value is empty, skip
 
     rc = RfcGetParameterDescByName(function_desc_handle,
                                    (parameter_name_u = zend_string_to_sapuc(name)),
@@ -674,4 +675,10 @@ RFC_RC rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_handle,
 
     free((char *)parameter_name_u);
     return ret;
+}
+
+zval *rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
+                               RFC_FUNCTION_DESC_HANDLE function_desc_handle,
+                               zend_string *name)
+{
 }
