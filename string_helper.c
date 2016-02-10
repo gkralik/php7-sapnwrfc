@@ -54,8 +54,8 @@ zend_string *sapuc_to_zend_string(SAP_UC *str)
     char *utf8;
     zend_string *out;
 
-    utf8size = strlenU(str) * 4;
-    utf8 = calloc(1, utf8size + 2);
+    utf8size = strlenU(str) * 2 + 1;
+    utf8 = calloc(1, utf8size);
 
     result_length = 0;
     RfcSAPUCToUTF8(str, strlenU(str), (RFC_BYTE *)utf8, &utf8size, &result_length, &error_info);
