@@ -3,4 +3,4 @@
 *.exp
 *.out
 *.sh
-
+private_tests/
