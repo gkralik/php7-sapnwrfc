@@ -5,6 +5,7 @@ Not ordered by priority...
 * Rename `FunctionEntry` to `RemoteFunction`
 * Make sure all malloc'd `SAP_UC*` etc are free'd
 * Make sure all resources are free'd correctly (eg. what about `zend_string_release?`)
+* Add `arginfo`
 * Organize the code ;)
 * Make exception factories easier to use (pass in `RFC_ERROR_INFO` and do the heavy lifting in there instead of scattering the same code all over the place) and check if there are more fields from the error info struct that might be interesting to the end user. `RfcGetRcAsString` might come in handy there also.
 * Make exception messages more useful: include the parameter name where it makes sense etc.
