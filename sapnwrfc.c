@@ -367,7 +367,7 @@ PHP_METHOD(Connection, getFunction)
     SAP_UC *function_name_u;
     RFC_PARAMETER_DESC parameter_desc;
     zval parameter_description;
-    int i;
+    unsigned i;
 
     zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &function_name) == FAILURE) {

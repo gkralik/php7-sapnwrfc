@@ -1031,11 +1031,6 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
     zval value;
     zval field_value;
 
-    //DEBUG
-    ulong num_key;
-    zend_string *key;
-    zval *val;
-
     type_handle = RfcDescribeType(line, &error_info);
     if (type_handle == NULL) {
         sapnwrfc_throw_function_exception_ex("Failed to get TABLE line",
