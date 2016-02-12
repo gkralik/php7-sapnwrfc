@@ -22,7 +22,7 @@
 extern zend_module_entry sapnwrfc_module_entry;
 #define phpext_sapnwrfc_ptr &sapnwrfc_module_entry
 
-#define PHP_SAPNWRFC_VERSION "0.1.0" /* Replace with version number for your extension */
+#define PHP_SAPNWRFC_VERSION "0.5.0"
 
 #ifdef PHP_WIN32
 #    define PHP_SAPNWRFC_API __declspec(dllexport)
