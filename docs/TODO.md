@@ -18,3 +18,4 @@
   then, setParameterActive would just change the map, isParameterActive would query the map
   and invoke would just iterate over the map and call RfcSetParameterActive on all of them
   could we use HashTable for that??? or a plain zend_array??
+* rstrip
