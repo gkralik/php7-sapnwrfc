@@ -679,7 +679,7 @@ zval rfc_get_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
         return value;
     }
 
-    value = sapuc_to_zval(buf);
+    value = sapuc_to_zval_len(buf, len);
     free(buf);
 
     return value;
@@ -816,7 +816,7 @@ zval rfc_get_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
         return value;
     }
 
-    value = sapuc_to_zval(buf);
+    value = sapuc_to_zval_len(buf, len);
     free(buf);
 
     return value;
@@ -972,7 +972,7 @@ zval rfc_get_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
         return value;
     }
 
-    value = sapuc_to_zval(buf);
+    value = sapuc_to_zval_len(buf, result_len);
     free(buf);
 
     return value;
