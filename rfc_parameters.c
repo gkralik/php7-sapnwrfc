@@ -24,9 +24,6 @@
 
 #include "sapnwrfc.h"
 
-// NOTE https://github.com/SAP/PyRFC/blob/master/pyrfc/_pyrfc.pyx
-// NOTE https://github.com/SAP/node-rfc/blob/master/src/rfcio.cc
-
 rfc_set_value_return_t rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
