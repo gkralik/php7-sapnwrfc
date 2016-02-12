@@ -7,9 +7,19 @@
 
 namespace SAPNWRFC;
 
-class ConnectionException extends \RuntimeException {}
+class ConnectionException extends \RuntimeException {
+    /* ...properties inherited from \RuntimeException ... */
 
-class FunctionCallException extends \RuntimeException {}
+    public $rfcKey;
+    public $rfcMessage;
+}
+
+class FunctionCallException extends \RuntimeException {
+    /* ...properties inherited from \RuntimeException ... */
+
+    public $rfcKey;
+    public $rfcMessage;
+}
 
 class Connection {
     /**
