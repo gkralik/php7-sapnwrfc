@@ -92,6 +92,13 @@ class Connection {
 }
 
 class FunctionEntry {
+    /**
+     * Invoke the RFC function.
+     *
+     * @param array $parameters Function parameters.
+     * @returns array Return value from the backend.
+     * @throws FunctionCallException if any error occurs during execution.
+     */
     public function invoke(array $parameters) {}
 
     /**
