@@ -530,10 +530,12 @@ PHP_METHOD(FunctionEntry, invoke)
     RFC_ERROR_INFO error_info;
     RFC_PARAMETER_DESC parameter_desc;
     int is_active;
+    int i = 0;
     zval *in_parameters;
     HashTable *in_parameters_hash;
     zend_string *key;
     zval *val;
+    zval retval;
     SAP_UC *parameter_name_u;
 
     zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
@@ -590,18 +592,77 @@ PHP_METHOD(FunctionEntry, invoke)
             case RFC_IMPORT:
             case RFC_CHANGING:
             case RFC_TABLES:
-                if (rfc_set_parameter_value(intern->function_handle, intern->function_desc_handle, key, val) != 1) {
+                if (rfc_set_parameter_value(intern->function_handle, intern->function_desc_handle, key, val) == RFC_SET_VALUE_ERROR) {
                     // setting the parameter failed; an exception has been thrown
                     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
                     RETURN_NULL();
                 }
                 break;
-            // case RFC_TABLES:
-            //     zend_error(E_ERROR, "RFC_TABLE direction not implemented");
-            //     break;
+            default:
+                // unknown direction
+                zend_error(E_WARNING, "Unknown parameter direction");
+                zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                RETURN_NULL();
         }
 
     } ZEND_HASH_FOREACH_END();
+
+    // invoke the function
+    rc = RfcInvoke(intern->rfc_handle, intern->function_handle, &error_info);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_function_exception_ex("Function invocation failed",
+                                          error_info.code,
+                                          sapuc_to_zend_string(error_info.key),
+                                          sapuc_to_zend_string(error_info.message));
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        RETURN_NULL();
+    }
+
+    // now get the return values
+    array_init(return_value);
+
+    for (i = 0; i < intern->parameter_count; i++) {
+        rc = RfcGetParameterDescByIndex(intern->function_desc_handle, i, &parameter_desc, &error_info);
+        if (rc != RFC_OK) {
+            sapnwrfc_throw_function_exception_ex("Failed to get parameter descriptor",
+                                              error_info.code,
+                                              sapuc_to_zend_string(error_info.key),
+                                              sapuc_to_zend_string(error_info.message));
+            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            RETURN_NULL();
+        }
+
+        // check if the parameter is active
+        rc = RfcIsParameterActive(intern->function_handle, parameter_desc.name, &is_active, &error_info);
+        if (rc != RFC_OK) {
+            sapnwrfc_throw_function_exception_ex("Failed to get parameter status",
+                                              error_info.code,
+                                              sapuc_to_zend_string(error_info.key),
+                                              sapuc_to_zend_string(error_info.message));
+            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            RETURN_NULL();
+        }
+
+        if (is_active == 0) {
+            continue;
+        }
+
+        switch(parameter_desc.direction) {
+            case RFC_IMPORT:
+                break;
+            case RFC_EXPORT:
+            case RFC_CHANGING:
+            case RFC_TABLES:
+                retval = rfc_get_parameter_value(intern->function_handle, intern->function_desc_handle, sapuc_to_zend_string(parameter_desc.name));
+                if (ZVAL_IS_NULL(&retval)) {
+                    // getting the parameter failed; an exception has been thrown
+                    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                    RETURN_NULL();
+                }
+                add_assoc_zval(return_value, ZSTR_VAL(sapuc_to_zend_string(parameter_desc.name)), &retval);
+                break;
+        }
+    }
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }

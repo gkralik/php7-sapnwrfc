@@ -24,6 +24,8 @@
 SAP_UC *zval_to_sapuc(zval *zv);
 SAP_UC *zend_string_to_sapuc(zend_string *str);
 
+zval sapuc_to_zval(SAP_UC *str);
+zval sapuc_to_zval_len(SAP_UC *str, unsigned len);
 zend_string *sapuc_to_zend_string(SAP_UC *str);
 
 #endif /* STRING_HELPER_H_ */

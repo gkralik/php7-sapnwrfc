@@ -47,6 +47,46 @@ SAP_UC *zend_string_to_sapuc(zend_string *str)
     return sapuc;
 }
 
+zval sapuc_to_zval(SAP_UC *str)
+{
+    RFC_ERROR_INFO error_info;
+    unsigned utf8size, result_length;
+    char *utf8;
+    zval out;
+
+    utf8size = strlenU(str) * 2 + 1;
+    utf8 = calloc(1, utf8size);
+    utf8[0] = '\0';
+
+    result_length = 0;
+    RfcSAPUCToUTF8(str, strlenU(str), (RFC_BYTE *)utf8, &utf8size, &result_length, &error_info);
+
+    ZVAL_STRINGL(&out, utf8, result_length -1 ); // without \0 terminator
+    free(utf8);
+
+    return out;
+}
+
+zval sapuc_to_zval_len(SAP_UC *str, unsigned len)
+{
+    RFC_ERROR_INFO error_info;
+    unsigned utf8size, result_length;
+    char *utf8;
+    zval out;
+
+    utf8size = len * 2 + 1;
+    utf8 = calloc(1, utf8size);
+    utf8[0] = '\0';
+
+    result_length = 0;
+    RfcSAPUCToUTF8(str, len, (RFC_BYTE *)utf8, &utf8size, &result_length, &error_info);
+
+    ZVAL_STRINGL(&out, utf8, result_length - 1); // without \0 terminator
+    free(utf8);
+
+    return out;
+}
+
 zend_string *sapuc_to_zend_string(SAP_UC *str)
 {
     RFC_ERROR_INFO error_info;
@@ -60,7 +100,7 @@ zend_string *sapuc_to_zend_string(SAP_UC *str)
     result_length = 0;
     RfcSAPUCToUTF8(str, strlenU(str), (RFC_BYTE *)utf8, &utf8size, &result_length, &error_info);
 
-    out = zend_string_init(utf8, result_length, 0);
+    out = zend_string_init(utf8, result_length - 1, 0);
     free(utf8);
 
     return out;
