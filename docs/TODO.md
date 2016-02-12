@@ -19,3 +19,4 @@
   and invoke would just iterate over the map and call RfcSetParameterActive on all of them
   could we use HashTable for that??? or a plain zend_array??
 * rstrip
+* zend_string_release usage
