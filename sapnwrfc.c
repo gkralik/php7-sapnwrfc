@@ -505,7 +505,8 @@ PHP_METHOD(Connection, version)
 
     len = spprintf(&version, 0, "%s", PHP_SAPNWRFC_VERSION);
 
-    RETURN_STRINGL(version, len);
+    RETVAL_STRINGL(version, len);
+    efree(version);
 }
 
 PHP_METHOD(Connection, rfcVersion)
@@ -520,7 +521,8 @@ PHP_METHOD(Connection, rfcVersion)
 
     len = spprintf(&version, 0, "%d.%d.%d", major, minor, patch);
 
-    RETURN_STRINGL(version, len);
+    RETVAL_STRINGL(version, len);
+    efree(version);
 }
 
 PHP_METHOD(FunctionEntry, invoke)
