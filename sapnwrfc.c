@@ -428,11 +428,11 @@ PHP_METHOD(Connection, getFunction)
 
         array_init(&parameter_description);
 
-        add_assoc_str(&parameter_description, "type", (tmp = sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type))));
-        add_assoc_str(&parameter_description, "direction", (tmp = sapuc_to_zend_string((SAP_UC *)RfcGetDirectionAsString(parameter_desc.direction))));
-        add_assoc_str(&parameter_description, "description", (tmp = sapuc_to_zend_string(parameter_desc.parameterText)));
+        add_assoc_str(&parameter_description, "type", sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type)));
+        add_assoc_str(&parameter_description, "direction", sapuc_to_zend_string((SAP_UC *)RfcGetDirectionAsString(parameter_desc.direction)));
+        add_assoc_str(&parameter_description, "description", sapuc_to_zend_string(parameter_desc.parameterText));
         add_assoc_bool(&parameter_description, "optional", parameter_desc.optional);
-        add_assoc_str(&parameter_description, "defaultValue", (tmp = sapuc_to_zend_string(parameter_desc.defaultValue)));
+        add_assoc_str(&parameter_description, "defaultValue", sapuc_to_zend_string(parameter_desc.defaultValue));
 
         tmp = sapuc_to_zend_string(parameter_desc.name);
         add_property_zval(return_value, ZSTR_VAL(tmp), &parameter_description);
