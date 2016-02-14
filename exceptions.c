@@ -83,6 +83,8 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
     zend_update_property(sapnwrfc_connection_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info TSRMLS_CC);
 
     zend_throw_exception_object(&ex TSRMLS_CC);
+
+    zval_ptr_dtor(&info);
     zend_string_release(message);
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
@@ -145,6 +147,8 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
     zend_update_property(sapnwrfc_function_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info TSRMLS_CC);
 
     zend_throw_exception_object(&ex TSRMLS_CC);
+
+    zval_ptr_dtor(&info);
     zend_string_release(message);
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
