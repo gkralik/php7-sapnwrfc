@@ -228,7 +228,7 @@ PHP_METHOD(Connection, __construct)
     zval *connection_params;
     long len;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
 
     // get the connection parameters
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &connection_params) == FAILURE) {
@@ -238,7 +238,7 @@ PHP_METHOD(Connection, __construct)
 
     len = zend_hash_num_elements(Z_ARRVAL_P(connection_params));
     if (len == 0) {
-        sapnwrfc_throw_connection_exception("No connection parameters given", 0);
+        zend_error(E_WARNING, "No connection parameters given");
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
     }
@@ -293,7 +293,7 @@ PHP_METHOD(Connection, attributes)
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
@@ -338,7 +338,7 @@ PHP_METHOD(Connection, ping)
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
     zend_parse_parameters_none();
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
@@ -370,7 +370,7 @@ PHP_METHOD(Connection, getFunction)
     zval parameter_description;
     unsigned i;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &function_name) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
@@ -461,7 +461,7 @@ PHP_METHOD(Connection, setIniPath)
     RFC_RC rc = RFC_OK;
     zend_string *path;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &path) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
@@ -487,7 +487,7 @@ PHP_METHOD(Connection, reloadIniFile)
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
     zend_parse_parameters_none();
 
     rc = RfcReloadIniFile(&error_info);
@@ -550,7 +550,7 @@ PHP_METHOD(FunctionEntry, invoke)
     zval retval;
     SAP_UC *parameter_name_u;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "a", &in_parameters) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
@@ -564,7 +564,7 @@ PHP_METHOD(FunctionEntry, invoke)
     ZEND_HASH_FOREACH_STR_KEY_VAL(in_parameters_hash, key, val) {
         if (!key) {
             // not a string key
-            sapnwrfc_throw_function_exception("All parameter keys must be strings.", 0);
+            zend_error(EH_WARNING, "All parameter keys must be strings");
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
             RETURN_NULL();
         }
@@ -694,7 +694,7 @@ PHP_METHOD(FunctionEntry, setParameterActive)
     zend_bool parameter_active;
     SAP_UC *parameter_name_u;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "Sb", &parameter_name, &parameter_active) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
@@ -727,7 +727,7 @@ PHP_METHOD(FunctionEntry, isParameterActive)
     SAP_UC *parameter_name_u;
     int is_active;
 
-    zend_replace_error_handling(EH_THROW, zend_ce_exception, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &parameter_name) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
