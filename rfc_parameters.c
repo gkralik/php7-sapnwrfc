@@ -468,7 +468,7 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value)
 
     ZEND_HASH_FOREACH_KEY_VAL(value_hash, num_key, str_index, val) {
         if (!str_index) { // not string
-            sapnwrfc_throw_function_exception("All parameter keys must be strings.", 0);
+            zend_error(E_WARNING, "All parameter keys must be strings.");
             return RFC_SET_VALUE_ERROR;
         }
 
