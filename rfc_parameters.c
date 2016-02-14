@@ -28,13 +28,13 @@ rfc_set_value_return_t rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     SAP_UC *value_u;
 
     if (Z_TYPE_P(value) != IS_STRING) {
-        sapnwrfc_throw_function_exception_ex("Failed to set char parameter: expected string",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set CHAR parameter %s, expected string", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -43,10 +43,9 @@ rfc_set_value_return_t rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
     free((char *)value_u);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set char parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set CHAR parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -57,22 +56,21 @@ rfc_set_value_return_t rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     SAP_UC *value_u;
     RFC_DATE value_date;
 
     if (Z_TYPE_P(value) != IS_STRING) {
-        sapnwrfc_throw_function_exception_ex("Failed to set date parameter: expected string",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set DATE parameter %s, expected string", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
-    if (Z_STRLEN_P(value) != 8) {
-        sapnwrfc_throw_function_exception_ex("Failed to set date parameter: invalid format",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+    if (Z_STRLEN_P(value) != SAP_DATE_LN) {
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set DATE parameter %s, invalid format given", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -82,10 +80,9 @@ rfc_set_value_return_t rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 
     rc = RfcSetDate(h, name, value_date, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set date parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set DATE parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -96,35 +93,33 @@ rfc_set_value_return_t rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     SAP_UC *value_u;
     RFC_TIME value_time;
 
     if (Z_TYPE_P(value) != IS_STRING) {
-        sapnwrfc_throw_function_exception_ex("Failed to set time parameter: expected string",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set TIME parameter %s, expected string", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
-    if (Z_STRLEN_P(value) != 6) {
-        sapnwrfc_throw_function_exception_ex("Failed to set time parameter: invalid format",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+    if (Z_STRLEN_P(value) != SAP_TIME_LN) {
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set TIME parameter %s, invalid format given", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     value_u = zval_to_sapuc(value);
-    memcpy((char *)value_time, (char *)value_u, 12);
+    memcpy((char *)value_time, (char *)value_u, SAP_TIME_LN * 2);
     free((char *)value_u);
 
     rc = RfcSetTime(h, name, value_time, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set time parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set TIME parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -135,29 +130,27 @@ rfc_set_value_return_t rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
 
     if (Z_TYPE_P(value) != IS_STRING) {
-        sapnwrfc_throw_function_exception_ex("Failed to set byte parameter: expected string",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set BYTE parameter %s, expected string", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_STRLEN_P(value) > max) {
-        sapnwrfc_throw_function_exception_ex("Failed to set byte parameter: too long",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set BYTE parameter %s, too long", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetBytes(h, name, (SAP_RAW *)Z_STRVAL_P(value), Z_STRLEN_P(value), &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set byte parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set BYTE parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -168,15 +161,15 @@ rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
 {
     RFC_ERROR_INFO error_info;
     RFC_STRUCTURE_HANDLE table_row;
+    zend_string *zname;
     HashTable *value_hash;
     zend_string *key;
     zval *val;
 
     if (Z_TYPE_P(value) != IS_ARRAY) {
-        sapnwrfc_throw_function_exception_ex("Failed to set table parameter: expected array",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set TABLE parameter %s, expected array", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -184,19 +177,14 @@ rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     ZEND_HASH_FOREACH_STR_KEY_VAL(value_hash, key, val) {
         table_row = RfcAppendNewRow(h, &error_info);
         if (table_row == NULL) {
-            sapnwrfc_throw_function_exception_ex("Failed to append table row",
-                                                 error_info.code,
-                                                 sapuc_to_zend_string(error_info.key),
-                                                 sapuc_to_zend_string(error_info.message));
+            zname = sapuc_to_zend_string(name);
+            sapnwrfc_throw_function_exception(error_info, "Failed to append TABLE row for parameter %s", ZSTR_VAL(zname));
+            zend_string_release(zname);
             return RFC_SET_VALUE_ERROR;
         }
 
         if (rfc_set_table_row(table_row, val) == RFC_SET_VALUE_ERROR) {
-            // or in rfc_set_table_row()?
-            sapnwrfc_throw_function_exception_ex("Failed to set table row",
-                                                 error_info.code,
-                                                 sapuc_to_zend_string(error_info.key),
-                                                 sapuc_to_zend_string(error_info.message));
+            // exception has been thrown; abort
             return RFC_SET_VALUE_ERROR;
         }
     } ZEND_HASH_FOREACH_END();
@@ -208,21 +196,20 @@ rfc_set_value_return_t rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, 
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     SAP_UC *value_u;
 
     if (Z_TYPE_P(value) != IS_STRING) {
-        sapnwrfc_throw_function_exception_ex("Failed to set num parameter: expected string",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set NUM parameter %s, expected string", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_STRLEN_P(value) > max) {
-        sapnwrfc_throw_function_exception_ex("Failed to set num parameter: too long",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set NUM parameter, too long");
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -232,10 +219,9 @@ rfc_set_value_return_t rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, 
     free((char *)value_u);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set num parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set NUM parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -246,22 +232,21 @@ rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
 
     if (Z_TYPE_P(value) != IS_DOUBLE) {
-        sapnwrfc_throw_function_exception_ex("Failed to set float parameter: expected double",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set FLOAT parameter %s, excpected double", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetFloat(h, name, (RFC_FLOAT)Z_DVAL_P(value), &error_info);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set float parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set FLOAT parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -272,22 +257,21 @@ rfc_set_value_return_t rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, 
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
 
     if (Z_TYPE_P(value) != IS_LONG) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int parameter: expected long",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set INT parameter %s, expected integer", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetInt(h, name, (RFC_INT)Z_LVAL_P(value), &error_info);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set INT parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -298,30 +282,28 @@ rfc_set_value_return_t rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
 
     if (Z_TYPE_P(value) != IS_LONG) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int1 parameter: expected long",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set INT1 parameter %s, expected integer", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_LVAL_P(value) > 255) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int1 parameter: too big (>255)",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set INT1 parameter %s, too big", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetInt1(h, name, (RFC_INT1)Z_LVAL_P(value), &error_info);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int1 parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set INT1 parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -332,30 +314,28 @@ rfc_set_value_return_t rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
 
     if (Z_TYPE_P(value) != IS_LONG) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int2 parameter: expected long",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set INT2 parameter %s, expected integer", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     if (Z_LVAL_P(value) > 65535) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int2 parameter: too big (>65535)",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set INT2 parameter %s, too big", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetInt2(h, name, (RFC_INT2)Z_LVAL_P(value), &error_info);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set int2 parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set INT2 parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -367,13 +347,13 @@ rfc_set_value_return_t rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     RFC_STRUCTURE_HANDLE line_handle;
+    zend_string *zname;
 
     rc = RfcGetStructure(h, name, &line_handle, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set STRUCTURE",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set STRUCTURE parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -385,12 +365,12 @@ rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *nam
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     SAP_UC *value_u;
+    zend_string *zname;
 
     if (Z_TYPE_P(value) != IS_STRING) {
-        sapnwrfc_throw_function_exception_ex("Failed to set string parameter: expected string",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set STRING parameter %s, expected string", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -399,10 +379,9 @@ rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *nam
     free((char *)value_u);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set string parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set STRING parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -413,22 +392,21 @@ rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *na
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
 
     if (Z_TYPE_P(value) != IS_STRING) {
-        sapnwrfc_throw_function_exception_ex("Failed to set xstring parameter: expected string",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set XSTRING parameter %s, expected string", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
     rc = RfcSetXString(h, name, (SAP_RAW *)Z_STRVAL_P(value), Z_STRLEN_P(value), &error_info);
 
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to set xstring parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set XSTRING parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -443,42 +421,33 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value)
     RFC_TYPE_DESC_HANDLE type_desc_handle;
     SAP_UC * field_name_u;
     HashTable *value_hash;
-    zend_string *str_index;
+    zend_string *key;
     ulong num_key;
     zval *val;
 
     if (Z_TYPE_P(value) != IS_ARRAY) {
-        sapnwrfc_throw_function_exception_ex("Failed to set table row: expected array",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zend_error(E_WARNING, "Failed to set TABLE row, expected array");
         return RFC_SET_VALUE_ERROR;
     }
 
     type_desc_handle = RfcDescribeType(row, &error_info);
     if (type_desc_handle == NULL) {
-        sapnwrfc_throw_function_exception_ex("Failed to get row type",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE row type description");
         return RFC_SET_VALUE_ERROR;
     }
 
     value_hash = Z_ARRVAL_P(value);
 
-    ZEND_HASH_FOREACH_KEY_VAL(value_hash, num_key, str_index, val) {
-        if (!str_index) { // not string
+    ZEND_HASH_FOREACH_KEY_VAL(value_hash, num_key, key, val) {
+        if (!key) { // not string
             zend_error(E_WARNING, "All parameter keys must be strings.");
             return RFC_SET_VALUE_ERROR;
         }
 
-        rc = RfcGetFieldDescByName(type_desc_handle, (field_name_u = zend_string_to_sapuc(str_index)), &field_desc, &error_info);
+        rc = RfcGetFieldDescByName(type_desc_handle, (field_name_u = zend_string_to_sapuc(key)), &field_desc, &error_info);
         if (rc != RFC_OK) {
             free((char *)field_name_u);
-            sapnwrfc_throw_function_exception_ex("Failed to get field description",
-                                                 error_info.code,
-                                                 sapuc_to_zend_string(error_info.key),
-                                                 sapuc_to_zend_string(error_info.message));
+            sapnwrfc_throw_function_exception(error_info, "Failed to get description for field %s", ZSTR_VAL(key));
             return RFC_SET_VALUE_ERROR;
         }
 
@@ -486,10 +455,6 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value)
         free((char *)field_name_u);
 
         if (rfc_set_field_value(row, field_desc, val) == RFC_SET_VALUE_ERROR) {
-            sapnwrfc_throw_function_exception_ex("Failed to set field value",
-                                                 error_info.code,
-                                                 sapuc_to_zend_string(error_info.key),
-                                                 sapuc_to_zend_string(error_info.message));
             return RFC_SET_VALUE_ERROR;
         }
     } ZEND_HASH_FOREACH_END();
@@ -502,6 +467,7 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     RFC_TABLE_HANDLE table_handle;
+    zend_string *zname;
     int ret = RFC_SET_VALUE_OK;
 
     switch(field_desc.type) {
@@ -520,11 +486,9 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
         case RFCTYPE_TABLE:
             rc = RfcGetTable(h, field_desc.name, &table_handle, &error_info);
             if (rc != RFC_OK) {
-                sapnwrfc_throw_function_exception_ex("Failed to get table handle",
-                                                     error_info.code,
-                                                     sapuc_to_zend_string(error_info.key),
-                                                     sapuc_to_zend_string(error_info.message));
-
+                zname = sapuc_to_zend_string(field_desc.name);
+                sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE handle for parameter %s", ZSTR_VAL(zname));
+                zend_string_release(zname);
                 return RFC_SET_VALUE_ERROR;
             }
 
@@ -556,7 +520,9 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
             ret = rfc_set_xstring_value(h, field_desc.name, value);
             break;
         default:
-            zend_error(E_ERROR, "Unknown parameter type\n");
+            zname = sapuc_to_zend_string(field_desc.name);
+            zend_error(E_WARNING, "Unknown type for parameter %s", ZSTR_VAL(zname));
+            zend_string_release(zname);
             ret = RFC_SET_VALUE_ERROR;
     }
 
@@ -585,11 +551,7 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
     if (rc != RFC_OK) {
         free((char *)parameter_name_u);
 
-        sapnwrfc_throw_function_exception_ex("Failed to get parameter description",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
-
+        sapnwrfc_throw_function_exception(error_info, "Failed to get description for parameter %s", ZSTR_VAL(name));
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -611,11 +573,7 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
             if (rc != RFC_OK) {
                 free((char *)parameter_name_u);
 
-                sapnwrfc_throw_function_exception_ex("Failed to get table handle",
-                                                     error_info.code,
-                                                     sapuc_to_zend_string(error_info.key),
-                                                     sapuc_to_zend_string(error_info.message));
-
+                sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE handle for parameter %s", ZSTR_VAL(name));
                 return RFC_SET_VALUE_ERROR;
             }
 
@@ -647,7 +605,7 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
             ret = rfc_set_xstring_value(function_handle, parameter_name_u, value);
             break;
         default:
-            zend_error(E_ERROR, "Unknown parameter type\n");
+            zend_error(E_WARNING, "Unknown type for parameter %s", ZSTR_VAL(name));
             ret = RFC_SET_VALUE_ERROR;
     }
 
@@ -660,6 +618,7 @@ zval rfc_get_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     SAP_UC *buf;
+    zend_string *zname;
     zval value;
 
     buf = (SAP_UC *)mallocU(len);
@@ -667,10 +626,9 @@ zval rfc_get_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
     rc = RfcGetChars(h, name, buf, len, &error_info);
     if (rc != RFC_OK) {
         free(buf);
-        sapnwrfc_throw_function_exception_ex("Failed to get CHAR parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get CHAR parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -687,14 +645,14 @@ zval rfc_get_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     RFC_DATE buf;
+    zend_string *zname;
     zval value;
 
     rc = RfcGetDate(h, name, buf, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get DATE parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get DATE parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -710,14 +668,14 @@ zval rfc_get_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     RFC_TIME buf;
+    zend_string *zname;
     zval value;
 
     rc = RfcGetTime(h, name, buf, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get TIME parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get TIME parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -732,6 +690,7 @@ zval rfc_get_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     SAP_RAW *buf;
     zval value;
 
@@ -740,10 +699,9 @@ zval rfc_get_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
     if (rc != RFC_OK) {
         free(buf);
 
-        sapnwrfc_throw_function_exception_ex("Failed to get BYTE parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get BYTE parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -759,6 +717,7 @@ zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_STRUCTURE_HANDLE line_handle;
     zval value;
     zval line_value;
@@ -767,10 +726,9 @@ zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 
     rc = RfcGetRowCount(h, &table_len, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get TABLE parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -796,6 +754,7 @@ zval rfc_get_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_NUM *buf;
     zval value;
 
@@ -804,10 +763,10 @@ zval rfc_get_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
     rc = RfcGetNum(h, name, buf, len, &error_info);
     if (rc != RFC_OK) {
         free(buf);
-        sapnwrfc_throw_function_exception_ex("Failed to get NUM parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get NUM parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -823,15 +782,15 @@ zval rfc_get_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_FLOAT buf;
     zval value;
 
     rc = RfcGetFloat(h, name, &buf, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get FLOAT parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get FLOAT parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -846,15 +805,15 @@ zval rfc_get_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_INT buf;
     zval value;
 
     rc = RfcGetInt(h, name, &buf, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get INT parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get INT parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -869,15 +828,15 @@ zval rfc_get_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_INT1 buf;
     zval value;
 
     rc = RfcGetInt1(h, name, &buf, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get INT1 parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get INT1 parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -892,15 +851,15 @@ zval rfc_get_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_INT2 buf;
     zval value;
 
     rc = RfcGetInt2(h, name, &buf, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get INT2 parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get INT2 parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -915,15 +874,15 @@ zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_STRUCTURE_HANDLE line_handle;
     zval value;
 
     rc = RfcGetStructure(h, name, &line_handle, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get STRUCTURE",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get STRUCTURE parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -936,16 +895,16 @@ zval rfc_get_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     zval value;
     unsigned str_len, result_len;
     SAP_UC *buf;
 
     rc = RfcGetStringLength(h, name, &str_len, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get STRING parameter length",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get length of STRING parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -960,10 +919,10 @@ zval rfc_get_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     rc = RfcGetString(h, name, buf, str_len + 1, &result_len, &error_info);
     if (rc != RFC_OK) {
         free(buf);
-        sapnwrfc_throw_function_exception_ex("Failed to get STRING parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get STRING parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -979,16 +938,16 @@ zval rfc_get_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     zval value;
     unsigned str_len, result_len;
     SAP_RAW *buf;
 
     rc = RfcGetStringLength(h, name, &str_len, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get XSTRING parameter length",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get length of XSTRING parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -1005,10 +964,10 @@ zval rfc_get_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     rc = RfcGetXString(h, name, buf, str_len, &result_len, &error_info);
     if (rc != RFC_OK) {
         free(buf);
-        sapnwrfc_throw_function_exception_ex("Failed to get XSTRING parameter",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get XSTRING parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
 
         ZVAL_NULL(&value);
         return value;
@@ -1034,10 +993,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
 
     type_handle = RfcDescribeType(line, &error_info);
     if (type_handle == NULL) {
-        sapnwrfc_throw_function_exception_ex("Failed to get TABLE line",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE line");
 
         ZVAL_NULL(&value);
         return value;
@@ -1045,10 +1001,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
 
     rc = RfcGetFieldCount(type_handle, &field_count, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception_ex("Failed to get TABLE line",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        sapnwrfc_throw_function_exception(error_info, "Failed to get field count for TABLE line");
 
         ZVAL_NULL(&value);
         return value;
@@ -1059,10 +1012,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
     for(i = 0; i < field_count; i++) {
         rc = RfcGetFieldDescByIndex(type_handle, i, &field_desc, &error_info);
         if (rc != RFC_OK) {
-            sapnwrfc_throw_function_exception_ex("Failed to get TABLE line",
-                                                 error_info.code,
-                                                 sapuc_to_zend_string(error_info.key),
-                                                 sapuc_to_zend_string(error_info.message));
+            sapnwrfc_throw_function_exception(error_info, "Failed to get field description for TABLE line");
 
             ZVAL_NULL(&value);
             return value;
@@ -1087,8 +1037,10 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
+    zend_string *zname;
     RFC_TABLE_HANDLE table_handle;
     zval value;
+
     switch(field_desc.type) {
         case RFCTYPE_CHAR:
             value = rfc_get_char_value(h, field_desc.name, field_desc.nucLength);
@@ -1105,10 +1057,9 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
         case RFCTYPE_TABLE:
             rc = RfcGetTable(h, field_desc.name, &table_handle, &error_info);
             if (rc != RFC_OK) {
-                sapnwrfc_throw_function_exception_ex("Failed to get table handle",
-                                                     error_info.code,
-                                                     sapuc_to_zend_string(error_info.key),
-                                                     sapuc_to_zend_string(error_info.message));
+                zname = sapuc_to_zend_string(field_desc.name);
+                sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE handle for parameter %s", ZSTR_VAL(zname));
+                zend_string_release(zname);
 
                 ZVAL_NULL(&value);
                 return value;
@@ -1142,7 +1093,9 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
             value = rfc_get_xstring_value(h, field_desc.name);
             break;
         default:
-            zend_error(E_ERROR, "Unknown parameter type\n");
+            zname = sapuc_to_zend_string(field_desc.name);
+            zend_error(E_ERROR, "Unknown type for parameter %s", ZSTR_VAL(zname));
+            zend_string_release(zname);
             ZVAL_NULL(&value);
     }
 
@@ -1164,10 +1117,7 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
     if (rc != RFC_OK) {
         free((char *)parameter_name_u);
 
-        sapnwrfc_throw_function_exception_ex("Failed to get parameter description",
-                                             error_info.code,
-                                             sapuc_to_zend_string(error_info.key),
-                                             sapuc_to_zend_string(error_info.message));
+        sapnwrfc_throw_function_exception(error_info, "Failed to get description for parameter %s", ZSTR_VAL(name));
 
         ZVAL_NULL(&value);
         return value;
@@ -1191,10 +1141,7 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
             if (rc != RFC_OK) {
                 free((char *)parameter_name_u);
 
-                sapnwrfc_throw_function_exception_ex("Failed to get table handle",
-                                                     error_info.code,
-                                                     sapuc_to_zend_string(error_info.key),
-                                                     sapuc_to_zend_string(error_info.message));
+                sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE handle for parameter %s", ZSTR_VAL(name));
 
                 ZVAL_NULL(&value);
             }
@@ -1226,7 +1173,7 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
             value = rfc_get_xstring_value(function_handle, parameter_name_u);
             break;
         default:
-            zend_error(E_ERROR, "Unknown parameter type\n");
+            zend_error(E_ERROR, "Unknown type for parameter %s", ZSTR_VAL(name));
             ZVAL_NULL(&value);
     }
 

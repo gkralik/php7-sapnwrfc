@@ -16,8 +16,8 @@
   +----------------------------------------------------------------------+
 */
 
-#ifndef RFC_PARAMETERS_H
-#define RFC_PARAMETERS_H
+#ifndef _RFC_PARAMETERS_H
+#define _RFC_PARAMETERS_H
 
 typedef enum { RFC_SET_VALUE_ERROR, RFC_SET_VALUE_OK} rfc_set_value_return_t;
 
@@ -65,4 +65,4 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
                                RFC_FUNCTION_DESC_HANDLE function_desc_handle,
                                zend_string *name);
 
-#endif /* RFC_PARAMETERS_H */
+#endif /* _RFC_PARAMETERS_H */

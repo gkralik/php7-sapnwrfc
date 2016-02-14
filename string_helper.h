@@ -18,8 +18,8 @@
 
 #include "sapnwrfc.h"
 
-#ifndef STRING_HELPER_H_
-#define STRING_HELPER_H_
+#ifndef _STRING_HELPER_H
+#define _STRING_HELPER_H
 
 SAP_UC *zval_to_sapuc(zval *zv);
 SAP_UC *zend_string_to_sapuc(zend_string *str);
@@ -27,4 +27,4 @@ SAP_UC *zend_string_to_sapuc(zend_string *str);
 zval sapuc_to_zval_len(SAP_UC *str, unsigned len);
 zend_string *sapuc_to_zend_string(SAP_UC *str);
 
-#endif /* STRING_HELPER_H_ */
+#endif /* _STRING_HELPER_H */

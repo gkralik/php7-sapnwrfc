@@ -16,11 +16,18 @@
   +----------------------------------------------------------------------+
 */
 
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+#include "sapnwrfc.h"
 
+#ifndef _EXCEPTIONS_H
+#define _EXCEPTIONS_H
+
+zend_class_entry *sapnwrfc_exception_ce;
 zend_class_entry *sapnwrfc_connection_exception_ce;
 zend_class_entry *sapnwrfc_function_exception_ce;
+
+typedef struct _sapnwrfc_exception_object {
+    zend_object *zobj;
+} sapnwrfc_exception_object;
 
 typedef struct _sapnwrfc_connection_exception_object {
     zend_object zobj;
@@ -30,12 +37,9 @@ typedef struct _sapnwrfc_function_exception_object {
     zend_object zobj;
 } sapnwrfc_functioncall_exception_object;
 
-void sapnwrfc_throw_connection_exception_ex(char *msg, int code, zend_string *rfcKey, zend_string *rfcMessage);
-void sapnwrfc_throw_connection_exception(char *msg, int code);
-
-void sapnwrfc_throw_function_exception_ex(char *msg, int code, zend_string *rfcKey, zend_string *rfcMessage);
-void sapnwrfc_throw_function_exception(char *msg, int code);
+void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, ...);
+void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...);
 
 void sapnwrfc_register_exceptions();
 
-#endif /* EXCEPTIONS_H */
+#endif /* _EXCEPTIONS_H */

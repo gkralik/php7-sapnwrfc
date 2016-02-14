@@ -16,8 +16,8 @@
   +----------------------------------------------------------------------+
 */
 
-#ifndef PHP_SAPNWRFC_H
-#define PHP_SAPNWRFC_H
+#ifndef _PHP_SAPNWRFC_H
+#define _PHP_SAPNWRFC_H
 
 extern zend_module_entry sapnwrfc_module_entry;
 #define phpext_sapnwrfc_ptr &sapnwrfc_module_entry
@@ -42,7 +42,7 @@ extern zend_module_entry sapnwrfc_module_entry;
 ZEND_TSRMLS_CACHE_EXTERN();
 #endif
 
-#endif    /* PHP_SAPNWRFC_H */
+#endif    /* _PHP_SAPNWRFC_H */
 
 
 /*

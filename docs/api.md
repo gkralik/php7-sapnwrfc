@@ -7,19 +7,25 @@
 
 namespace SAPNWRFC;
 
-class ConnectionException extends \RuntimeException {
-    /* ...properties inherited from \RuntimeException ... */
-
-    public $rfcKey;
-    public $rfcMessage;
+class Exception extends \RuntimeException {
+    /**
+     * Detailed RFC/ABAP error information
+     *
+     * $errorInfo contains at least the "code", "key" and "message" keys from
+     * the RFC library.
+     * If the error is an ABAP error, the following additional keys are
+     * available:
+     *    "abapMsgClass", "abapMsgType", "abapMsgNumber", "abapMsgV1",
+     *    "abapMsgV2", "abapMsgV3", "abapMsgV4"
+     *
+     * @var array $errorInfo
+     */
+    public $errorInfo;
 }
 
-class FunctionCallException extends \RuntimeException {
-    /* ...properties inherited from \RuntimeException ... */
+class ConnectionException extends Exception {}
 
-    public $rfcKey;
-    public $rfcMessage;
-}
+class FunctionCallException extends Exception {}
 
 class Connection {
     /**
