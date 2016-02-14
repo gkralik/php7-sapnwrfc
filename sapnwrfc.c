@@ -364,6 +364,7 @@ PHP_METHOD(Connection, getFunction)
     RFC_RC rc = RFC_OK;
     RFC_FUNCTION_DESC_HANDLE function_desc_handle;
     zend_string *function_name;
+    zend_string *tmp;
     SAP_UC *function_name_u;
     RFC_PARAMETER_DESC parameter_desc;
     zval parameter_description;
@@ -397,8 +398,10 @@ PHP_METHOD(Connection, getFunction)
     func_intern = SAPNWRFC_FUNCTION_OBJ_P(return_value);
     func_intern->rfc_handle = intern->rfc_handle;
     func_intern->function_desc_handle = function_desc_handle;
-    func_intern->name = function_name;
+    func_intern->name = zend_string_copy(function_name);
     add_property_str(return_value, "name", function_name);
+
+    zend_string_release(function_name);
 
     // get nr of parameters
     rc = RfcGetParameterCount(func_intern->function_desc_handle, &func_intern->parameter_count, &error_info);
@@ -424,12 +427,18 @@ PHP_METHOD(Connection, getFunction)
         }
 
         array_init(&parameter_description);
-        add_assoc_str(&parameter_description, "type", sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type)));
-        add_assoc_str(&parameter_description, "direction", sapuc_to_zend_string((SAP_UC *)RfcGetDirectionAsString(parameter_desc.direction)));
-        add_assoc_str(&parameter_description, "description", sapuc_to_zend_string(parameter_desc.parameterText));
+
+        add_assoc_str(&parameter_description, "type", (tmp = sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type))));
+        add_assoc_str(&parameter_description, "direction", (tmp = sapuc_to_zend_string((SAP_UC *)RfcGetDirectionAsString(parameter_desc.direction))));
+        add_assoc_str(&parameter_description, "description", (tmp = sapuc_to_zend_string(parameter_desc.parameterText)));
         add_assoc_bool(&parameter_description, "optional", parameter_desc.optional);
-        add_assoc_str(&parameter_description, "defaultValue", sapuc_to_zend_string(parameter_desc.defaultValue));
-        add_property_zval(return_value, ZSTR_VAL(sapuc_to_zend_string(parameter_desc.name)), &parameter_description);
+        add_assoc_str(&parameter_description, "defaultValue", (tmp = sapuc_to_zend_string(parameter_desc.defaultValue)));
+
+        tmp = sapuc_to_zend_string(parameter_desc.name);
+        add_property_zval(return_value, ZSTR_VAL(tmp), &parameter_description);
+        zend_string_release(tmp);
+
+        zval_ptr_dtor(&parameter_description);
     }
 
     // create the function handle
