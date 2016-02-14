@@ -1030,6 +1030,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
     unsigned i = 0;
     zval value;
     zval field_value;
+    zend_string *tmp;
 
     type_handle = RfcDescribeType(line, &error_info);
     if (type_handle == NULL) {
@@ -1074,7 +1075,9 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
             return value;
         }
 
-        add_assoc_zval(&value, ZSTR_VAL(sapuc_to_zend_string(field_desc.name)), &field_value);
+        tmp = sapuc_to_zend_string(field_desc.name);
+        add_assoc_zval(&value, ZSTR_VAL(tmp), &field_value);
+        zend_string_release(tmp);
     }
 
     return value;

@@ -544,6 +544,7 @@ PHP_METHOD(FunctionEntry, invoke)
     int i = 0;
     zval *in_parameters;
     HashTable *in_parameters_hash;
+    zend_string *tmp;
     zend_string *key;
     zval *val;
     zval retval;
@@ -664,13 +665,19 @@ PHP_METHOD(FunctionEntry, invoke)
             case RFC_EXPORT:
             case RFC_CHANGING:
             case RFC_TABLES:
-                retval = rfc_get_parameter_value(intern->function_handle, intern->function_desc_handle, sapuc_to_zend_string(parameter_desc.name));
+                tmp = sapuc_to_zend_string(parameter_desc.name);
+                retval = rfc_get_parameter_value(intern->function_handle, intern->function_desc_handle, tmp);
+
                 if (ZVAL_IS_NULL(&retval)) {
+                    zend_string_release(tmp);
                     // getting the parameter failed; an exception has been thrown
                     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
                     RETURN_NULL();
                 }
-                add_assoc_zval(return_value, ZSTR_VAL(sapuc_to_zend_string(parameter_desc.name)), &retval);
+
+                add_assoc_zval(return_value, ZSTR_VAL(tmp), &retval);
+
+                zend_string_release(tmp);
                 break;
         }
     }
