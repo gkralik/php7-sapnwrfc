@@ -52,10 +52,10 @@ class Connection {
     public function ping() {}
 
     /**
-     * Lookup a RFC function and return a FunctionEntry object.
+     * Lookup a RFC function and return a RemoteFunction object.
      *
      * @param string $functionName Name of the function.
-     * @return FunctionEntry A FunctionEntry class for the RFC function.
+     * @return RemoteFunction A RemoteFunction class for the RFC function.
      * @throws FunctionCallException if the lookup fails or an error is
      *                               returned during parameter parsing.
      */
@@ -107,7 +107,7 @@ class Connection {
     public static function rfcVersion() {}
 }
 
-class FunctionEntry {
+class RemoteFunction {
     /**
      * Invoke the RFC function.
      *

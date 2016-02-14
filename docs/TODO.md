@@ -2,7 +2,6 @@
 
 Not ordered by priority...
 
-* Rename `FunctionEntry` to `RemoteFunction`
 * Make sure all malloc'd `SAP_UC*` etc are free'd
 * Test with a `DEBUG` and `ZTS` build.
 * Add `arginfo`

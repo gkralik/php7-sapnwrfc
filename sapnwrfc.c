@@ -85,9 +85,9 @@ PHP_METHOD(Connection, reloadIniFile);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
-PHP_METHOD(FunctionEntry, invoke);
-PHP_METHOD(FunctionEntry, setParameterActive);
-PHP_METHOD(FunctionEntry, isParameterActive);
+PHP_METHOD(RemoteFunction, invoke);
+PHP_METHOD(RemoteFunction, setParameterActive);
+PHP_METHOD(RemoteFunction, isParameterActive);
 
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
@@ -104,9 +104,9 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
 };
 
 static zend_function_entry sapnwrfc_function_class_functions[] = {
-    PHP_ME(FunctionEntry, invoke, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(FunctionEntry, setParameterActive, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(FunctionEntry, isParameterActive, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(RemoteFunction, invoke, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(RemoteFunction, setParameterActive, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(RemoteFunction, isParameterActive, NULL, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 
@@ -506,7 +506,7 @@ PHP_METHOD(Connection, rfcVersion)
     efree(version);
 }
 
-PHP_METHOD(FunctionEntry, invoke)
+PHP_METHOD(RemoteFunction, invoke)
 {
     sapnwrfc_function_object *intern;
     RFC_RC rc = RFC_OK;
@@ -642,7 +642,7 @@ PHP_METHOD(FunctionEntry, invoke)
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }
 
-PHP_METHOD(FunctionEntry, setParameterActive)
+PHP_METHOD(RemoteFunction, setParameterActive)
 {
     sapnwrfc_function_object *intern;
     RFC_RC rc = RFC_OK;
@@ -672,7 +672,7 @@ PHP_METHOD(FunctionEntry, setParameterActive)
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }
 
-PHP_METHOD(FunctionEntry, isParameterActive)
+PHP_METHOD(RemoteFunction, isParameterActive)
 {
     sapnwrfc_function_object *intern;
     RFC_RC rc = RFC_OK;
@@ -731,7 +731,7 @@ static void register_sapnwrfc_function_object()
     sapnwrfc_function_object_handlers.free_obj = sapnwrfc_function_object_free;
     sapnwrfc_function_object_handlers.clone_obj = NULL;
 
-    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\FunctionEntry", sapnwrfc_function_class_functions);
+    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\RemoteFunction", sapnwrfc_function_class_functions);
     ce.create_object = sapnwrfc_function_object_create;
     sapnwrfc_function_ce = zend_register_internal_class(&ce);
     sapnwrfc_function_ce->ce_flags |= ZEND_ACC_FINAL;
