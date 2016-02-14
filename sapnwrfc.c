@@ -564,7 +564,7 @@ PHP_METHOD(FunctionEntry, invoke)
     ZEND_HASH_FOREACH_STR_KEY_VAL(in_parameters_hash, key, val) {
         if (!key) {
             // not a string key
-            zend_error(EH_WARNING, "All parameter keys must be strings");
+            zend_error(E_WARNING, "All parameter keys must be strings");
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
             RETURN_NULL();
         }
