@@ -67,5 +67,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
      makephp 71 zts
      newphp 71 debugzts
+     echo "/nwrfcsdk/lib" > /etc/ld.so.conf.d/nwrfcsdk.conf
+     ldconfig
   SHELL
 end
