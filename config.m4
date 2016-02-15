@@ -70,8 +70,8 @@ EOF
 ])
 
 PHP_ARG_WITH(sapnwrfc, for SAP NW RFC support,
-Make sure that the comment is aligned:
-[	--with-sapnwrfc						 Include SAP NW RFC support])
+dnl Make sure that the comment is aligned:
+[  --with-sapnwrfc         Include SAP NW RFC support])
 
 if test "$PHP_SAPNWRFC" != "no"; then
 	dnl # --with-sapnwrfc -> check with-path
