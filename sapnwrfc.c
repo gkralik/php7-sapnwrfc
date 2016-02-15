@@ -196,6 +196,7 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
 
     ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params_hash, key, val) {
         if (key) { // is string
+            // those are free'd in sapnwrfc_connection_object_free
             intern->rfc_login_params[i].name = zend_string_to_sapuc(key);
             intern->rfc_login_params[i].value = zval_to_sapuc(val);
 
@@ -429,6 +430,7 @@ PHP_METHOD(Connection, setIniPath)
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
     zend_string *path;
+    SAP_UC *path_u;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &path) == FAILURE) {
@@ -436,8 +438,8 @@ PHP_METHOD(Connection, setIniPath)
         return;
     }
 
-    // FIXME assign path in call and free after + check other similar cases
-    rc = RfcSetIniPath(zend_string_to_sapuc(path), &error_info);
+    rc = RfcSetIniPath((path_u = zend_string_to_sapuc(path)), &error_info);
+    free((char *)path_u);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception(error_info, "Failed to set INI file path");
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);

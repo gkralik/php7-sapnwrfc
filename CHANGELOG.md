@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 - Update some of the documentation to reflect current development state
 
 ### Fixed
-- Memory leaks releated to zend_string handling throughout the extension
+- Memory leaks related to zend_string handling throughout the extension
+- Memory leaks related to SAP_UC* handling throughout the extension
 
 ### Removed
 - References to TSRM; they are not needed anymore in PHP7

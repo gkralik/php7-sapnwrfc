@@ -66,7 +66,7 @@ rfc_set_value_return_t rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
     }
 
     value_u = zval_to_sapuc(value);
-    memcpy((char *)value_date, (char *)value_u, 16);
+    memcpy((char *)value_date, (char *)value_u, SAP_DATE_LN * 2);
     free((char *)value_u);
 
     rc = RfcSetDate(h, name, value_date, &error_info);
@@ -205,7 +205,6 @@ rfc_set_value_return_t rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, 
     }
 
     value_u = zval_to_sapuc(value);
-
     rc = RfcSetNum(h, name, (RFC_NUM *)value_u, strlenU(value_u), &error_info);
     free((char *)value_u);
 
