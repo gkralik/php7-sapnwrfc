@@ -17,6 +17,9 @@ All notable changes to this project will be documented in this file.
 ## Fixed
 - Memory leaks releated to zend_string handling throughout the extension
 
+## Removed
+- References to TSRM; they are not needed anymore in PHP7
+
 ## 0.5.0 - 2016-02-13
 ### Added
 - Initial working release of the extension

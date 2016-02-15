@@ -219,7 +219,7 @@ PHP_METHOD(Connection, __construct)
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
 
     // get the connection parameters
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "a", &connection_params) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "a", &connection_params) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
     }
@@ -792,9 +792,6 @@ zend_module_entry sapnwrfc_module_entry = {
 /* }}} */
 
 #ifdef COMPILE_DL_SAPNWRFC
-#ifdef ZTS
-ZEND_TSRMLS_CACHE_DEFINE();
-#endif
 ZEND_GET_MODULE(sapnwrfc)
 #endif
 

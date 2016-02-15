@@ -23,18 +23,9 @@ extern zend_module_entry sapnwrfc_module_entry;
 #    define PHP_SAPNWRFC_API
 #endif
 
-#ifdef ZTS
-#include "TSRM.h"
-#endif
-
 #define SAPNWRFC_G(v) ZEND_MODULE_GLOBALS_ACCESSOR(sapnwrfc, v)
 
-#if defined(ZTS) && defined(COMPILE_DL_SAPNWRFC)
-ZEND_TSRMLS_CACHE_EXTERN();
-#endif
-
 #endif    /* _PHP_SAPNWRFC_H */
-
 
 /*
  * Local variables:

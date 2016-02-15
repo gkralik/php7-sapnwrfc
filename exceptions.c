@@ -33,8 +33,8 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
 
     object_init_ex(&ex, sapnwrfc_connection_exception_ce);
-    zend_update_property_string(sapnwrfc_connection_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message) TSRMLS_CC);
-    zend_update_property_long(sapnwrfc_connection_exception_ce, &ex, "code", sizeof("code") - 1, error_info.code TSRMLS_CC);
+    zend_update_property_string(sapnwrfc_connection_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message));
+    zend_update_property_long(sapnwrfc_connection_exception_ce, &ex, "code", sizeof("code") - 1, error_info.code);
 
     // populate errorInfo array
     add_assoc_long(&info, "code", error_info.code);
@@ -71,9 +71,9 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
             return;
     }
 
-    zend_update_property(sapnwrfc_connection_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info TSRMLS_CC);
+    zend_update_property(sapnwrfc_connection_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
 
-    zend_throw_exception_object(&ex TSRMLS_CC);
+    zend_throw_exception_object(&ex);
 
     zval_ptr_dtor(&info);
     zend_string_release(message);
@@ -97,8 +97,8 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
     zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 
     object_init_ex(&ex, sapnwrfc_function_exception_ce);
-    zend_update_property_string(sapnwrfc_function_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message) TSRMLS_CC);
-    zend_update_property_long(sapnwrfc_function_exception_ce, &ex, "code", sizeof("code") - 1, error_info.code TSRMLS_CC);
+    zend_update_property_string(sapnwrfc_function_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message));
+    zend_update_property_long(sapnwrfc_function_exception_ce, &ex, "code", sizeof("code") - 1, error_info.code);
 
     // populate errorInfo array
     add_assoc_long(&info, "code", error_info.code);
@@ -135,9 +135,9 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
             return;
     }
 
-    zend_update_property(sapnwrfc_function_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info TSRMLS_CC);
+    zend_update_property(sapnwrfc_function_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
 
-    zend_throw_exception_object(&ex TSRMLS_CC);
+    zend_throw_exception_object(&ex);
 
     zval_ptr_dtor(&info);
     zend_string_release(message);
