@@ -28,14 +28,16 @@ This simple example shows how to call a (fictional) RFC function and get its ret
 ```php
 <?php
 
+use \SAPNWRFC\Connection as SapConnection;
+
 try {
-    $c = new \SAPNWRFC\Connection([
+    $c = new SapConnection([
         'ashost' => 'my.sap.system.local',
         'sysnr'  => '00',
         'client' => '123',
         'user' => 'DEMO',
         'passwd' => 'XXXX',
-        'trace'  => '0'
+        'trace'  => SapConnection::TRACE_LEVEL_OFF,
     ]);
 
     $f = $c->getFunction('Z_TEST_FUNCTION');

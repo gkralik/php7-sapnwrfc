@@ -28,6 +28,11 @@ class ConnectionException extends Exception {}
 class FunctionCallException extends Exception {}
 
 class Connection {
+    const TRACE_LEVEL_OFF = 0;
+    const TRACE_LEVEL_BRIEF = 1;
+    const TRACE_LEVEL_VERBOSE = 2;
+    const TRACE_LEVEL_FULL = 3;
+
     /**
      * Connect to the system using the given parameters.
      *

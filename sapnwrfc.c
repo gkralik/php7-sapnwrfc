@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  * Author: Gregor Kralik <g.kralik@gmail.com>
- */ 
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,6 +711,11 @@ static void register_sapnwrfc_connection_object()
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Connection", sapnwrfc_connection_class_functions);
     ce.create_object = sapnwrfc_connection_object_create;
     sapnwrfc_connection_ce = zend_register_internal_class(&ce);
+
+    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_OFF", sizeof("TRACE_LEVEL_OFF") - 1, 0);
+    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_BRIEF", sizeof("TRACE_LEVEL_BRIEF") - 1, 1);
+    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_VERBOSE", sizeof("TRACE_LEVEL_VERBOSE") - 1, 2);
+    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_FULL", sizeof("TRACE_LEVEL_FULL") - 1, 3);
 }
 
 static void register_sapnwrfc_function_object()
