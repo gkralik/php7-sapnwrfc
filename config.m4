@@ -1,3 +1,10 @@
+dnl Copyright (c) 2016 Gregor Kralik <g.kralik (at) gmail.com>
+dnl
+dnl This source code is licensed under the MIT license found in the
+dnl LICENSE file in the root directory of this source tree.
+dnl
+dnl Author: Gregor Kralik <g.kralik@gmail.com>
+
 dnl config.m4 for extension sapnwrfc
 
 dnl
@@ -54,7 +61,7 @@ AC_DEFUN([PHP_ADD_SOURCES_X],[
 		esac
 
 		dnl create a rule for the object/source combo
-    dnl NOTE: $ac_comp MUST be indented with a TAB - make is picky ;)
+		dnl NOTE: $ac_comp MUST be indented with a TAB - make is picky ;)
 		cat >>Makefile.objects<<EOF
 $ac_bdir[$]ac_obj.lo: $ac_srcdir[$]ac_src
 	$ac_comp
@@ -64,7 +71,7 @@ EOF
 
 PHP_ARG_WITH(sapnwrfc, for SAP NW RFC support,
 Make sure that the comment is aligned:
-[  --with-sapnwrfc             Include SAP NW RFC support])
+[	--with-sapnwrfc						 Include SAP NW RFC support])
 
 if test "$PHP_SAPNWRFC" != "no"; then
 	dnl # --with-sapnwrfc -> check with-path
