@@ -1,9 +1,9 @@
-# php7-sapnwrfc API
-
-This document shows the public interface of the classes exposed by the extension.
-
-```php
 <?php
+
+/**
+ * This is a stub file of the extensions public interface to enable
+ * code completion in IDEs.
+ */
 
 namespace SAPNWRFC;
 
@@ -135,4 +135,3 @@ class RemoteFunction {
      */
     public function isParameterActive($parameterName) {}
 }
-```

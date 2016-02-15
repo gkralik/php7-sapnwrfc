@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Vagrant configuration for testing/debugging
+- Stub file for code completion in IDEs
 
 ## Changed
 - Better exceptions: new base class and consistent exception messages
