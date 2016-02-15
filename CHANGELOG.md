@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Throw base exception class instead of generic Exception
 - Rename class `FunctionEntry` to `RemoteFunction`
 - Use MIT license instead of PHP license
+- Update some of the documentation to reflect current development state
 
 ## Fixed
 - Memory leaks releated to zend_string handling throughout the extension

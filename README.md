@@ -1,7 +1,5 @@
 # SAP NW RFC extension for PHP 7
 
-**NOTE: This extension is currently in an alpha version. Help (especially testing) is welcome**
-
 This extension is intended to provide a means for PHP 7 developers to interface with the SAP NetWeaver SDK.
 
 ## Building
@@ -49,20 +47,23 @@ try {
     ]);
 
     var_dump($result);
-} catch(\SAPNWRFC\ConnectionException $e) {
-    print "Connection failed: ".$e->getMessage()."\n";
+} catch(\SAPNWRFC\Exception $e) {
+    print "Exception: ".$e->getMessage()."\n";
     exit(1);
-} catch(\SAPNWRFC\FunctionCallException $e) {
-    print "Connection failed: ".$e->getMessage()."\n";
-    exit(1);
+
+    /*
+     * You could also catch ConnectionException and FunctionCallException
+     * separately if you want to.
+     */
 }
 ```
 
-See [the API overview](docs/api.md) for details about the provided interface.
+See [documentation](docs/readme.md) for details.
 
-## Issues and Pull Requests
+## Contributing
 
-As this extension is in early development, some issues are expected. If you find anything, don't hesitate to open an issue or a pull request and help out.
+Contribution to the project (be it by reporting/fixing bugs, writing documentaton, helping with testing) is very welcome.
+Just open up an issue or a PR.
 
 ## License
 
