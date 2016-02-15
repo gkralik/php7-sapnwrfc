@@ -64,6 +64,10 @@ See [the API overview](docs/api.md) for details about the provided interface.
 
 As this extension is in early development, some issues are expected. If you find anything, don't hesitate to open an issue or a pull request and help out.
 
+## License
+
+This software is licensed under the MIT license. See [LICENSE](LICENSE) for details.
+
 ## Legal notice
 
 SAP and other SAP products and services mentioned herein are trademarks or registered trademarks of SAP SE (or an SAP affiliate company) in Germany and other countries.
