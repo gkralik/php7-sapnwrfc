@@ -5,7 +5,7 @@
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree.
 //
-// Author: Martin Keckeis
+// Author: Martin Keckeis <martin.keckeis1 (at) gmail.com>
 
 ARG_WITH("sapnwrfc", "*****SAP NW RFC*****", "no");
 
