@@ -7,17 +7,17 @@ All notable changes to this project will be documented in this file.
 - Stub file for code completion in IDEs
 - Class constants for trace levels
 
-## Changed
+### Changed
 - Better exceptions: new base class and consistent exception messages
 - Throw base exception class instead of generic Exception
 - Rename class `FunctionEntry` to `RemoteFunction`
 - Use MIT license instead of PHP license
 - Update some of the documentation to reflect current development state
 
-## Fixed
+### Fixed
 - Memory leaks releated to zend_string handling throughout the extension
 
-## Removed
+### Removed
 - References to TSRM; they are not needed anymore in PHP7
 
 ## 0.5.0 - 2016-02-13
