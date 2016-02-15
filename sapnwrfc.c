@@ -794,6 +794,9 @@ zend_module_entry sapnwrfc_module_entry = {
 /* }}} */
 
 #ifdef COMPILE_DL_SAPNWRFC
+#ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE();
+#endif
 ZEND_GET_MODULE(sapnwrfc)
 #endif
 

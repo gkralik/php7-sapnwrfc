@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Readded some removed TSRM bits as pointed out by @krakjoe - thanks a lot!
 
 ## [0.6.0] - 2016-02-15
 ### Added
