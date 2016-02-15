@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [0.6.0] - 2016-02-15
 ### Added
 - Vagrant configuration for testing/debugging
 - Stub file for code completion in IDEs
@@ -25,4 +27,5 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.5.0...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.0...HEAD
+[0.6.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.5.0...0.6.0
