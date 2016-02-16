@@ -146,7 +146,6 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
 void sapnwrfc_register_exceptions()
 {
     zend_class_entry ce;
-    zval error_info;
 
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Exception", NULL);
     sapnwrfc_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
