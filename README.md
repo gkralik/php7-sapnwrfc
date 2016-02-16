@@ -4,7 +4,7 @@ This extension is intended to provide a means for PHP 7 developers to interface 
 
 ## Building
 
-To build the extension you need to download the *SAP NetWeaver RFC SDK* from the *SAP Service Marketplace* and extract the SDK. You can [follow the instructions](http://sap.github.io/PyRFC/install.html#install-c-connector).
+To build the extension you need to download the *SAP NetWeaver RFC SDK* from the *SAP Service Marketplace* and extract the SDK. You can [follow the instructions](docs/installing_nwrfcsdk.md).
 
 ```
 $ git clone https://github.com/gkralik/php7-sapnwrfc.git
