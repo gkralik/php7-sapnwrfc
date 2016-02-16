@@ -3,7 +3,6 @@
 Not ordered by priority...
 
 * Add tests!
-* Make sure all malloc'd `SAP_UC*` etc are free'd
 * Test with a `DEBUG` and `ZTS` build.
 * Add `arginfo`
 * Organize the code ;)

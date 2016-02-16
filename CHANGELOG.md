@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [0.6.1] - 2016-02-16
 ### Added
 - Readded some removed TSRM bits as pointed out by @krakjoe - thanks a lot!
 
@@ -32,5 +34,6 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.0...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.1...HEAD
+[0.6.1]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.0...0.6.1
 [0.6.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.5.0...0.6.0
