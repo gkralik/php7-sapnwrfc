@@ -2,8 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-## Added
+### Added
 - Instructions for installing the SAP NW RFC SDK library
+- Some additional tests (offline and online)
+
+### Fixed
+- `TRACE_LEVEL_*` contants are now strings; the long variants caused segfaults in `zval_to_sapuc()`
 
 ## [0.6.1] - 2016-02-16
 ### Added
