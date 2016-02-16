@@ -18,6 +18,7 @@ config.sub
 configure
 configure.in
 dev_rfc.trc
+dist/
 install-sh
 libtool
 ltmain.sh
