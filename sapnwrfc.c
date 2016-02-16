@@ -506,7 +506,7 @@ PHP_METHOD(RemoteFunction, invoke)
     RFC_ERROR_INFO error_info;
     RFC_PARAMETER_DESC parameter_desc;
     int is_active;
-    int i = 0;
+    unsigned int i = 0;
     zval *in_parameters;
     HashTable *in_parameters_hash;
     zend_string *tmp;
