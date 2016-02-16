@@ -4,3 +4,4 @@
 *.out
 *.sh
 private_tests/
+sapnwrfc.config.inc

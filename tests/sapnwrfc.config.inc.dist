@@ -1,0 +1,10 @@
+<?php
+
+return [
+    'ashost' => 'my.sap.system.local',
+    'sysnr'  => '00',
+    'client' => '123',
+    'user' => 'DEMO',
+    'passwd' => 'XXXX',
+    'trace'  => \SAPNWRFC\Connection::TRACE_LEVEL_OFF,
+];
