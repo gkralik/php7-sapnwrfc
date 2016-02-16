@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Readded some removed TSRM bits as pointed out by @krakjoe - thanks a lot!
 
+### Fixed
+- Properly initialize the "errorInfo" property in exceptions to prevent error on shutdown (Windows)
+
 ## [0.6.0] - 2016-02-15
 ### Added
 - Vagrant configuration for testing/debugging
