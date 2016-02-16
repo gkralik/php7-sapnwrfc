@@ -71,7 +71,7 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
             return;
     }
 
-    zend_update_property(sapnwrfc_connection_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
+    //zend_update_property(sapnwrfc_connection_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
 
     zend_throw_exception_object(&ex);
 
@@ -135,7 +135,7 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
             return;
     }
 
-    zend_update_property(sapnwrfc_function_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
+    //zend_update_property(sapnwrfc_function_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
 
     zend_throw_exception_object(&ex);
 
@@ -150,10 +150,9 @@ void sapnwrfc_register_exceptions()
     zend_class_entry ce;
     zval error_info;
 
-    //array_init(&error_info);
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Exception", NULL);
     sapnwrfc_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
-    zend_declare_property(sapnwrfc_exception_ce, "errorInfo", sizeof("errorInfo") - 1, &error_info, ZEND_ACC_PUBLIC);
+    //zend_declare_property(sapnwrfc_exception_ce, "errorInfo", sizeof("errorInfo") - 1, &error_info, ZEND_ACC_PUBLIC);
 
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\ConnectionException", NULL);
     sapnwrfc_connection_exception_ce = zend_register_internal_class_ex(&ce, sapnwrfc_exception_ce);
