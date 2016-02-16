@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+## Added
+- Instructions for installing the SAP NW RFC SDK library
 
 ## [0.6.1] - 2016-02-16
 ### Added
