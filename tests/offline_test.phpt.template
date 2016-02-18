@@ -1,7 +1,7 @@
 --TEST--
-Check if XXX
+
 --SKIPIF--
-<?php include("skipif_offline.inc"); ?>
+<?php include("should_run_online_tests.inc"); ?>
 --FILE--
 <?php
 $config = include "sapnwrfc.config.inc"

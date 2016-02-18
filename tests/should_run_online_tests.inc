@@ -1,10 +1,6 @@
 <?php
 
-if(!extension_loaded('sapnwrfc')) {
-    die("skip sapnwrfc extension not loaded");
-}
-
-die(var_dump($_ENV));
+require 'skipif.inc';
 
 if (!isset($_ENV["RUN_ONLINE_TESTS"]) || (int)$_ENV["RUN_ONLINE_TESTS"] != 1) {
     die("skip Online tests not enabled (use RUN_ONLINE_TESTS env var)");
