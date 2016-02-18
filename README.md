@@ -3,18 +3,25 @@
 
 This extension is intended to provide a means for PHP 7 developers to interface with the SAP NetWeaver SDK.
 
-## Install SAP NetWeaver RFC SDK (required always!)
+## Obtain a copy of SAP NetWeaver RFC SDK
 
-To ***build or install*** you need always the *SAP NetWeaver RFC SDK* from the *SAP Service Marketplace* first!
+To ***build or install*** this extension you need to obtain a copy of the *SAP NetWeaver RFC SDK* from the *SAP Service Marketplace*.
 You can [follow the instructions here](docs/installing_nwrfcsdk.md).
 
-## Building unix/windows
+## Building
 
-Please [see the build instructions](docs/build.md)
+Follow the [build instructions](docs/building.md).
 
 ## Installing
 
-Add `extension=sapnwrfc.so` to your `php.ini` (for windows `extension=php_sapnwrfc.dll`) 
+Enable the extension in your `php.ini`:
+```
+# for Linux/Unix
+extension=sapnwrfc.so
+
+# for Windows
+extension=php_sapnwrfc.dll
+```
 
 You can verify that the extension is loaded by running `php -m | grep sapnwrfc`.
 
@@ -49,7 +56,7 @@ try {
     var_dump($result);
 } catch(SapException $ex) {
     echo 'Exception: ' . $ex->getMessage() . PHP_EOL;
-    
+
     /*
      * You could also catch \SAPNWRFC\ConnectionException and \SAPNWRFC\FunctionCallException
      * separately if you want to.
@@ -57,7 +64,7 @@ try {
 }
 ```
 
-See [documentation](docs/readme.md) for details.
+Read the [docs](docs/readme.md) for details.
 
 ## Contributing
 
