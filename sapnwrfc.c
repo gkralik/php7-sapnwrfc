@@ -329,7 +329,7 @@ PHP_METHOD(Connection, ping)
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcPing(intern->rfc_handle, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_connection_exception(error_info, "Failed to reload INI file");
+        sapnwrfc_throw_connection_exception(error_info, "Failed to ping connection");
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         RETURN_NULL();
     }
