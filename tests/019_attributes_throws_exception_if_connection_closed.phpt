@@ -1,5 +1,5 @@
 --TEST--
-
+attributes() throws ConnectionException if connection already closed.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -7,5 +7,12 @@
 $config = include "sapnwrfc.config.inc";
 $c = new \SAPNWRFC\Connection($config);
 
+$c->close();
 
+try {
+    $c->attributes();
+} catch(\SAPNWRFC\ConnectionException $e) {
+    echo 'ok';
+}
 --EXPECT--
+ok

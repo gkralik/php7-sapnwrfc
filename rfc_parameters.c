@@ -226,7 +226,7 @@ rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
 
     if (Z_TYPE_P(value) != IS_DOUBLE) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set FLOAT parameter %s, excpected double", ZSTR_VAL(zname));
+        zend_error(E_WARNING, "Failed to set FLOAT parameter %s, expected double", ZSTR_VAL(zname));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }

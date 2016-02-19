@@ -1,8 +1,8 @@
 --TEST--
 
 --SKIPIF--
-<?php include("should_run_online_tests.inc"); ?>
+<?php include("skipif.inc"); ?>
 --FILE--
 <?php
-$config = include "sapnwrfc.config.inc"
+
 --EXPECT--
