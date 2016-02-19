@@ -3,6 +3,7 @@
 *.exp
 *.out
 *.sh
+*.log
 old/
 private_tests/
 sapnwrfc.config.inc

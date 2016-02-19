@@ -20,7 +20,7 @@
 * version() returns a string of format "X.Y.Z"
 * rfcVersion() returns a string of format "X.Y.Z"
 
-### __construct()
+### \__construct()
 
 * throws ConnectionException if given no parameters
 * throws ConnectionException if given anything other than array
@@ -56,14 +56,12 @@
 
 ### setIniPath()
 
-* returns true if path exists and is set correctly
+* returns true if INI path set
 * throws ConnectionException if parameter is anything other than a string
-* throws exception if no 'sapnwrfc.ini' file is present in the given path
 
 ### reloeadIniFile()
 
 * returns true if reload OK
-* throws ConnectionException if no 'sapnwrfc.ini' file is present in the currently set path
 * does not accept parameters
 
 ## RemoteFunction
