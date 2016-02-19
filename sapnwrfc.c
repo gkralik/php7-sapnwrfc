@@ -281,6 +281,7 @@ PHP_METHOD(Connection, attributes)
     RFC_RC rc = RFC_OK;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_parse_parameters_none();
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
