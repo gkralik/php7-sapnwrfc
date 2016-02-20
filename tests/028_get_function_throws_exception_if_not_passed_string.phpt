@@ -13,6 +13,8 @@ function test($c, $param) {
         echo "ok\n";
     } catch(\SAPNWRFC\ConnectionException $e) {
         echo "fail\n";
+    } catch(\SAPNWRFC\FunctionCallException $e) {
+        echo "fail_lookup\n";
     }
 }
 
@@ -22,7 +24,7 @@ test($c, []);
 test($c, new \stdClass);
 --EXPECT--
 ok
-fail
+fail_lookup
 fail
 fail
 --XFAIL--
