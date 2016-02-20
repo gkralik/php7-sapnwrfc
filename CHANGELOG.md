@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [0.6.2] - 2016-02-20
 ### Added
 - Instructions for installing the SAP NW RFC SDK library
 - Some additional tests (offline and online)
@@ -42,6 +44,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.1...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.2...HEAD
+[0.6.2]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.0...0.6.1
 [0.6.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.5.0...0.6.0
