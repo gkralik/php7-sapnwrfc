@@ -1,4 +1,5 @@
 # Documentation for php7-sapnwrfc
 
 * [Public API](api.md)
+* [Installing the SAP NW RFC SDK library](installing_nwrfcsdk.md)
 * [Stubs](sapnwrfc.stubs.php) for auto completion in IDEs

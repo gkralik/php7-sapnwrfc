@@ -1,0 +1,8 @@
+--TEST--
+
+--SKIPIF--
+<?php include("skipif.inc"); ?>
+--FILE--
+<?php
+
+--EXPECT--

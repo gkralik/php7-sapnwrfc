@@ -281,6 +281,7 @@ PHP_METHOD(Connection, attributes)
     RFC_RC rc = RFC_OK;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_parse_parameters_none();
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
@@ -329,7 +330,7 @@ PHP_METHOD(Connection, ping)
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcPing(intern->rfc_handle, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_connection_exception(error_info, "Failed to reload INI file");
+        sapnwrfc_throw_connection_exception(error_info, "Failed to ping connection");
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         RETURN_NULL();
     }
@@ -378,9 +379,8 @@ PHP_METHOD(Connection, getFunction)
     func_intern->rfc_handle = intern->rfc_handle;
     func_intern->function_desc_handle = function_desc_handle;
     func_intern->name = zend_string_copy(function_name);
-    add_property_str(return_value, "name", function_name);
 
-    zend_string_release(function_name);
+    add_property_str(return_value, "name", zend_string_copy(function_name));
 
     // get nr of parameters
     rc = RfcGetParameterCount(func_intern->function_desc_handle, &func_intern->parameter_count, &error_info);
@@ -714,10 +714,10 @@ static void register_sapnwrfc_connection_object()
     ce.create_object = sapnwrfc_connection_object_create;
     sapnwrfc_connection_ce = zend_register_internal_class(&ce);
 
-    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_OFF", sizeof("TRACE_LEVEL_OFF") - 1, 0);
-    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_BRIEF", sizeof("TRACE_LEVEL_BRIEF") - 1, 1);
-    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_VERBOSE", sizeof("TRACE_LEVEL_VERBOSE") - 1, 2);
-    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_FULL", sizeof("TRACE_LEVEL_FULL") - 1, 3);
+    zend_declare_class_constant_string(sapnwrfc_connection_ce, "TRACE_LEVEL_OFF", sizeof("TRACE_LEVEL_OFF") - 1, "0");
+    zend_declare_class_constant_string(sapnwrfc_connection_ce, "TRACE_LEVEL_BRIEF", sizeof("TRACE_LEVEL_BRIEF") - 1, "1");
+    zend_declare_class_constant_string(sapnwrfc_connection_ce, "TRACE_LEVEL_VERBOSE", sizeof("TRACE_LEVEL_VERBOSE") - 1, "2");
+    zend_declare_class_constant_string(sapnwrfc_connection_ce, "TRACE_LEVEL_FULL", sizeof("TRACE_LEVEL_FULL") - 1, "3");
 }
 
 static void register_sapnwrfc_function_object()

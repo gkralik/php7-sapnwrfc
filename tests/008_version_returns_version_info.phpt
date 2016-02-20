@@ -1,5 +1,5 @@
 --TEST--
-Check for SAPNWRFC\Connection::version()
+version() returns version string x.y.z
 --SKIPIF--
 <?php include("skipif.inc"); ?>
 --FILE--
