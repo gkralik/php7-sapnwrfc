@@ -9,7 +9,7 @@ $c = new \SAPNWRFC\Connection($config);
 
 function test($c, $param) {
     try {
-        $f = $c->getFunction($param);
+        $c->getFunction($param);
         echo "ok\n";
     } catch(\SAPNWRFC\ConnectionException $e) {
         echo "fail\n";
@@ -17,9 +17,13 @@ function test($c, $param) {
 }
 
 test($c, 'RFC_PING');
+test($c, 0);
 test($c, []);
 test($c, new \stdClass);
 --EXPECT--
 ok
 fail
 fail
+fail
+--XFAIL--
+Segfaults when running tests (and only when runnings tests) in zend_mm_alloc_small

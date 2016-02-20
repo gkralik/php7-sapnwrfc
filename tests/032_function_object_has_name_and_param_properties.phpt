@@ -10,7 +10,7 @@ $c = new \SAPNWRFC\Connection($config);
 $f = $c->getFunction('STFC_STRUCTURE');
 
 var_dump(property_exists($f, "name"));
-var_dump($f->name);
+var_dump(trim($f->name));
 var_dump(property_exists($f, "IMPORTSTRUCT"));
 var_dump(is_array($f->IMPORTSTRUCT));
 var_dump(property_exists($f, "RFCTABLE"));
