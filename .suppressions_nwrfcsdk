@@ -1,0 +1,17 @@
+{
+   nwrfcsdk
+   Memcheck:Cond
+   obj:/nwrfcsdk/lib/libsapnwrfc.so
+}
+
+{
+   nwrfcsdk
+   Memcheck:Free
+   obj:/nwrfcsdk/lib/libsapnwrfc.so
+}
+
+{
+   nwrfcsdk
+   Memcheck:Value8
+   obj:/nwrfcsdk/lib/libsapnwrfc.so
+}

@@ -4,6 +4,7 @@ setIniPath() does only accept a string parameter.
 <?php include("skipif.inc"); ?>
 --FILE--
 <?php
+
 function test($param) {
     try {
         \SAPNWRFC\Connection::setIniPath($param);
@@ -14,17 +15,9 @@ function test($param) {
 }
 
 test('.');
-test(0);
-test(false);
 test([]);
 test(new \stdClass);
-test(1.1);
 --EXPECT--
 ok
 fail
 fail
-fail
-fail
-fail
---XFAIL--
-Seems like bool and int and double get coerced to a string...
