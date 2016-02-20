@@ -5,9 +5,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Instructions for installing the SAP NW RFC SDK library
 - Some additional tests (offline and online)
+- Tests covering exceptions and `Connection` object
 
 ### Fixed
 - `TRACE_LEVEL_*` contants are now strings; the long variants caused segfaults in `zval_to_sapuc()`
+- Fix a segfault related to the `RemoteFunction::$name` property.
 
 ## [0.6.1] - 2016-02-16
 ### Added
