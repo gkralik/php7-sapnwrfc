@@ -27,5 +27,3 @@ ok
 fail_lookup
 fail
 fail
---XFAIL--
-Segfaults when running tests (and only when runnings tests) in zend_mm_alloc_small

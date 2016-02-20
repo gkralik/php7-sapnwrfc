@@ -379,9 +379,8 @@ PHP_METHOD(Connection, getFunction)
     func_intern->rfc_handle = intern->rfc_handle;
     func_intern->function_desc_handle = function_desc_handle;
     func_intern->name = zend_string_copy(function_name);
-    add_property_str(return_value, "name", function_name);
 
-    zend_string_release(function_name);
+    add_property_str(return_value, "name", zend_string_copy(function_name));
 
     // get nr of parameters
     rc = RfcGetParameterCount(func_intern->function_desc_handle, &func_intern->parameter_count, &error_info);
