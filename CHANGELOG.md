@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+- Fixed a segfault when passing non-string values in connection parameters
+
 
 ## [0.6.2] - 2016-02-20
 ### Added

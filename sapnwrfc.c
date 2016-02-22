@@ -196,6 +196,8 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
 
     ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params_hash, key, val) {
         if (key) { // is string
+            convert_to_string_ex(val);
+			
             // those are free'd in sapnwrfc_connection_object_free
             intern->rfc_login_params[i].name = zend_string_to_sapuc(key);
             intern->rfc_login_params[i].value = zval_to_sapuc(val);
