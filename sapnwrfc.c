@@ -197,7 +197,7 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
     ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params_hash, key, val) {
         if (key) { // is string
             convert_to_string_ex(val);
-			
+
             // those are free'd in sapnwrfc_connection_object_free
             intern->rfc_login_params[i].name = zend_string_to_sapuc(key);
             intern->rfc_login_params[i].value = zval_to_sapuc(val);
@@ -764,16 +764,16 @@ PHP_MSHUTDOWN_FUNCTION(sapnwrfc)
  */
 PHP_MINFO_FUNCTION(sapnwrfc)
 {
-	unsigned int major, minor, patch;
-	char *version;
+    unsigned int major, minor, patch;
+    char *version;
 
-	RfcGetVersion(&major, &minor, &patch);
-	spprintf(&version, 0, "%d.%d.%d", major, minor, patch);
+    RfcGetVersion(&major, &minor, &patch);
+    spprintf(&version, 0, "%d.%d.%d", major, minor, patch);
 
     php_info_print_table_start();
     php_info_print_table_header(2, "sapnwrfc support", "enabled");
-	php_info_print_table_row(2, "Version", PHP_SAPNWRFC_VERSION);
-	php_info_print_table_row(2, "SAP NW RFC", version);
+    php_info_print_table_row(2, "Version", PHP_SAPNWRFC_VERSION);
+    php_info_print_table_row(2, "SAP NW RFC", version);
     php_info_print_table_end();
 }
 /* }}} */
