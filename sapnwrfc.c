@@ -773,7 +773,7 @@ PHP_MINFO_FUNCTION(sapnwrfc)
     php_info_print_table_start();
     php_info_print_table_header(2, "sapnwrfc support", "enabled");
     php_info_print_table_row(2, "Version", PHP_SAPNWRFC_VERSION);
-    php_info_print_table_row(2, "SAP NW RFC", version);
+    php_info_print_table_row(2, "SAP NW RFC SDK", version);
     php_info_print_table_end();
 }
 /* }}} */

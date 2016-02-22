@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Version information in phpinfo()
+
 ### Fixed
 - Fixed a segfault when passing non-string values in connection parameters
 
