@@ -762,16 +762,8 @@ PHP_MSHUTDOWN_FUNCTION(sapnwrfc)
  */
 PHP_MINFO_FUNCTION(sapnwrfc)
 {
-	unsigned int major, minor, patch;
-	char *version;
-
-	RfcGetVersion(&major, &minor, &patch);
-	spprintf(&version, 0, "%d.%d.%d", major, minor, patch);
-
     php_info_print_table_start();
     php_info_print_table_header(2, "sapnwrfc support", "enabled");
-	php_info_print_table_row(2, "Version", PHP_SAPNWRFC_VERSION);
-	php_info_print_table_row(2, "SAP NW RFC", version);
     php_info_print_table_end();
 }
 /* }}} */
