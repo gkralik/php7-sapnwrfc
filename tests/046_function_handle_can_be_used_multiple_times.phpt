@@ -11,5 +11,4 @@ $f = $c->getFunction('RFC_PING');
 $f->invoke([]);
 $f->invoke([]);
 $f->invoke([]);
-
 --EXPECT--

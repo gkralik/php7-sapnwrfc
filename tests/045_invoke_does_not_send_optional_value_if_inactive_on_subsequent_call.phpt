@@ -26,5 +26,3 @@ try {
 --EXPECT--
 string(1) "W"
 string(1) "E"
---XFAIL--
-Blocked by failing test 046.
