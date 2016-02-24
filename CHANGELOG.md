@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Version information in phpinfo()
+- Windows build instructions (@ThaDafinser)
 
 ### Fixed
 - Fixed a segfault when passing non-string values in connection parameters
