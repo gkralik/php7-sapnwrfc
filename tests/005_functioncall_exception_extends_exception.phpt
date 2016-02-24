@@ -1,5 +1,5 @@
 --TEST--
-\SAPNWRFC\FunctionCallException extends \SAPNWRFC\Exception
+SAPNWRFC\FunctionCallException extends \SAPNWRFC\Exception
 --SKIPIF--
 <?php include("skipif.inc"); ?>
 --FILE--

@@ -1,5 +1,5 @@
 --TEST--
-\SAPNWRFC\Connection has constants for trace levels.
+SAPNWRFC\Connection has constants for trace levels.
 --SKIPIF--
 <?php include("skipif.inc"); ?>
 --FILE--

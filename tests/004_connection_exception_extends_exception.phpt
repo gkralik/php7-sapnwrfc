@@ -1,5 +1,5 @@
 --TEST--
-\SAPNWRFC\ConnectionException extends \SAPNWRFC\Exception
+SAPNWRFC\ConnectionException extends \SAPNWRFC\Exception
 --SKIPIF--
 <?php include("skipif.inc"); ?>
 --FILE--
