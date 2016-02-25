@@ -281,9 +281,9 @@ rfc_set_value_return_t rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
         return RFC_SET_VALUE_ERROR;
     }
 
-    if (Z_LVAL_P(value) > 255) {
+    if (Z_LVAL_P(value) > 255 || Z_LVAL_P(value) < 0) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set INT1 parameter %s, too big", ZSTR_VAL(zname));
+        zend_error(E_WARNING, "Failed to set INT1 parameter %s, out of range (0 - 255)", ZSTR_VAL(zname));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -313,9 +313,9 @@ rfc_set_value_return_t rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
         return RFC_SET_VALUE_ERROR;
     }
 
-    if (Z_LVAL_P(value) > 65535) {
+    if (Z_LVAL_P(value) > 32767 || Z_LVAL_P(value) < -32767) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set INT2 parameter %s, too big", ZSTR_VAL(zname));
+        zend_error(E_WARNING, "Failed to set INT2 parameter %s, out of range (-32767 - 32767)", ZSTR_VAL(zname));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
