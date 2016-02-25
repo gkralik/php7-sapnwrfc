@@ -1,7 +1,7 @@
 --TEST--
 invoke() does not send optional value on subsequent call if parameter inactive.
 --SKIPIF--
-<?php include("should_run_online_tests.inc"); ?>
+<?php include("should_run_online_tests.inc"); die("skip invalid test"); ?>
 --FILE--
 <?php
 $config = include "sapnwrfc.config.inc";
