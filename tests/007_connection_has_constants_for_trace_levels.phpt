@@ -9,7 +9,7 @@ var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_BRIEF);
 var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_VERBOSE);
 var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_FULL);
 --EXPECT--
-string(1) "0"
-string(1) "1"
-string(1) "2"
-string(1) "3"
+int(0)
+int(1)
+int(2)
+int(3)

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Version information in phpinfo()
 - Windows build instructions (@ThaDafinser)
+- A lot more tests
+
+### Changed
+- `TRACE_LEVEL_*` constants are now integers
 
 ### Fixed
 - Fixed a segfault when passing non-string values in connection parameters
