@@ -19,12 +19,8 @@ function test($f, $p1) {
 }
 
 test($f, "IMPORTSTRUCT");
-test($f, 0);
 test($f, []);
-test($f, false);
 
 --EXPECT--
 ok
-fail
-fail
 fail

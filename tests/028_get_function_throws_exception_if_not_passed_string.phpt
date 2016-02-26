@@ -14,7 +14,7 @@ function test($c, $param) {
     } catch(TypeError $e) {
         echo "fail\n";
     } catch(\SAPNWRFC\FunctionCallException $e) {
-        echo "fail_lookup";
+        echo "fail_lookup\n";
     }
 }
 
