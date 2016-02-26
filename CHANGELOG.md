@@ -3,9 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- Version information in phpinfo()
-- Windows build instructions (@ThaDafinser)
+- Version information in phpinfo() (#12)
+- Windows build instructions (#8, #10)
 - A lot more tests
+- `getErrorInfo()` for exception classes (#14)
 
 ### Changed
 - `TRACE_LEVEL_*` constants are now integers

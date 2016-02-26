@@ -6,7 +6,7 @@ SAPNWRFC\Exception has getter for "errorInfo"
 <?php
 $e = new \SAPNWRFC\Exception;
 var_dump(method_exists($e, 'getErrorInfo'));
+var_dump($e->getErrorInfo() === null);
 --EXPECT--
 bool(true)
---XFAIL--
-Not implemented yet.
+bool(true)

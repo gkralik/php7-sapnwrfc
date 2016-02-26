@@ -21,6 +21,13 @@ class Exception extends \RuntimeException {
      * @var array $errorInfo
      */
     public $errorInfo;
+
+    /**
+     * Getter for the errorInfo property.
+     *
+     * @returns array|null
+     */
+    public function getErrorInfo() {}
 }
 
 class ConnectionException extends Exception {}

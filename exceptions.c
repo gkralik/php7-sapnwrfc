@@ -16,7 +16,6 @@
 
 #include "sapnwrfc.h"
 
-
 void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, ...)
 {
     va_list args;
@@ -143,11 +142,17 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }
 
+PHP_METHOD(Exception, getErrorInfo)
+{
+    zend_parse_parameters_none();
+    zend_read_property(sapnwrfc_exception_ce, getThis(), "errorInfo", sizeof("errorInfo") - 1, 0, return_value);
+}
+
 void sapnwrfc_register_exceptions()
 {
     zend_class_entry ce;
 
-    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Exception", NULL);
+    INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Exception", sapnwrfc_exception_class_functions);
     sapnwrfc_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
     zend_declare_property_null(sapnwrfc_exception_ce, "errorInfo", sizeof("errorInfo") - 1, ZEND_ACC_PUBLIC);
 
