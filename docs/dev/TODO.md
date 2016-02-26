@@ -2,8 +2,6 @@
 
 Not ordered by priority...
 
-* Add tests!
-* Test with a `DEBUG` and `ZTS` build.
 * Add `arginfo`
 * Organize the code ;)
 * Change the handling of active/inactive parameters. Currently, the functon handle is created in `Connection::getFunction()` and `setParameterActive/isParameterActive` directly use `RfcSetParameterActive/RfcIsParameterActive`. This could be a problem when one fetches a function that hast optional parameters and uses it for subsequent calls -> if an optional parameter is given in the first call, but not in the second one, the optional parameter from the first call will be reused without the user expecting/wanting it.
