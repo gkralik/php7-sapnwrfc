@@ -80,9 +80,6 @@ PHP_METHOD(RemoteFunction, invoke);
 PHP_METHOD(RemoteFunction, setParameterActive);
 PHP_METHOD(RemoteFunction, isParameterActive);
 
-// arginfo
-//ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(name, IS_VOID, NULL, 0)
-//ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_Connection___construct, 0, 0, 1)
     ZEND_ARG_ARRAY_INFO(0, parameters, 0)
@@ -120,7 +117,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 1, IS_
     ZEND_ARG_ARRAY_INFO(0, parameters, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_setParameterActive, 0, 2, IS_VOID, NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_RemoteFunction_setParameterActive, 0, 0, 2)
     ZEND_ARG_TYPE_INFO(0, parameterName, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, isActive, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
@@ -145,9 +142,9 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
 };
 
 static zend_function_entry sapnwrfc_function_class_functions[] = {
-    PHP_ME(RemoteFunction, invoke, arginfo_RemoteFunction_invoke, ZEND_ACC_PUBLIC)
-    PHP_ME(RemoteFunction, setParameterActive, arginfo_RemoteFunction_setParameterActive, ZEND_ACC_PUBLIC)
-    PHP_ME(RemoteFunction, isParameterActive, arginfo_RemoteFunction_isParameterActive, ZEND_ACC_PUBLIC)
+    PHP_ME(RemoteFunction, invoke, arginfo_RemoteFunction_invoke, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(RemoteFunction, setParameterActive, arginfo_RemoteFunction_setParameterActive, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(RemoteFunction, isParameterActive, arginfo_RemoteFunction_isParameterActive, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_FE_END
 };
 
@@ -711,7 +708,7 @@ PHP_METHOD(RemoteFunction, setParameterActive)
     if (rc != RFC_OK) {
         sapnwrfc_throw_function_exception(error_info, "Failed to set status for parameter %s", parameter_name);
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-        RETURN_NULL();
+        return;
     }
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
