@@ -9,7 +9,7 @@ function test($param) {
     try {
         \SAPNWRFC\Connection::setIniPath($param);
         echo "ok\n";
-    } catch(\SAPNWRFC\ConnectionException $e) {
+    } catch(TypeError $e) {
         echo "fail\n";
     }
 }

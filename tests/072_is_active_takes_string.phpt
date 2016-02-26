@@ -1,5 +1,5 @@
 --TEST--
-isParameterActive() takes a string argument.
+isParameterActive() accepts only a string argument.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -13,7 +13,7 @@ function test($f, $p1) {
     try {
         $f->isParameterActive($p1);
         echo "ok\n";
-    } catch(\SAPNWRFC\FunctionCallException $e) {
+    } catch(TypeError $e) {
         echo "fail\n";
     }
 }
@@ -28,5 +28,3 @@ ok
 fail
 fail
 fail
---XFAIL--
-Implicit type conversion.

@@ -1,5 +1,5 @@
 --TEST--
-getFunction() throws ConnectionException if parameter is not string.
+getFunction() accepts only string parameter.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -11,10 +11,10 @@ function test($c, $param) {
     try {
         $c->getFunction($param);
         echo "ok\n";
-    } catch(\SAPNWRFC\ConnectionException $e) {
+    } catch(TypeError $e) {
         echo "fail\n";
     } catch(\SAPNWRFC\FunctionCallException $e) {
-        echo "fail_lookup\n";
+        echo "fail_lookup";
     }
 }
 

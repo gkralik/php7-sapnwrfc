@@ -80,24 +80,74 @@ PHP_METHOD(RemoteFunction, invoke);
 PHP_METHOD(RemoteFunction, setParameterActive);
 PHP_METHOD(RemoteFunction, isParameterActive);
 
+// arginfo
+//ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(name, IS_VOID, NULL, 0)
+//ZEND_ARG_TYPE_INFO(pass_by_ref, name, type_hint, allow_null)
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_Connection___construct, 0, 0, 1)
+    ZEND_ARG_ARRAY_INFO(0, parameters, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_attributes, IS_ARRAY, NULL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_ping, _IS_BOOL, NULL, 0)
+ZEND_END_ARG_INFO()
+
+// NOTE: strangeley, the macro is defined with class_name, not #class_name. enclose in quotes to mitigate
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_getFunction, 0, 1, IS_OBJECT, "SAPNWRFC\\RemoteFunction", 0)
+    ZEND_ARG_TYPE_INFO(0, functionName, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_close, _IS_BOOL, NULL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setIniPath, 0, 1, _IS_BOOL, NULL, 0)
+    ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_reloadIniFile, _IS_BOOL, NULL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_version, IS_STRING, NULL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_rfcVersion, IS_STRING, NULL, 0)
+ZEND_END_ARG_INFO()
+
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 1, IS_ARRAY, NULL, 0)
+    ZEND_ARG_ARRAY_INFO(0, parameters, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_setParameterActive, 0, 2, IS_VOID, NULL, 0)
+    ZEND_ARG_TYPE_INFO(0, parameterName, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, isActive, _IS_BOOL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_isParameterActive, 0, 1, _IS_BOOL, NULL, 0)
+    ZEND_ARG_TYPE_INFO(0, parameterName, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
-    PHP_ME(Connection, __construct, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(Connection, attributes, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(Connection, ping, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(Connection, getFunction, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(Connection, close, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(Connection, setIniPath, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
-    PHP_ME(Connection, reloadIniFile, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
-    PHP_ME(Connection, version, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
-    PHP_ME(Connection, rfcVersion, NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    PHP_ME(Connection, __construct, arginfo_Connection___construct, ZEND_ACC_PUBLIC)
+    PHP_ME(Connection, attributes, arginfo_Connection_attributes, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, ping, arginfo_Connection_ping, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, getFunction, arginfo_Connection_getFunction, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, close, arginfo_Connection_close, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, setIniPath, arginfo_Connection_setIniPath, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, reloadIniFile, arginfo_Connection_reloadIniFile, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, version, arginfo_Connection_version, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, rfcVersion, arginfo_Connection_rfcVersion, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_FE_END
 };
 
 static zend_function_entry sapnwrfc_function_class_functions[] = {
-    PHP_ME(RemoteFunction, invoke, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(RemoteFunction, setParameterActive, NULL, ZEND_ACC_PUBLIC)
-    PHP_ME(RemoteFunction, isParameterActive, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(RemoteFunction, invoke, arginfo_RemoteFunction_invoke, ZEND_ACC_PUBLIC)
+    PHP_ME(RemoteFunction, setParameterActive, arginfo_RemoteFunction_setParameterActive, ZEND_ACC_PUBLIC)
+    PHP_ME(RemoteFunction, isParameterActive, arginfo_RemoteFunction_isParameterActive, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 

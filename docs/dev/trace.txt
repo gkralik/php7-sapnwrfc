@@ -1,0 +1,2 @@
+DECL_EXP RFC_RC SAP_API RfcSetTraceLevel(RFC_CONNECTION_HANDLE connection, SAP_UC* destination, unsigned traceLevel, RFC_ERROR_INFO* errorInfo);
+DECL_EXP RFC_RC SAP_API RfcSetTraceDir(SAP_UC* traceDir, RFC_ERROR_INFO* errorInfo);

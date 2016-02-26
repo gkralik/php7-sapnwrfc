@@ -1,5 +1,5 @@
 --TEST--
-invoke() throws FunctionCallExceptions if given non-array parameter.
+invoke() accepts only array parameter.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -13,7 +13,7 @@ function test($f, $param) {
     try {
         $f->invoke($param);
         echo "fail\n";
-    } catch(\SAPNWRFC\FunctionCallException $e) {
+    } catch(TypeError $e) {
         echo "ok\n";
     }
 }

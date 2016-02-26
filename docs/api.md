@@ -5,6 +5,11 @@ This document shows the public interface of the classes exposed by the extension
 ```php
 <?php
 
+/**
+ * This is a stub file of the extensions public interface to enable
+ * code completion in IDEs.
+ */
+
 namespace SAPNWRFC;
 
 class Exception extends \RuntimeException {
@@ -43,10 +48,10 @@ class Connection {
     /**
      * Connect to the system using the given parameters.
      *
-     * @params array $connectionParams Connection parameters.
-     * @throw ConnectionException if the connection fails.
+     * @param array $parameters Connection parameters.
+     * @throws ConnectionException if the connection fails.
      */
-    public function __construct(array $connectionParams) {}
+    public function __construct(array $parameters) {}
 
     /**
      * Get the connection attributes.
@@ -66,7 +71,7 @@ class Connection {
     /**
      * Lookup a RFC function and return a RemoteFunction object.
      *
-     * @param string $functionName Name of the function.
+     * @param string $functionnName Name of the function.
      * @return RemoteFunction A RemoteFunction class for the RFC function.
      * @throws FunctionCallException if the lookup fails or an error is
      *                               returned during parameter parsing.

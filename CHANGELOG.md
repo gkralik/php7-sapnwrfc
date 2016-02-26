@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Windows build instructions (#8, #10)
 - A lot more tests
 - `getErrorInfo()` for exception classes (#14)
+- Argument info and types to enable reflection and type safety
 
 ### Changed
 - `TRACE_LEVEL_*` constants are now integers
