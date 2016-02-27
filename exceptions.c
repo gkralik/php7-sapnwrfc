@@ -161,8 +161,13 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
 
 PHP_METHOD(Exception, getErrorInfo)
 {
+    zval tmp;
+    zval *error_info;
+
     zend_parse_parameters_none();
-    zend_read_property(sapnwrfc_exception_ce, getThis(), "errorInfo", sizeof("errorInfo") - 1, 0, return_value);
+    error_info = zend_read_property(sapnwrfc_exception_ce, getThis(), "errorInfo", sizeof("errorInfo") - 1, 0, &tmp);
+
+    RETURN_ZVAL(error_info, 1, 0);
 }
 
 void sapnwrfc_register_exceptions()
