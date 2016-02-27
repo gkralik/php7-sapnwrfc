@@ -12,12 +12,16 @@ try {
     $f->invoke([]);
 } catch(\SAPNWRFC\FunctionCallException $e) {
     var_dump(is_array($e->errorInfo));
+    var_dump(is_array($e->getErrorInfo()));
+    var_dump($e->errorInfo == $e->getErrorInfo());
     var_dump($e->errorInfo["code"]);
     var_dump($e->errorInfo["abapMsgClass"]);
     var_dump($e->errorInfo["abapMsgType"]);
     var_dump($e->errorInfo["abapMsgNumber"]);
 }
 --EXPECT--
+bool(true)
+bool(true)
 bool(true)
 int(4)
 string(2) "SR"
