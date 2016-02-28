@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - A lot more tests
 - `getErrorInfo()` for exception classes (#14)
 - Argument info and types to enable reflection and type safety
+- Improve parameter handling
 
 ### Changed
 - `TRACE_LEVEL_*` constants are now integers
