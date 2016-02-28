@@ -28,8 +28,11 @@ typedef struct _sapnwrfc_function_exception_object {
     zend_object zobj;
 } sapnwrfc_functioncall_exception_object;
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Exception_getErrorInfo, IS_ARRAY, NULL, 0)
+ZEND_END_ARG_INFO()
+
 static zend_function_entry sapnwrfc_exception_class_functions[] = {
-    PHP_ME(Exception, getErrorInfo, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(Exception, getErrorInfo, arginfo_Exception_getErrorInfo, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 
