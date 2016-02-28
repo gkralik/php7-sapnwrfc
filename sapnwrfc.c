@@ -592,7 +592,7 @@ PHP_METHOD(RemoteFunction, invoke)
         rc = RfcSetParameterActive(function_handle, (parameter_name_u = zend_string_to_sapuc(key)), 0, &error_info);
         free((char *)parameter_name_u);
         if (rc != RFC_OK) {
-            sapnwrfc_throw_function_exception(error_info, "Failed to set status for parameter %s", ZSTR_VAL(key));
+            sapnwrfc_throw_function_exception(error_info, "Failed to deactivate parameter %s", ZSTR_VAL(key));
 
             RfcDestroyFunction(function_handle, &error_info);
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
@@ -621,18 +621,15 @@ PHP_METHOD(RemoteFunction, invoke)
             RETURN_NULL();
         }
 
-        // check if the parameter is active
-        rc = RfcIsParameterActive(function_handle, parameter_desc.name, &is_active, &error_info);
+        // a parameter is provided, so make sure it is active
+        rc = RfcSetParameterActive(function_handle, (parameter_name_u = zend_string_to_sapuc(key)), 1, &error_info);
+        free((char *)parameter_name_u);
         if (rc != RFC_OK) {
-            sapnwrfc_throw_function_exception(error_info, "Failed to get status of parameter %s", ZSTR_VAL(key));
+            sapnwrfc_throw_function_exception(error_info, "Failed to activate parameter %s", ZSTR_VAL(key));
+
             RfcDestroyFunction(function_handle, &error_info);
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
             RETURN_NULL();
-        }
-
-        // FIXME should we set the parameter to active if the user has supplied it?
-        if (!is_active) {
-            continue;
         }
 
         // set the parameter value
