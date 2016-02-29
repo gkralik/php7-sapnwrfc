@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [0.7.0] - 2016-02-29
 ### Added
 - Version information in phpinfo() (#12)
 - Windows build instructions (#8, #10)
@@ -60,7 +62,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.2...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.2...0.7.0
 [0.6.2]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.0...0.6.1
 [0.6.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.5.0...0.6.0
