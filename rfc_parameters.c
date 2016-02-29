@@ -412,7 +412,7 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value)
     SAP_UC * field_name_u;
     HashTable *value_hash;
     zend_string *key;
-    ulong num_key;
+    zend_ulong num_key;
     zval *val;
 
     if (Z_TYPE_P(value) != IS_ARRAY) {
