@@ -1,5 +1,7 @@
 <?php
 
+die('This file is intended for IDE parsers and should not be included.');
+
 /**
  * This is a stub file of the extensions public interface to enable
  * code completion in IDEs.
