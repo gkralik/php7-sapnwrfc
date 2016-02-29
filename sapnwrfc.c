@@ -73,6 +73,8 @@ PHP_METHOD(Connection, getFunction);
 PHP_METHOD(Connection, close);
 PHP_METHOD(Connection, setIniPath);
 PHP_METHOD(Connection, reloadIniFile);
+PHP_METHOD(Connection, setTraceDir);
+PHP_METHOD(Connection, setTraceLevel);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
@@ -106,6 +108,14 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_reloadIniFile, _IS_BOOL, NULL, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceDir, 0, 1, _IS_BOOL, NULL, 1)
+    ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceLevel, 0, 1, _IS_BOOL, NULL, 1)
+    ZEND_ARG_TYPE_INFO(0, level, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_version, IS_STRING, NULL, 0)
 ZEND_END_ARG_INFO()
 
@@ -136,6 +146,8 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, close, arginfo_Connection_close, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, setIniPath, arginfo_Connection_setIniPath, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, reloadIniFile, arginfo_Connection_reloadIniFile, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, setTraceDir, arginfo_Connection_setTraceDir, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, setTraceLevel, arginfo_Connection_setTraceLevel, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, version, arginfo_Connection_version, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, rfcVersion, arginfo_Connection_rfcVersion, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_FE_END
@@ -516,6 +528,60 @@ PHP_METHOD(Connection, reloadIniFile)
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
     RETURN_TRUE;
+}
+
+PHP_METHOD(Connection, setTraceDir)
+{
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+    zend_string *path;
+    SAP_UC *path_u;
+
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &path) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    rc = RfcSetTraceDir((path_u = zend_string_to_sapuc(path)), &error_info);
+    free((char *)path_u);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_connection_exception(error_info, "Failed to set trace directory");
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
+
+PHP_METHOD(Connection, setTraceLevel)
+{
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+    unsigned int level;
+
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &level) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    if (level < 0 || level > 3) {
+        zend_error(E_WARNING, "Failed to set trace level, out of range (0 - 3)");
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    rc = RfcSetTraceLevel(NULL, NULL, level, &error_info);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_connection_exception(error_info, "Failed to set trace level");
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }
 
 // Connection class methods
