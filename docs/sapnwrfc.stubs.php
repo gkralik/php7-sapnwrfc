@@ -22,7 +22,7 @@ class Exception extends \RuntimeException
      *
      * @var array
      */
-    public $errorInfo;
+    private $errorInfo;
 
     /**
      * Getter for the errorInfo property.
