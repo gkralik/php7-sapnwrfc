@@ -20,6 +20,8 @@ Vagrant.configure(2) do |config|
      sed -i "s/extension=raphf.so/;extension=raphf.so/" /etc/php71/php-cli.ini
      sed -i "s/extension=propro.so/;extension=propro.so/" /etc/php71/php-cli.ini
      sed -i "s/extension=http.so/;extension=http.so/" /etc/php71/php-cli.ini
+     sed -i "s/extension=http.so/;extension=ast.so/" /etc/php71/php-cli.ini
+     sed -i "s/extension=http.so/;extension=mysql.so/" /etc/php71/php-cli.ini
      echo -e "*\thard\tcore\tunlimited" > /etc/security/limits.d/core-dump.conf
      ulimit -c unlimited
      php -v
