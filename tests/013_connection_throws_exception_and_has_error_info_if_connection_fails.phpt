@@ -14,10 +14,11 @@ try {
         'trace'  => \SAPNWRFC\Connection::TRACE_LEVEL_OFF,
     ]);
 } catch(\SAPNWRFC\ConnectionException $e) {
-    var_dump(is_array($e->errorInfo));
-    var_dump(!empty($e->errorInfo["code"]));
-    var_dump(!empty($e->errorInfo["key"]));
-    var_dump(!empty($e->errorInfo["message"]));
+    $errorInfo = $e->getErrorInfo();
+    var_dump(is_array($errorInfo));
+    var_dump(!empty($errorInfo["code"]));
+    var_dump(!empty($errorInfo["key"]));
+    var_dump(!empty($errorInfo["message"]));
 }
 --EXPECT--
 bool(true)

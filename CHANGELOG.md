@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Changed
-- `Exception::$errorInfo` is now private
+- `Exception::$errorInfo` is now protected
 - `attributes()` is now `getAttributes()`
 
 ## [0.7.0] - 2016-02-29

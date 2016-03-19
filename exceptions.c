@@ -179,7 +179,7 @@ void sapnwrfc_register_exceptions()
 
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\Exception", sapnwrfc_exception_class_functions);
     sapnwrfc_exception_ce = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException);
-    zend_declare_property_null(sapnwrfc_exception_ce, "errorInfo", sizeof("errorInfo") - 1, ZEND_ACC_PRIVATE);
+    zend_declare_property_null(sapnwrfc_exception_ce, "errorInfo", sizeof("errorInfo") - 1, ZEND_ACC_PROTECTED);
 
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\ConnectionException", NULL);
     sapnwrfc_connection_exception_ce = zend_register_internal_class_ex(&ce, sapnwrfc_exception_ce);

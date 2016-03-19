@@ -8,7 +8,7 @@ $e = new \SAPNWRFC\Exception;
 var_dump(property_exists($e, 'errorInfo'));
 
 $r = new ReflectionClass($e);
-var_dump($r->getProperty('errorInfo')->isPrivate());
+var_dump($r->getProperty('errorInfo')->isProtected());
 
 --EXPECT--
 bool(true)
