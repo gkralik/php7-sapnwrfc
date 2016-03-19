@@ -1,5 +1,5 @@
 --TEST--
-attributes() does not take arguments.
+getAttributes() does not take arguments.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -8,7 +8,7 @@ $config = include "sapnwrfc.config.inc";
 $c = new \SAPNWRFC\Connection($config);
 
 try {
-    $c->attributes('foobar');
+    $c->getAttributes('foobar');
 } catch(\SAPNWRFC\ConnectionException $e) {
     echo 'ok';
 }

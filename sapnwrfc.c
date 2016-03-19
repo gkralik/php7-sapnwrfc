@@ -67,7 +67,7 @@ static inline sapnwrfc_function_object *sapnwrfc_function_object_fetch(zend_obje
 
 // forward declaration of class methods
 PHP_METHOD(Connection, __construct);
-PHP_METHOD(Connection, attributes);
+PHP_METHOD(Connection, getAttributes);
 PHP_METHOD(Connection, ping);
 PHP_METHOD(Connection, getFunction);
 PHP_METHOD(Connection, close);
@@ -87,7 +87,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_Connection___construct, 0, 0, 1)
     ZEND_ARG_ARRAY_INFO(0, parameters, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_attributes, IS_ARRAY, NULL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_getAttributes, IS_ARRAY, NULL, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_ping, _IS_BOOL, NULL, 0)
@@ -140,7 +140,7 @@ ZEND_END_ARG_INFO()
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, __construct, arginfo_Connection___construct, ZEND_ACC_PUBLIC)
-    PHP_ME(Connection, attributes, arginfo_Connection_attributes, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, getAttributes, arginfo_Connection_getAttributes, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, ping, arginfo_Connection_ping, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, getFunction, arginfo_Connection_getFunction, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, close, arginfo_Connection_close, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
@@ -334,7 +334,7 @@ PHP_METHOD(Connection, close)
     RETURN_NULL();
 }
 
-PHP_METHOD(Connection, attributes)
+PHP_METHOD(Connection, getAttributes)
 {
     sapnwrfc_connection_object *intern;
     RFC_ATTRIBUTES attributes;

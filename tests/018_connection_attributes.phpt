@@ -1,5 +1,5 @@
 --TEST--
-attributes() returns an array of connection attributes.
+getAttributes() returns an array of connection attributes.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -8,7 +8,7 @@ $config = include "sapnwrfc.config.inc";
 
 $c = new \SAPNWRFC\Connection($config);
 
-$a = $c->attributes();
+$a = $c->getAttributes();
 
 var_dump(is_array($a));
 var_dump(array_key_exists("dest", $a));

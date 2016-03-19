@@ -68,7 +68,7 @@ class Connection
      * @throws ConnectionException if the connection attributes could not be
      *                             fetched.
      */
-    public function attributes()
+    public function getAttributes()
     {
     }
 
