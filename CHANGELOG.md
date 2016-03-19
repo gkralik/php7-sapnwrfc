@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - `Exception::$errorInfo` is now protected
 - `attributes()` is now `getAttributes()`
+- Test handling simplified for testing agains a live system
 
 ## [0.7.0] - 2016-02-29
 ### Added
