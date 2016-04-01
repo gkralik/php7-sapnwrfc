@@ -2,10 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.0.0]
 ### Changed
 - `Exception::$errorInfo` is now protected
 - `attributes()` is now `getAttributes()`
-- Test handling simplified for testing agains a live system
+- Test handling simplified for testing against a live system
 
 ## [0.7.0] - 2016-02-29
 ### Added
@@ -66,7 +68,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/0.7.0...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.7.0...1.0.0
 [0.7.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.2...0.7.0
 [0.6.2]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.1...0.6.2
 [0.6.1]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.0...0.6.1
