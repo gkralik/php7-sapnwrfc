@@ -2,8 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- add a release date for version 1.0.0 in the Changelog
 
-## [1.0.0]
+## [1.0.0] - 2016-04-01
 ### Changed
 - `Exception::$errorInfo` is now protected
 - `attributes()` is now `getAttributes()`
