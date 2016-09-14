@@ -157,8 +157,9 @@ rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     zend_string *key;
     zval *val;
 
+    zname = sapuc_to_zend_string(name);
+
     if (Z_TYPE_P(value) != IS_ARRAY) {
-        zname = sapuc_to_zend_string(name);
         zend_error(E_WARNING, "Failed to set TABLE parameter %s, expected array", ZSTR_VAL(zname));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
@@ -168,18 +169,19 @@ rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     ZEND_HASH_FOREACH_STR_KEY_VAL(value_hash, key, val) {
         table_row = RfcAppendNewRow(h, &error_info);
         if (table_row == NULL) {
-            zname = sapuc_to_zend_string(name);
             sapnwrfc_throw_function_exception(error_info, "Failed to append TABLE row for parameter %s", ZSTR_VAL(zname));
             zend_string_release(zname);
             return RFC_SET_VALUE_ERROR;
         }
 
-        if (rfc_set_table_row(table_row, val) == RFC_SET_VALUE_ERROR) {
+        if (rfc_set_table_row(table_row, val, zname) == RFC_SET_VALUE_ERROR) {
             // exception has been thrown; abort
+            zend_string_release(zname);
             return RFC_SET_VALUE_ERROR;
         }
     } ZEND_HASH_FOREACH_END();
 
+    zend_string_release(zname);
     return RFC_SET_VALUE_OK;
 }
 
@@ -199,7 +201,8 @@ rfc_set_value_return_t rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, 
 
     if (Z_STRLEN_P(value) > max) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set NUM parameter, too long");
+        zend_error(E_WARNING, "Failed to set NUM parameter %s, too long",
+        ZSTR_VAL(zname));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -338,16 +341,20 @@ rfc_set_value_return_t rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *
     RFC_ERROR_INFO error_info;
     RFC_STRUCTURE_HANDLE line_handle;
     zend_string *zname;
+    rfc_set_value_return_t ret;
+
+    zname = sapuc_to_zend_string(name);
 
     rc = RfcGetStructure(h, name, &line_handle, &error_info);
     if (rc != RFC_OK) {
-        zname = sapuc_to_zend_string(name);
         sapnwrfc_throw_function_exception(error_info, "Failed to set STRUCTURE parameter %s", ZSTR_VAL(zname));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
 
-    return rfc_set_table_row(line_handle, value);
+    ret = rfc_set_table_row(line_handle, value, zname);
+    zend_string_release(zname);
+    return ret;
 }
 
 rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
@@ -403,7 +410,7 @@ rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *na
     return RFC_SET_VALUE_OK;
 }
 
-rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value)
+rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value, zend_string *param_name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -416,13 +423,13 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value)
     zval *val;
 
     if (Z_TYPE_P(value) != IS_ARRAY) {
-        zend_error(E_WARNING, "Failed to set TABLE row, expected array");
+        zend_error(E_WARNING, "Failed to set TABLE row, expected array for parameter %s", ZSTR_VAL(param_name));
         return RFC_SET_VALUE_ERROR;
     }
 
     type_desc_handle = RfcDescribeType(row, &error_info);
     if (type_desc_handle == NULL) {
-        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE row type description");
+        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE row type description for parameter %s", ZSTR_VAL(param_name));
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -714,9 +721,10 @@ zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     unsigned table_len = 0;
     unsigned i = 0;
 
+    zname = sapuc_to_zend_string(name);
+
     rc = RfcGetRowCount(h, &table_len, &error_info);
     if (rc != RFC_OK) {
-        zname = sapuc_to_zend_string(name);
         sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE parameter %s", ZSTR_VAL(zname));
         zend_string_release(zname);
 
@@ -728,15 +736,18 @@ zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     for(i = 0; i < table_len; i++) {
         RfcMoveTo(h, i, NULL);
         line_handle = RfcGetCurrentRow(h, NULL);
-        line_value = rfc_get_table_line(line_handle);
+
+        line_value = rfc_get_table_line(line_handle, zname);
         if (ZVAL_IS_NULL(&line_value)) {
             // error; exception has been thrown
             ZVAL_NULL(&value);
+            zend_string_release(zname);
             return value;
         }
         add_next_index_zval(&value, &line_value);
     }
 
+    zend_string_release(zname);
     return value;
 }
 
@@ -868,9 +879,10 @@ zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     RFC_STRUCTURE_HANDLE line_handle;
     zval value;
 
+    zname = sapuc_to_zend_string(name);
+
     rc = RfcGetStructure(h, name, &line_handle, &error_info);
     if (rc != RFC_OK) {
-        zname = sapuc_to_zend_string(name);
         sapnwrfc_throw_function_exception(error_info, "Failed to get STRUCTURE parameter %s", ZSTR_VAL(zname));
         zend_string_release(zname);
 
@@ -878,7 +890,10 @@ zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
         return value;
     }
 
-    return rfc_get_table_line(line_handle);
+    value = rfc_get_table_line(line_handle, zname);
+    zend_string_release(zname);
+
+    return value;
 }
 
 zval rfc_get_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
@@ -969,7 +984,7 @@ zval rfc_get_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     return value;
 }
 
-zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
+zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line, zend_string *param_name)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -983,7 +998,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
 
     type_handle = RfcDescribeType(line, &error_info);
     if (type_handle == NULL) {
-        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE line");
+        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE line for parameter %s", ZSTR_VAL(param_name));
 
         ZVAL_NULL(&value);
         return value;
@@ -991,7 +1006,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
 
     rc = RfcGetFieldCount(type_handle, &field_count, &error_info);
     if (rc != RFC_OK) {
-        sapnwrfc_throw_function_exception(error_info, "Failed to get field count for TABLE line");
+        sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE line field count for parameter %s", ZSTR_VAL(param_name));
 
         ZVAL_NULL(&value);
         return value;
@@ -1002,7 +1017,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line)
     for(i = 0; i < field_count; i++) {
         rc = RfcGetFieldDescByIndex(type_handle, i, &field_desc, &error_info);
         if (rc != RFC_OK) {
-            sapnwrfc_throw_function_exception(error_info, "Failed to get field description for TABLE line");
+            sapnwrfc_throw_function_exception(error_info, "Failed to get TABLE line field description for parameter %s", ZSTR_VAL(param_name));
 
             ZVAL_NULL(&value);
             return value;

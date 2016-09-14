@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Changed
-- add a release date for version 1.0.0 in the Changelog
+- Add a release date for version 1.0.0 in the Changelog
+- CS fixes
+- Include parameter name in exception messages for TABLE parameters
 
 ## [1.0.0] - 2016-04-01
 ### Changed
@@ -20,7 +22,6 @@ All notable changes to this project will be documented in this file.
 - Argument info and types to enable reflection and type safety
 - Improve parameter handling (#15)
 - `setTraceDir()` and `setTraceLevel()` for setting the trace directory and level (#17)
--  for setting the trace level
 
 ### Changed
 - `TRACE_LEVEL_*` constants are now integers
