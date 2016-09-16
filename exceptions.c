@@ -78,11 +78,12 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
             add_assoc_str(&info, "abapMsgV3", sapuc_to_zend_string(error_info.abapMsgV3));
             add_assoc_str(&info, "abapMsgV4", sapuc_to_zend_string(error_info.abapMsgV4));
             break;
-        case RFC_OK:
+        case RFC_OK: // LCOV_EXCL_START
             zend_error(E_ERROR, "Internal error: exception handler called for RFC_OK");
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
             zend_string_release(message);
             return;
+            // LCOV_EXCL_STOP
         default:
             zend_error(E_ERROR, "Internal error: unknown error group");
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
@@ -141,11 +142,12 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
             add_assoc_str(&info, "abapMsgV3", sapuc_to_zend_string(error_info.abapMsgV3));
             add_assoc_str(&info, "abapMsgV4", sapuc_to_zend_string(error_info.abapMsgV4));
             break;
-        case RFC_OK:
+        case RFC_OK: // LCOV_EXCL_START
             zend_error(E_ERROR, "Internal error: exception handler called for RFC_OK");
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
             zend_string_release(message);
             return;
+            // LCOV_EXCL_STOP
         default:
             zend_error(E_ERROR, "Internal error: unknown error group");
             zend_replace_error_handling(EH_NORMAL, NULL, NULL);
