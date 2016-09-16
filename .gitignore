@@ -17,6 +17,7 @@ config.status
 config.sub
 configure
 configure.in
+coverage_data/
 dev_rfc.trc
 dist/
 install-sh
@@ -28,6 +29,7 @@ modules/
 run-tests.php
 *.c.i
 *.ii
+*.info
 *.la
 *.lo
 *.trc
