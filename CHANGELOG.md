@@ -2,14 +2,17 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [1.1.0] - 2016-09-16
 ### Changed
-- Add a release date for version 1.0.0 in the Changelog
-- CS fixes
 - Include parameter name in exception messages for TABLE parameters
 - Allow `int` to be passed for `FLOAT` parameters
 - Allow passing parameters by reference
 - Add script to generate test coverage data
 - Add new screenshots to the NW RFC SDK installation guide
+- Add a release date for version 1.0.0 in the Changelog
+- CS fixes
 
 ## [1.0.0] - 2016-04-01
 ### Changed
@@ -75,7 +78,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/gkralik/php7-sapnwrfc/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.7.0...1.0.0
 [0.7.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.2...0.7.0
 [0.6.2]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.1...0.6.2
