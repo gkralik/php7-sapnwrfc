@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - CS fixes
 - Include parameter name in exception messages for TABLE parameters
 - Allow `int` to be passed for `FLOAT` parameters
+- Allow passing parameters by reference
 
 ## [1.0.0] - 2016-04-01
 ### Changed
