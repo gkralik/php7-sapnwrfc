@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Include parameter name in exception messages for TABLE parameters
 - Allow `int` to be passed for `FLOAT` parameters
 - Allow passing parameters by reference
+- Add script to generate test coverage data
 
 ## [1.0.0] - 2016-04-01
 ### Changed

@@ -17,7 +17,7 @@ config.status
 config.sub
 configure
 configure.in
-coverage_data/
+coverage_html/
 dev_rfc.trc
 dist/
 install-sh
