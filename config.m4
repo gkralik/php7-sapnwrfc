@@ -44,7 +44,7 @@ AC_DEFUN([PHP_ADD_SOURCES_X],[
 
 		dnl set the flags needed for compiling a SAP NW RFC application
 		dnl NOTE: these are for a linux environment
-		nwrfc_extra_flags="-std=c99 -DNDEBUG -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DSAPonUNIX -DSAPwithUNICODE -D__NO_MATH_INLINES -DSAPwithTHREADS -DSAPonLIN -minline-all-stringops -g -fno-strict-aliasing -fno-omit-frame-pointer -fexceptions -funsigned-char -Wall -Wno-uninitialized -Wno-long-long -Wcast-align -pthread -fPIC"
+		nwrfc_extra_flags="-std=c99 -DNDEBUG -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DSAPonUNIX -DSAPwithUNICODE -D__NO_MATH_INLINES -DSAPwithTHREADS -DSAPonLIN -minline-all-stringops -fno-strict-aliasing -fno-omit-frame-pointer -fexceptions -funsigned-char -Wall -Wno-uninitialized -Wno-long-long -Wcast-align -pthread -fPIC"
 
 		dnl the SAP NW RFC SDK requires a preprocessing step for unicode things
 		dnl refer to the SAP notes given above for details
