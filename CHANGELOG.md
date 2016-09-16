@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 - Add a release date for version 1.0.0 in the Changelog
 - CS fixes
 - Include parameter name in exception messages for TABLE parameters
+- Allow `int` to be passed for `FLOAT` parameters
 
 ## [1.0.0] - 2016-04-01
 ### Changed

@@ -227,9 +227,14 @@ rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     RFC_ERROR_INFO error_info;
     zend_string *zname;
 
+    // if argument type is int, try to convert to double
+    if (Z_TYPE_P(value) == IS_LONG) {
+        convert_to_double(value);
+    }
+
     if (Z_TYPE_P(value) != IS_DOUBLE) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set FLOAT parameter %s, expected double", ZSTR_VAL(zname));
+        zend_error(E_WARNING, "Failed to set FLOAT parameter %s, expected int or double", ZSTR_VAL(zname));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -537,8 +542,6 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
     RFC_TABLE_HANDLE table_handle;
     SAP_UC *parameter_name_u;
     int ret = RFC_SET_VALUE_OK;
-
-    // TODO if value is empty, skip
 
     rc = RfcGetParameterDescByName(function_desc_handle,
                                    (parameter_name_u = zend_string_to_sapuc(name)),

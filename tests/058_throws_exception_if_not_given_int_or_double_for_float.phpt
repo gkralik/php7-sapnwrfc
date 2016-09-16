@@ -1,5 +1,5 @@
 --TEST--
-Throws FunctionCallException if not given double for RFC FLOAT parameter.
+Throws FunctionCallException if given wrong type for RFC FLOAT parameter.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
