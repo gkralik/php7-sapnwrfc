@@ -17,6 +17,7 @@ Vagrant.configure(2) do |config|
      newphp 71 debugzts
      echo "/nwrfcsdk/lib" > /etc/ld.so.conf.d/nwrfcsdk.conf
      ldconfig
+     ldconfig
      sed -i "s/variables_order=GPCS/variables_order=EGPCS/" /etc/php71/php-cli.ini
      sed -i "s/extension=memcached.so/;extension=memcached.so/" /etc/php71/php-cli.ini
      sed -i "s/extension=raphf.so/;extension=raphf.so/" /etc/php71/php-cli.ini
