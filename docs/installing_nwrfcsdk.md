@@ -2,9 +2,9 @@
 
 To build and use this extension, you need to have the *SAP NW RFC SDK libaray* installed.
 
-To obtain a copy of the library, login to the SAP Support Portal and head to the *[Software Downloads](https://support.sap.com/software.html)* section.
+To obtain a copy of the library, head over to the *[Software Downloads](https://support.sap.com/software.html)* section of the SAP Support Portal.
 
-Click on *Search for Software*.
+Click on *Software Downloads* and login with your S-User when prompted.
 
 ![Search for Software](images/01_smp.png)
 

@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Allow `int` to be passed for `FLOAT` parameters
 - Allow passing parameters by reference
 - Add script to generate test coverage data
+- Add new screenshots to the NW RFC SDK installation guide
 
 ## [1.0.0] - 2016-04-01
 ### Changed
