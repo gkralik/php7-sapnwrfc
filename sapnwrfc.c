@@ -177,6 +177,7 @@ static void sapnwrfc_connection_object_free(zend_object *object)
 {
     RFC_ERROR_INFO error_info;
     sapnwrfc_connection_object *intern;
+    int i;
 
     intern = SAPNWRFC_CONNECTION_OBJ(object);
 
@@ -190,7 +191,7 @@ static void sapnwrfc_connection_object_free(zend_object *object)
 
     // free login parameters
     if(intern->rfc_login_params) {
-        for(int i = 0; i < intern->rfc_login_params_len; i++) {
+        for (i = 0; i < intern->rfc_login_params_len; i++) {
             free((char *)intern->rfc_login_params[i].name);
             free((char *)intern->rfc_login_params[i].value);
         }

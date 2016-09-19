@@ -2,7 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-
+### Fixed
+- Windows build: fix syntax error
 
 ## [1.1.0] - 2016-09-16
 ### Changed
