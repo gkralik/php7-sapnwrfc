@@ -82,7 +82,7 @@ All notable changes to this project will be documented in this file.
 - Initial working release of the extension
 
 [Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.1...HEAD
-[1.1.1]: https://github.com/gkralik/php7-sapnwrfc/compare/1.0.0...1.1.1
+[1.1.1]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/gkralik/php7-sapnwrfc/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.7.0...1.0.0
 [0.7.0]: https://github.com/gkralik/php7-sapnwrfc/compare/0.6.2...0.7.0
