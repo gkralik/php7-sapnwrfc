@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 Gregor Kralik <g.kralik (at) gmail.com>
+ * Copyright (c) 2016 - 2017 Gregor Kralik <g.kralik (at) gmail.com>
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -460,7 +460,7 @@ rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *na
     if (Z_ISREF_P(value)) {
         value = Z_REFVAL_P(value);
     }
-    
+
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
         zend_error(E_WARNING, "Failed to set XSTRING parameter %s, expected string", ZSTR_VAL(zname));
