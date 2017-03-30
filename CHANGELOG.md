@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+- Fix segfault when returning empty strings
 
 ## [1.1.1] - 2016-09-20
 ### Fixed

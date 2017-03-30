@@ -989,7 +989,7 @@ zval rfc_get_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     }
 
     if (str_len == 0) {
-        ZVAL_EMPTY_STRING(&value);
+        ZVAL_STRING(&value, "");
         return value;
     }
 
@@ -1032,7 +1032,7 @@ zval rfc_get_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     }
 
     if (str_len == 0) {
-        ZVAL_EMPTY_STRING(&value);
+        ZVAL_STRING(&value, "");
         return value;
     }
 
