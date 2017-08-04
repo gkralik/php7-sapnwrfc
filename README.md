@@ -6,7 +6,7 @@ This extension is intended to provide a means for PHP 7 developers to interface 
 *If you like/use the extension and want to donate:*
 ```
 LTC: LQ9XajbxJY2wxC44dwHTLCQCjoAmx2Uvfg
-BTC: 188v8pWMHigH9dGahdxPyhYJntanzhQEbY
+BTC: 18edm8meRzxYn2znxHYj1McjvWvV53GTAY
 ```
 
 ## Obtain a copy of SAP NetWeaver RFC SDK
