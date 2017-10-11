@@ -3,6 +3,12 @@
 
 This extension is intended to provide a means for PHP 7 developers to interface with the SAP NetWeaver SDK.
 
+*If you like/use the extension and want to donate:*
+```
+LTC: LQ9XajbxJY2wxC44dwHTLCQCjoAmx2Uvfg
+BTC: 18edm8meRzxYn2znxHYj1McjvWvV53GTAY
+```
+
 ## Obtain a copy of SAP NetWeaver RFC SDK
 
 To ***build or install*** this extension you need to obtain a copy of the *SAP NetWeaver RFC SDK* from the *SAP Service Marketplace*.
