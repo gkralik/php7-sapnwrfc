@@ -69,6 +69,23 @@ EOF
 	done
 ])
 
+dnl
+dnl AC_CHECK_ENUM_VALUE(enum-type, enum-value, action-if-true, action-if-false, includes = `AC_INCLUDES_DEFAULT`)
+dnl
+dnl Checks if a value is defined in an enum.
+dnl
+AC_DEFUN([AC_CHECK_ENUM_VALUE],[
+	m4_default([$5], [AC_INCLUDES_DEFAULT])
+	AC_MSG_CHECKING([whether enum $1 has value $2])
+	AC_LANG_PUSH([C])
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$5], [$1 ev = $2;])],
+			  $3
+			  AC_MSG_RESULT([yes]),
+			  $4
+			  AC_MSG_RESULT([no]))
+	AC_LANG_POP([C])
+])
+
 PHP_ARG_WITH(sapnwrfc, for SAP NW RFC support,
 dnl Make sure that the comment is aligned:
 [  --with-sapnwrfc         Include SAP NW RFC support])
@@ -107,7 +124,7 @@ if test "$PHP_SAPNWRFC" != "no"; then
 
 	PHP_SUBST(SAPNWRFC_SHARED_LIBADD)
 
-	# check for version specific struct members
+	# check for version specifics
 	# RFC_ATTRIBUTES.partnerSystemCodepage is not available in SDK 7.11
 	AC_CHECK_MEMBER([RFC_ATTRIBUTES.partnerSystemCodepage], 
 					[AC_DEFINE([HAVE_RFC_ATTRIBUTES_PARTNER_SYSTEM_CODEPAGE], 
@@ -115,13 +132,15 @@ if test "$PHP_SAPNWRFC" != "no"; then
 							   [Define to 1 if RFC_ATTRIBUTES has a partnerSystemCodepage member])], 
 					[], 
 					[[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"]] )
-	# RFC_ERROR_GROUP.EXTERNAL_AUTHORIZATION_FAILURE is not available in SDK 7.11
-	AC_CHECK_MEMBER([RFC_ERROR_GROUP.EXTERNAL_AUTHORIZATION_FAILURE], 
-					[AC_DEFINE([HAVE_RFC_ERROR_GROUP_EXTERNAL_AUTHORIZATION_FAILURE], 
-							   [1], 
-							   [Define to 1 if RFC_ERROR_GROUP has a EXTERNAL_AUTHORIZATION_FAILURE member])], 
-					[], 
-					[[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"]] )
+
+	# RFC_ERROR_GROUP enum value EXTERNAL_AUTHORIZATION_FAILURE is not available in SDK 7.11
+	AC_CHECK_ENUM_VALUE([RFC_ERROR_GROUP],
+						[EXTERNAL_AUTHORIZATION_FAILURE], 
+						AC_DEFINE([HAVE_RFC_ERROR_GROUP_EXTERNAL_AUTHORIZATION_FAILURE], 
+								  [1], 
+								  [Define to 1 if RFC_ERROR_GROUP enum has a EXTERNAL_AUTHORIZATION_FAILURE value]), 
+						[], 
+						[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"] )
 
 	PHP_BUILD_SHARED()
 
