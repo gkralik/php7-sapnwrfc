@@ -375,7 +375,9 @@ PHP_METHOD(Connection, getAttributes)
     add_assoc_str(return_value, "cpicConvId", sapuc_to_zend_string(attributes.cpicConvId));
     add_assoc_str(return_value, "progName", sapuc_to_zend_string(attributes.progName));
     add_assoc_str(return_value, "partnerBytesPerChar", sapuc_to_zend_string(attributes.partnerBytesPerChar));
+#ifdef HAVE_RFC_ATTRIBUTES_PARTNER_SYSTEM_CODEPAGE
     add_assoc_str(return_value, "partnerSystemCodepage", sapuc_to_zend_string(attributes.partnerSystemCodepage));
+#endif
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }

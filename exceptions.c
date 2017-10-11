@@ -69,7 +69,9 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
         case ABAP_APPLICATION_FAILURE:        // ABAP Exception raised in ABAP function modules
         case ABAP_RUNTIME_FAILURE:            // ABAP Message raised in ABAP function modules or in ABAP runtime of the backend (e.g Kernel)
         case EXTERNAL_APPLICATION_FAILURE:    // Problems in the external program (e.g in the external server implementation)
+#ifdef HAVE_RFC_ERROR_GROUP_EXTERNAL_AUTHORIZATION_FAILURE        
         case EXTERNAL_AUTHORIZATION_FAILURE:  // Problems raised in the authorization check handler provided by the external server implementation
+#endif
             add_assoc_str(&info, "abapMsgClass", sapuc_to_zend_string(error_info.abapMsgClass));
             add_assoc_str(&info, "abapMsgType", sapuc_to_zend_string(error_info.abapMsgType));
             add_assoc_str(&info, "abapMsgNumber", sapuc_to_zend_string(error_info.abapMsgNumber));
@@ -133,7 +135,9 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
         case ABAP_APPLICATION_FAILURE:        // ABAP Exception raised in ABAP function modules
         case ABAP_RUNTIME_FAILURE:            // ABAP Message raised in ABAP function modules or in ABAP runtime of the backend (e.g Kernel)
         case EXTERNAL_APPLICATION_FAILURE:    // Problems in the external program (e.g in the external server implementation)
+#ifdef HAVE_RFC_ERROR_GROUP_EXTERNAL_AUTHORIZATION_FAILURE
         case EXTERNAL_AUTHORIZATION_FAILURE:  // Problems raised in the authorization check handler provided by the external server implementation
+#endif
             add_assoc_str(&info, "abapMsgClass", sapuc_to_zend_string(error_info.abapMsgClass));
             add_assoc_str(&info, "abapMsgType", sapuc_to_zend_string(error_info.abapMsgType));
             add_assoc_str(&info, "abapMsgNumber", sapuc_to_zend_string(error_info.abapMsgNumber));

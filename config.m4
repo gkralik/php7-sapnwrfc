@@ -95,7 +95,8 @@ if test "$PHP_SAPNWRFC" != "no"; then
 	fi
 
 	# add include path
-	PHP_ADD_INCLUDE($SAPNWRFC_DIR/include)
+	SAPNWRFC_INCLUDE_DIR=$SAPNWRFC_DIR/include
+	PHP_ADD_INCLUDE($SAPNWRFC_INCLUDE_DIR)
 
 	# check for library
 	if test ! -f $SAPNWRFC_DIR/lib/libsapnwrfc.so; then
@@ -105,6 +106,22 @@ if test "$PHP_SAPNWRFC" != "no"; then
 	PHP_ADD_LIBRARY_WITH_PATH(sapucum, $SAPNWRFC_DIR/lib, SAPNWRFC_SHARED_LIBADD)
 
 	PHP_SUBST(SAPNWRFC_SHARED_LIBADD)
+
+	# check for version specific struct members
+	# RFC_ATTRIBUTES.partnerSystemCodepage is not available in SDK 7.11
+	AC_CHECK_MEMBER([RFC_ATTRIBUTES.partnerSystemCodepage], 
+					[AC_DEFINE([HAVE_RFC_ATTRIBUTES_PARTNER_SYSTEM_CODEPAGE], 
+							   [1], 
+							   [Define to 1 if RFC_ATTRIBUTES has a partnerSystemCodepage member])], 
+					[], 
+					[[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"]] )
+	# RFC_ERROR_GROUP.EXTERNAL_AUTHORIZATION_FAILURE is not available in SDK 7.11
+	AC_CHECK_MEMBER([RFC_ERROR_GROUP.EXTERNAL_AUTHORIZATION_FAILURE], 
+					[AC_DEFINE([HAVE_RFC_ERROR_GROUP_EXTERNAL_AUTHORIZATION_FAILURE], 
+							   [1], 
+							   [Define to 1 if RFC_ERROR_GROUP has a EXTERNAL_AUTHORIZATION_FAILURE member])], 
+					[], 
+					[[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"]] )
 
 	PHP_BUILD_SHARED()
 

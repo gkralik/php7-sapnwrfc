@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+- Fix compilation with NW RFC SDK 7.11
 
 ## [1.1.2] - 2017-03-30
 ### Fixed
