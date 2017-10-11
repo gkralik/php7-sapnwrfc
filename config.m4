@@ -133,6 +133,14 @@ if test "$PHP_SAPNWRFC" != "no"; then
 					[], 
 					[[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"]] )
 
+	# RFC_ATTRIBUTES.partnerBytesPerChar is not available in SDK < 7.11
+	AC_CHECK_MEMBER([RFC_ATTRIBUTES.partnerBytesPerChar], 
+					[AC_DEFINE([HAVE_RFC_ATTRIBUTES_PARTNER_BYTES_PER_CHAR], 
+							   [1], 
+							   [Define to 1 if RFC_ATTRIBUTES has a partnerBytesPerChar member])], 
+					[], 
+					[[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"]] )
+
 	# RFC_ERROR_GROUP enum value EXTERNAL_AUTHORIZATION_FAILURE is not available in SDK 7.11
 	AC_CHECK_ENUM_VALUE([RFC_ERROR_GROUP],
 						[EXTERNAL_AUTHORIZATION_FAILURE], 
