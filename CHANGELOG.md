@@ -2,8 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.1.3] - 2017-10-21
 ### Fixed
-- Fix compilation with NW RFC SDK 7.11
+- Fix compilation with NW RFC SDK versions < 7.20
 
 ## [1.1.2] - 2017-03-30
 ### Fixed
@@ -87,7 +89,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.2...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.3...HEAD
+[1.1.3]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/gkralik/php7-sapnwrfc/compare/1.0.0...1.1.0
