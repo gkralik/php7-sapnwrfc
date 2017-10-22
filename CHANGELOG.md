@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Custom make targets `clean-ext` and `distclean-ext`
 
 ## [1.1.3] - 2017-10-21
 ### Fixed

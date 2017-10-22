@@ -153,4 +153,5 @@ if test "$PHP_SAPNWRFC" != "no"; then
 	PHP_BUILD_SHARED()
 
 	PHP_NEW_EXTENSION(sapnwrfc, sapnwrfc.c exceptions.c string_helper.c rfc_parameters.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+	PHP_ADD_MAKEFILE_FRAGMENT()		
 fi
