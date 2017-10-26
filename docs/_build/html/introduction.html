@@ -1,0 +1,183 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Introduction &#8212; php7-sapnwrfc 1.1.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.1.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="php7-sapnwrfc - RFC connector for PHP 7" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">php7-sapnwrfc</span></code> extension wraps the <em>SAP NW RFC library</em> and
+uses the provided methods to allow PHP developers to call
+remote-enabled ABAP modules.</p>
+<p>If you do not have prior experience with the <em>SAP NW RFC SDK</em>, the
+lecture of the following articles is highly recommended:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://help.sap.com/saphelp_nw73ehp1/helpdata/en/48/a88c805134307de10000000a42189b/frameset.htm?frameset=/en/48/a994a77e28674be10000000a421937/frameset.htm">SAP NetWeaver RFC SDK (SAP Help)</a></li>
+<li><a class="reference external" href="https://wiki.scn.sap.com/wiki/display/ABAPConn/SAP+NetWeaver+RFC+SDK+--+RFC+Client+Programs">SAP NetWeaver RFC SDK – RFC Client Programs</a></li>
+<li><a class="reference external" href="https://wiki.scn.sap.com/wiki/display/ABAPConn/SAP+NetWeaver+RFC+SDK+--+Advanced+Topics">SAP NetWeaver RFC SDK – Advanced Topics</a></li>
+</ul>
+<div class="section" id="quick-start">
+<span id="id1"></span><h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>The following simple example calls the RFC-enabled ABAP module
+<code class="docutils literal"><span class="pre">STFC_CHANGING</span></code> and dumps its return value:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="k">use</span> <span class="nx">SAPNWRFC\Connection</span> <span class="k">as</span> <span class="nx">SapConnection</span><span class="p">;</span>
+<span class="k">use</span> <span class="nx">SAPNWRFC\Exception</span> <span class="k">as</span> <span class="nx">SapException</span><span class="p">;</span>
+
+<span class="nv">$config</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;ashost&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;my.sap.system.local&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sysnr&#39;</span>  <span class="o">=&gt;</span> <span class="s1">&#39;00&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;client&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;123&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;user&#39;</span>   <span class="o">=&gt;</span> <span class="s1">&#39;YOUR USERNAME&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;passwd&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;YOUR PASSWORD&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;trace&#39;</span>  <span class="o">=&gt;</span> <span class="nx">SapConnection</span><span class="o">::</span><span class="na">TRACE_LEVEL_OFF</span><span class="p">,</span>
+<span class="p">];</span>
+
+<span class="k">try</span> <span class="p">{</span>
+    <span class="nv">$c</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SapConnection</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
+
+    <span class="nv">$f</span> <span class="o">=</span> <span class="nv">$c</span><span class="o">-&gt;</span><span class="na">getFunction</span><span class="p">(</span><span class="s1">&#39;STFC_CHANGING&#39;</span><span class="p">);</span>
+    <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$f</span><span class="o">-&gt;</span><span class="na">invoke</span><span class="p">([</span>
+        <span class="s1">&#39;START_VALUE&#39;</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;COUNTER&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">]);</span>
+
+    <span class="nb">var_dump</span><span class="p">(</span><span class="nv">$result</span><span class="p">);</span>
+    <span class="cm">/*</span>
+<span class="cm">    * array(2) {</span>
+<span class="cm">    *   [&quot;COUNTER&quot;]=&gt;</span>
+<span class="cm">    *   int(2)</span>
+<span class="cm">    *   [&quot;RESULT&quot;]=&gt;</span>
+<span class="cm">    *   int(1)</span>
+<span class="cm">    *   }</span>
+<span class="cm">    */</span>
+<span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">SapException</span> <span class="nv">$ex</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="s1">&#39;Exception: &#39;</span> <span class="o">.</span> <span class="nv">$ex</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">()</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Read the <a class="reference internal" href="usage.html"><span class="doc">usage guide</span></a> for a detailed explanation of the
+provided interface.</p>
+</div>
+<div class="section" id="usage-scenarios">
+<h2>Usage scenarios<a class="headerlink" href="#usage-scenarios" title="Permalink to this headline">¶</a></h2>
+<p>Not all functionality of the <em>SAP NW RFC SDK</em> has been implemented
+in this exension (yet). Basically, we distinguish between two
+scenarios:</p>
+<ul class="simple">
+<li>Client: Calling ABAP modules from PHP code</li>
+<li>Server: Calling PHP code from an ABAP client</li>
+</ul>
+<p>Currently, the extension only supports the client scenario, that is
+calling ABAP function modules from PHP.</p>
+<p>It does not support the server scenario at this moment.</p>
+<p>Other functionality might also not be available in this extension. If you
+have special needs, feel free to <a class="reference external" href="https://github.com/gkralik/php7-sapnwrfc/issues">open an issue</a>
+or a <a class="reference external" href="https://github.com/gkralik/php7-sapnwrfc/pulls">pull request</a> on GitHub.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">php7-sapnwrfc</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-scenarios">Usage scenarios</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from source</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">php7-sapnwrfc - RFC connector for PHP 7</a></li>
+      <li>Next: <a href="installation.html" title="next chapter">Installation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Gregor Kralik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/introduction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
