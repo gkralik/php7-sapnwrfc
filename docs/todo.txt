@@ -1,0 +1,7 @@
+TODO
+====
+
+- rtrim option (remove blank padding from fixed length string)
+- expose function module information via method + document
+- implement missing SDK functions
+- document functions in C source files (+ auto generate stub file from sources?)
