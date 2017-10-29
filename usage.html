@@ -36,7 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="php7-sapnwrfc 1.1.3 documentation" href="index.html"/>
-        <link rel="next" title="Building from source" href="building.html"/>
+        <link rel="next" title="API" href="api.html"/>
         <link rel="prev" title="Installation" href="installation.html"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108703036-1"></script>
 <script>
@@ -103,7 +103,23 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-to-a-sap-system">Connecting to a SAP system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calling-remote-function-modules">Calling remote function modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#looking-up-the-function-module">Looking up the function module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calling-the-function-module">Calling the function module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameters-and-return-values">Parameters and return values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameter-type-mappings">Parameter type mappings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#activating-deactivating-parameters">Activating/Deactivating parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-module-details">Function module details</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#trace-levels">Trace levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-the-version">Getting the version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="building.html">Building from source</a></li>
 </ul>
 
@@ -170,8 +186,282 @@
             
   <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<p><strong>TODO</strong></p>
-<p>Refer to the <a class="reference internal" href="introduction.html#quick-start"><span class="std std-ref">Quick start</span></a>.</p>
+<p>This guide describes commonly used functions of the <code class="docutils literal"><span class="pre">php7-sapnwrfc</span></code> extension.
+For a more detailed overview of available methods, refer to the <a class="reference internal" href="api.html"><span class="doc">API overview</span></a>.</p>
+<p>For getting started right away, refer to the <a class="reference internal" href="introduction.html#quick-start"><span class="std std-ref">Quick start</span></a>.</p>
+<div class="section" id="connecting-to-a-sap-system">
+<h2>Connecting to a SAP system<a class="headerlink" href="#connecting-to-a-sap-system" title="Permalink to this headline">¶</a></h2>
+<p>To connect to a SAP system, we create a new instance of <code class="docutils literal"><span class="pre">SAPNWRFC\Connection</span></code>,
+passing connection parameters:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+<span class="nv">$config</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;ashost&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;my.sap.system.local&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sysnr&#39;</span>  <span class="o">=&gt;</span> <span class="s1">&#39;00&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;client&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;123&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;user&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DEMO&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;passwd&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;XXXX&#39;</span><span class="p">,</span>
+<span class="p">];</span>
+
+<span class="c1">// connect</span>
+<span class="nv">$connection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SAPNWRFC\Connection</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
+
+<span class="c1">// do work here</span>
+
+<span class="c1">// close the connection</span>
+<span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">close</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>If the connection attempt fails, a <code class="docutils literal"><span class="pre">SAPNWRFC\ConnectionException</span></code> is thrown
+with details about the error.</p>
+<p>We can also use a <code class="docutils literal"><span class="pre">sapnwrfc.ini</span></code> file to specify connection details. See
+<code class="docutils literal"><span class="pre">SAPNWRFC\Connection::setIniPath($path)</span></code> and <code class="docutils literal"><span class="pre">SAPNWRFC\Connection::reloadIniFile()</span></code>
+in the <a class="reference internal" href="api.html"><span class="doc">API overview</span></a> for details.</p>
+<p>For available connection parameters refer to the <a class="reference external" href="https://help.sap.com/saphelp_nw73ehp1/helpdata/en/48/a88c805134307de10000000a42189b/frameset.htm?frameset=/en/48/a994a77e28674be10000000a421937/frameset.htm">sapnwrfc.ini parameter overview</a>.</p>
+<p>After we are done using the connection, it is recommended to close the connection
+using <code class="docutils literal"><span class="pre">SAPNWRFC\Connection::close()</span></code>.</p>
+</div>
+<div class="section" id="calling-remote-function-modules">
+<h2>Calling remote function modules<a class="headerlink" href="#calling-remote-function-modules" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="looking-up-the-function-module">
+<h3>Looking up the function module<a class="headerlink" href="#looking-up-the-function-module" title="Permalink to this headline">¶</a></h3>
+<p>Before we can call a remote function module, we have to lookup the desired
+function module to retrieve a <code class="docutils literal"><span class="pre">SAPNWRFC\RemoteFunction</span></code> object. This is accomplished
+with the <code class="docutils literal"><span class="pre">SAPNWRFC\Connection::getFunction($functionName)</span></code> method. We simply pass
+the name of the remote function module:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="nv">$remoteFunction</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">getFunction</span><span class="p">(</span><span class="s1">&#39;RFC_PING&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>If the lookup is successful, an object of type <code class="docutils literal"><span class="pre">SAPNWRFC\RemoteFunction</span></code> is returned
+which can be used for invoking the function.</p>
+<p>If the function lookup fails, a <code class="docutils literal"><span class="pre">SAPNWRFC\FunctionCallException</span></code> is thrown.</p>
+</div>
+<div class="section" id="calling-the-function-module">
+<h3>Calling the function module<a class="headerlink" href="#calling-the-function-module" title="Permalink to this headline">¶</a></h3>
+<p>After we have retrieved a <code class="docutils literal"><span class="pre">SAPNWRFC\RemoteFunction</span></code> object, we can invoke
+the function module by using its <code class="docutils literal"><span class="pre">invoke(array</span> <span class="pre">$parameters</span> <span class="pre">=</span> <span class="pre">[])</span></code> method.</p>
+<p>To invoke the function module <code class="docutils literal"><span class="pre">RFC_PING</span></code>, we can simply call <code class="docutils literal"><span class="pre">invoke()</span></code>
+without parameters.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="nv">$returnValue</span> <span class="o">=</span> <span class="nv">$remoteFunction</span><span class="o">-&gt;</span><span class="na">invoke</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>If the function module returns parameters, <code class="docutils literal"><span class="pre">invoke()</span></code> returns them. On any
+errors, a <code class="docutils literal"><span class="pre">SAPNWRFC\FunctionCallException</span></code> is thrown.</p>
+</div>
+<div class="section" id="parameters-and-return-values">
+<h3>Parameters and return values<a class="headerlink" href="#parameters-and-return-values" title="Permalink to this headline">¶</a></h3>
+<p>In practice, most of the remote function modules will require us to pass
+parameters and/or will return parameters after invocation.</p>
+<p>Passing parameters is possible using the <code class="docutils literal"><span class="pre">$parameters</span></code> array of the remote
+function’s <code class="docutils literal"><span class="pre">invoke()</span></code> method. Parameters are passed as arrays, with the
+key being the name of the parameter and the value the value to pass.</p>
+<p>The same is true for return values. If a remote function module returns parameters,
+they will be available in the array returned from <code class="docutils literal"><span class="pre">invoke()</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>ABAP function modules know four different types of parameters:</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">IMPORT</span></code>: set by the client.</li>
+<li><code class="docutils literal"><span class="pre">EXPORT</span></code>: set by the server.</li>
+<li><code class="docutils literal"><span class="pre">CHANGING</span></code>: set by the client and can be modified by the server.</li>
+<li><code class="docutils literal"><span class="pre">TABLE</span></code>: set by the client and can be modified by the server.</li>
+</ul>
+</div>
+<p>To call a function module <code class="docutils literal"><span class="pre">STFC_CHANGING</span></code> that requires input parameters as well
+as returns parameters to the caller, we can do as follows:</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="nv">$function</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">getFunction</span><span class="p">(</span><span class="s1">&#39;STFC_CHANGING&#39;</span><span class="p">);</span>
+<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$function</span><span class="o">-&gt;</span><span class="na">invoke</span><span class="p">([</span>
+    <span class="s1">&#39;START_VALUE&#39;</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s1">&#39;COUNTER&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">]);</span>
+
+<span class="cm">/*</span>
+<span class="cm">$result looks like this:</span>
+
+<span class="cm">array(2) {</span>
+<span class="cm">  [&quot;COUNTER&quot;] =&gt; int(2)</span>
+<span class="cm">  [&quot;RESULT&quot;] =&gt; int(1)</span>
+<span class="cm">}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>The types of the parameters and return values are mapped to standard PHP types.</p>
+</div>
+<div class="section" id="parameter-type-mappings">
+<h3>Parameter type mappings<a class="headerlink" href="#parameter-type-mappings" title="Permalink to this headline">¶</a></h3>
+<p>Remote function modules execute ABAP code and therefor use ABAB data types. This extension
+maps between RFC data types and builtin PHP data types as follows:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="8%" />
+<col width="9%" />
+<col width="41%" />
+<col width="34%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">ABAP type</th>
+<th class="head">RFC type</th>
+<th class="head">PHP type</th>
+<th class="head">Meaning</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>C</td>
+<td>CHAR</td>
+<td>string</td>
+<td>Text field (alphanumeric characters)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>D</td>
+<td>DATE</td>
+<td>string</td>
+<td>Date field (format: YYYYMMDD)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>T</td>
+<td>TIME</td>
+<td>string</td>
+<td>Time field (format: HHMMSS)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>X</td>
+<td>BYTE</td>
+<td>string</td>
+<td>Hexadecimal field</td>
+<td>use <code class="docutils literal"><span class="pre">hex2bin()</span></code> to convert to binary</td>
+</tr>
+<tr class="row-even"><td>N</td>
+<td>NUM</td>
+<td>string</td>
+<td>Numeric text field</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>STRING</td>
+<td>STRING</td>
+<td>string</td>
+<td>String (dynamic length)</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>XSTRING</td>
+<td>BYTE</td>
+<td>string</td>
+<td>Hexadecimal string (dynamic length)</td>
+<td>use <code class="docutils literal"><span class="pre">hex2bin()</span></code> to convert to binary</td>
+</tr>
+<tr class="row-odd"><td>I</td>
+<td>INT</td>
+<td>integer</td>
+<td>Integer</td>
+<td>INT1 and INT2 are also mapped to integer</td>
+</tr>
+<tr class="row-even"><td>P</td>
+<td>BCD</td>
+<td>double</td>
+<td>Packed number / BCD</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>F</td>
+<td>FLOAT</td>
+<td>double</td>
+<td>Floating point number</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, there are also tables and structures:</p>
+<ul class="simple">
+<li>A structure is mapped to an associative array, with the keys being the field names
+and the values the field values.</li>
+<li>A table is an array of structures.</li>
+</ul>
+</div>
+<div class="section" id="activating-deactivating-parameters">
+<h3>Activating/Deactivating parameters<a class="headerlink" href="#activating-deactivating-parameters" title="Permalink to this headline">¶</a></h3>
+<p>The <em>SAP NW RFC library</em> supports the activation and deactivation of parameters
+of a function module. This is especially useful if a function module has a lot of
+(possibly big) return values that you are not interested in.</p>
+<p>To activate or deactivate a parameter, we call the method
+<code class="docutils literal"><span class="pre">SAPNWRFC\RemoteFunction::setParameterActive($parameterName,</span> <span class="pre">$isActive)</span></code>
+on the remote function object. We can use <code class="docutils literal"><span class="pre">SAPNWRFC\RemoteFunction::isParameterActive($parameterName)</span></code>
+to check if a parameter is active or not.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="nv">$function</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">getFunction</span><span class="p">(</span><span class="s1">&#39;STFC_STRUCTURE&#39;</span><span class="p">);</span>
+
+<span class="nv">$function</span><span class="o">-&gt;</span><span class="na">setParameterActive</span><span class="p">(</span><span class="s1">&#39;IMPORTSTRUCT&#39;</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+<span class="nv">$function</span><span class="o">-&gt;</span><span class="na">setParameterActive</span><span class="p">(</span><span class="s1">&#39;RFCTABLE&#39;</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+
+<span class="nv">$function</span><span class="o">-&gt;</span><span class="na">isParameterActive</span><span class="p">(</span><span class="s1">&#39;IMPORTSTRUCT&#39;</span><span class="p">);</span> <span class="c1">// returns false</span>
+
+<span class="c1">// we don&#39;t need to pass parameters when invoking the function module,</span>
+<span class="c1">// as we deactivated all of them</span>
+<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$function</span><span class="o">-&gt;</span><span class="na">invoke</span><span class="p">([]);</span>
+
+<span class="c1">// $result will not contain the &#39;RFCTABLE&#39; parameter</span>
+
+<span class="nv">$function</span><span class="o">-&gt;</span><span class="na">setParameterActive</span><span class="p">(</span><span class="s1">&#39;RFCTABLE&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+<span class="nv">$function</span><span class="o">-&gt;</span><span class="na">isParameterActive</span><span class="p">(</span><span class="s1">&#39;IMPORTSTRUCT&#39;</span><span class="p">);</span> <span class="c1">// returns true</span>
+
+<span class="c1">// we need to pass the &#39;RFC_TABLE&#39; parameter now</span>
+<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$function</span><span class="o">-&gt;</span><span class="na">invoke</span><span class="p">([</span>
+    <span class="s1">&#39;RFCTABLE&#39;</span> <span class="o">=&gt;</span> <span class="p">[],</span>
+<span class="p">]);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="function-module-details">
+<h3>Function module details<a class="headerlink" href="#function-module-details" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">SAPNWRFC\RemoteFunction</span></code> object defines a <code class="docutils literal"><span class="pre">name</span></code> property containing
+the name of the function module it represents.</p>
+<p>Additionally, a property for each parameter of the function module is defined
+on the object that can be used to get detailed information about the parameter.</p>
+</div>
+</div>
+<div class="section" id="trace-levels">
+<h2>Trace levels<a class="headerlink" href="#trace-levels" title="Permalink to this headline">¶</a></h2>
+<p>The <em>SAP NW RFC library</em> allows the creation of trace files to troubleshoot
+connection and/or function call problems.</p>
+<p>We can set the desired trace level via the <code class="docutils literal"><span class="pre">trace</span></code> parameter when
+establishing the connection or change it at any time using the
+<code class="docutils literal"><span class="pre">SAPNWRFC\Connection::setTraceLevel($level)</span></code> method.</p>
+<p>The extension defines constants on the <code class="docutils literal"><span class="pre">SAPNWRFC\Connection</span></code> class
+for the four trace levels (from least to most verbose): <code class="docutils literal"><span class="pre">TRACE_LEVEL_OFF</span></code>,
+<code class="docutils literal"><span class="pre">TRACE_LEVEL_BRIEF</span></code>, <code class="docutils literal"><span class="pre">TRACE_LEVEL_VERBOSE</span></code>, <code class="docutils literal"><span class="pre">TRACE_LEVEL_FULL</span></code>.</p>
+<p>Additionally, we can set the directory for the generated trace file
+using <code class="docutils literal"><span class="pre">SAPNWRFC\Connection::setTraceDir($path)</span></code>. The default location
+for the trace file is the current working directory.</p>
+</div>
+<div class="section" id="getting-the-version">
+<h2>Getting the version<a class="headerlink" href="#getting-the-version" title="Permalink to this headline">¶</a></h2>
+<p>The extension provides the methods <code class="docutils literal"><span class="pre">SAPNWRFC\Connection::version()```and</span>
+<span class="pre">``SAPNWRFC\Connection::rfcVersion()</span></code> for getting the extension version
+and the RFC SDK version in use.</p>
+<p>Both methods return a string formatted as <code class="docutils literal"><span class="pre">MAJOR.MINOR.PATCH</span></code> (for example 1.1.3);</p>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<p>If an error occurs during any interaction, an exception is thrown with error details.
+Currently, there are two exception classes:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">SAPNWRFC\ConnectionException</span></code> for any errors that concern the connection itself.</li>
+<li><code class="docutils literal"><span class="pre">SAPNWRFC\FunctionCallException</span></code> for errors that stem from function module invocations.</li>
+</ul>
+<p>Both exception classes extend the base exception class <code class="docutils literal"><span class="pre">SAPNWRFC\Exception</span></code>, which
+adds an additional <code class="docutils literal"><span class="pre">getErrorInfo()</span></code> method to the standard methods and properties
+provided by <code class="docutils literal"><span class="pre">RuntimeException</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">getErrorInfo()</span></code> returns an array with detailed error information and contains
+at least the keys <code class="docutils literal"><span class="pre">code</span></code>, <code class="docutils literal"><span class="pre">key</span></code> and <code class="docutils literal"><span class="pre">message</span></code>.</p>
+<p>Depending on the type of error, the following additional keys might be available
+with detailed information: <code class="docutils literal"><span class="pre">abapMsgClass</span></code>, <code class="docutils literal"><span class="pre">abapMsgType</span></code>, <code class="docutils literal"><span class="pre">abapMsgNumber</span></code>,
+<code class="docutils literal"><span class="pre">abapMsgV1</span></code>, <code class="docutils literal"><span class="pre">abapMsgV2</span></code>, <code class="docutils literal"><span class="pre">abapMsgV3</span></code>, <code class="docutils literal"><span class="pre">abapMsgV4</span></code>.</p>
+</div>
 </div>
 
 
@@ -184,7 +474,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="building.html" class="btn btn-neutral float-right" title="Building from source" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

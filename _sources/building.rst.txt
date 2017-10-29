@@ -1,7 +1,7 @@
 Building from source
 ====================
 
-Before attempting to build the extension, make sure you have the *SAP NW RFC library*
+Before attempting to build the extension, make sure the *SAP NW RFC library* is
 installed. See :ref:`installing-nwrfcsdk` for instructions.
 
 Building on Linux

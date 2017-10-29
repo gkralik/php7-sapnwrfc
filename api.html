@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; php7-sapnwrfc 1.1.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="php7-sapnwrfc 1.1.3 documentation" href="index.html"/>
+        <link rel="next" title="Building from source" href="building.html"/>
+        <link rel="prev" title="Usage" href="usage.html"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108703036-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-108703036-1');
+</script>
+ 
+
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> php7-sapnwrfc
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from source</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">php7-sapnwrfc</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="k">die</span><span class="p">(</span><span class="s1">&#39;This file is intended for IDE parsers and should not be included.&#39;</span><span class="p">);</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * This is a stub file of the extensions public interface to enable</span>
+<span class="sd"> * code completion in IDEs.</span>
+<span class="sd"> */</span>
+<span class="k">namespace</span> <span class="nx">SAPNWRFC</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">Exception</span> <span class="k">extends</span> <span class="nx">\RuntimeException</span>
+<span class="p">{</span>
+    <span class="sd">/**</span>
+<span class="sd">     * Detailed RFC/ABAP error information.</span>
+<span class="sd">     *</span>
+<span class="sd">     * $errorInfo contains at least the &quot;code&quot;, &quot;key&quot; and &quot;message&quot; keys from</span>
+<span class="sd">     * the RFC library.</span>
+<span class="sd">     * If the error is an ABAP error, the following additional keys are</span>
+<span class="sd">     * available:</span>
+<span class="sd">     *    &quot;abapMsgClass&quot;, &quot;abapMsgType&quot;, &quot;abapMsgNumber&quot;, &quot;abapMsgV1&quot;,</span>
+<span class="sd">     *    &quot;abapMsgV2&quot;, &quot;abapMsgV3&quot;, &quot;abapMsgV4&quot;</span>
+<span class="sd">     *</span>
+<span class="sd">     * @var array</span>
+<span class="sd">     */</span>
+    <span class="k">protected</span> <span class="nv">$errorInfo</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Getter for the errorInfo property.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @returns array|null</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getErrorInfo</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">ConnectionException</span> <span class="k">extends</span> <span class="nx">Exception</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">FunctionCallException</span> <span class="k">extends</span> <span class="nx">Exception</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">Connection</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="no">TRACE_LEVEL_OFF</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">const</span> <span class="no">TRACE_LEVEL_BRIEF</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">const</span> <span class="no">TRACE_LEVEL_VERBOSE</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">const</span> <span class="no">TRACE_LEVEL_FULL</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Connect to the system using the given parameters.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param array $parameters Connection parameters.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if the connection fails.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="k">array</span> <span class="nv">$parameters</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Get the connection attributes.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return array Array of connection attributes.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if the connection attributes could not be</span>
+<span class="sd">     *                             fetched.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getAttributes</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * @return bool True if ping successful.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if the ping failed.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">ping</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Lookup a RFC function and return a RemoteFunction object.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param string $functionnName Name of the function.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return RemoteFunction A RemoteFunction class for the RFC function.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws FunctionCallException if the lookup fails or an error is</span>
+<span class="sd">     *                               returned during parameter parsing.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getFunction</span><span class="p">(</span><span class="nv">$functionName</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Close the connection.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return bool True if the connection was closed, false if the connection</span>
+<span class="sd">     *              is closed already.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if the connection could not be closed.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">close</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Sets the path to the sapnwrfc.ini file.</span>
+<span class="sd">     *</span>
+<span class="sd">     * By default, the INI file is searched for in the current directory.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param string $path Path to the sapnwrfc.ini file.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return bool True if path was set.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if path could not be set.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">setIniPath</span><span class="p">(</span><span class="nv">$path</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Reload the INI file.</span>
+<span class="sd">     *</span>
+<span class="sd">     * Searches for the INI file either in the path set by</span>
+<span class="sd">     * Connection::setIniFile() or in the current directory.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return bool True if INI file was reloaded.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if the INI file could not be reloaded.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">reloadIniFile</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Set trace directory.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param string $path Path to trace directory (must exist).</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return bool True if path was set.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if path could not be set.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">setTraceDir</span><span class="p">(</span><span class="nv">$path</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Set trace level.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param string $level Trace level.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return bool True if level was set.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if level could not be set.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">setTraceLevel</span><span class="p">(</span><span class="nv">$level</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Get the extension version.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return string The extension version.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">version</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Get the RFC SDK version.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return string The RFC SDK version.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">rfcVersion</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">RemoteFunction</span>
+<span class="p">{</span>
+    <span class="sd">/**</span>
+<span class="sd">     * Invoke the RFC function.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param array $parameters Function parameters.</span>
+<span class="sd">     * @returns array Return value from the backend.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws FunctionCallException if any error occurs during execution.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">invoke</span><span class="p">(</span><span class="k">array</span> <span class="nv">$parameters</span> <span class="o">=</span> <span class="p">[])</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Make a parameter active or inactive.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param string $parameterName The parameter to modify.</span>
+<span class="sd">     * @param bool   $isActive      True to activate the parameter, false to deactivate.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws FunctionCallException if the parameter status could not be set.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setParameterActive</span><span class="p">(</span><span class="nv">$parameterName</span><span class="p">,</span> <span class="nv">$isActive</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Check if a parameter is active or inactive.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param string $parameterName The parameter to check.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return bool True if parameter is active, false if not.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">isParameterActive</span><span class="p">(</span><span class="nv">$parameterName</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="building.html" class="btn btn-neutral float-right" title="Building from source" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usage.html" class="btn btn-neutral" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Gregor Kralik.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.1.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
