@@ -20,6 +20,7 @@ Documentation
    introduction
    installation
    usage
+   api
    building
 ..   changelog
 
