@@ -9,68 +9,9 @@ LTC: LQ9XajbxJY2wxC44dwHTLCQCjoAmx2Uvfg
 BTC: 18edm8meRzxYn2znxHYj1McjvWvV53GTAY
 ```
 
-## Obtain a copy of SAP NetWeaver RFC SDK
-
-To ***build or install*** this extension you need to obtain a copy of the *SAP NetWeaver RFC SDK* from the *SAP Service Marketplace*.
-You can [follow the instructions here](docs/installing_nwrfcsdk.md).
-
-## Building
-
-Follow the [build instructions](docs/building.md).
-
-## Installing
-
-Enable the extension in your `php.ini`:
-```
-# for Linux/Unix
-extension=sapnwrfc.so
-
-# for Windows
-extension=php_sapnwrfc.dll
-```
-
-You can verify that the extension is loaded by running `php -m | grep sapnwrfc`.
-
 ## Usage
 
-This simple example shows how to call a (fictional) RFC function and get its return value:
-
-```php
-use SAPNWRFC\Connection as SapConnection;
-use SAPNWRFC\Exception as SapException;
-
-$config = [
-    'ashost' => 'my.sap.system.local',
-    'sysnr'  => '00',
-    'client' => '123',
-    'user' => 'DEMO',
-    'passwd' => 'XXXX',
-    'trace'  => SapConnection::TRACE_LEVEL_OFF,
-];
-
-try {
-    $c = new SapConnection($config);
-
-    $f = $c->getFunction('Z_TEST_FUNCTION');
-    $result = $f->invoke([
-        'CHAR1' => 'A',
-        'TABL' => [
-            ['INT4' => 1, 'CHAR4' => 'NOPE'],
-        ]
-    ]);
-
-    var_dump($result);
-} catch(SapException $ex) {
-    echo 'Exception: ' . $ex->getMessage() . PHP_EOL;
-
-    /*
-     * You could also catch \SAPNWRFC\ConnectionException and \SAPNWRFC\FunctionCallException
-     * separately if you want to.
-     */
-}
-```
-
-Read the [docs](docs/readme.md) for details.
+You can find detailed instructions on how to build and use this extension at https://gkralik.github.io/php7-sapnwrfc.
 
 ## Contributing
 
