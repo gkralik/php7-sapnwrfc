@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Support for PHP 7.2
 - Custom make targets `extclean` and `extdistclean` to remove
   intermediary build artefacts
 - Add new documentation
