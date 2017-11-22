@@ -187,11 +187,12 @@ class RemoteFunction
      * Invoke the RFC function.
      *
      * @param array $parameters Function parameters.
-     * @returns array Return value from the backend.
+     * @param array $options Additional invoke options. Only 'rtrim' supported for now.
+     * @return array Return value from the backend.
      *
      * @throws FunctionCallException if any error occurs during execution.
      */
-    public function invoke(array $parameters = [])
+    public function invoke(array $parameters, array $options = [])
     {
     }
 

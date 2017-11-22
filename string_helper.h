@@ -15,7 +15,10 @@
 SAP_UC *zval_to_sapuc(zval *zv);
 SAP_UC *zend_string_to_sapuc(zend_string *str);
 
-zval sapuc_to_zval_len(SAP_UC *str, unsigned len);
+zval sapuc_to_zval_len_ex(SAP_UC *str, unsigned len, unsigned char rtrim);
 zend_string *sapuc_to_zend_string(SAP_UC *str);
+
+#define sapuc_to_zval_len(str, len) \
+    sapuc_to_zval_len_ex(str, len, 0)
 
 #endif /* _STRING_HELPER_H */

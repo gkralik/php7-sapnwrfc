@@ -37,26 +37,26 @@ var_dump(is_array($result));
 var_dump(array_key_exists('ECHOSTRUCT', $result));
 var_dump(array_key_exists('RFCTABLE', $result));
 
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCCHAR1"]) == $importStruct["RFCCHAR1"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCCHAR2"]) == $importStruct["RFCCHAR2"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCCHAR4"]) == $importStruct["RFCCHAR4"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCFLOAT"]) == $importStruct["RFCFLOAT"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCINT1"]) == $importStruct["RFCINT1"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCINT2"]) == $importStruct["RFCINT2"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCINT4"]) == $importStruct["RFCINT4"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCDATA1"]) == $importStruct["RFCDATA1"]);
-var_dump(rtrim($result["ECHOSTRUCT"]["RFCDATA2"]) == $importStruct["RFCDATA2"]);
+var_dump($result["ECHOSTRUCT"]["RFCCHAR1"] == $importStruct["RFCCHAR1"]);
+var_dump($result["ECHOSTRUCT"]["RFCCHAR2"] == $importStruct["RFCCHAR2"]);
+var_dump($result["ECHOSTRUCT"]["RFCCHAR4"] == $importStruct["RFCCHAR4"]);
+var_dump($result["ECHOSTRUCT"]["RFCFLOAT"] == $importStruct["RFCFLOAT"]);
+var_dump($result["ECHOSTRUCT"]["RFCINT1"] == $importStruct["RFCINT1"]);
+var_dump($result["ECHOSTRUCT"]["RFCINT2"] == $importStruct["RFCINT2"]);
+var_dump($result["ECHOSTRUCT"]["RFCINT4"] == $importStruct["RFCINT4"]);
+var_dump($result["ECHOSTRUCT"]["RFCDATA1"] == $importStruct["RFCDATA1"]);
+var_dump($result["ECHOSTRUCT"]["RFCDATA2"] == $importStruct["RFCDATA2"]);
 
 var_dump(count($result["RFCTABLE"]) == 2);
-var_dump(rtrim($result["RFCTABLE"][1]["RFCFLOAT"]) == $importStruct["RFCFLOAT"] + 1);
-var_dump(rtrim($result["RFCTABLE"][1]["RFCINT1"]) == $importStruct["RFCINT1"] + 1);
-var_dump(rtrim($result["RFCTABLE"][1]["RFCINT2"]) == $importStruct["RFCINT2"] + 1);
-var_dump(rtrim($result["RFCTABLE"][1]["RFCINT4"]) == $importStruct["RFCINT4"] + 1);
+var_dump($result["RFCTABLE"][1]["RFCFLOAT"] == $importStruct["RFCFLOAT"] + 1);
+var_dump($result["RFCTABLE"][1]["RFCINT1"] == $importStruct["RFCINT1"] + 1);
+var_dump($result["RFCTABLE"][1]["RFCINT2"] == $importStruct["RFCINT2"] + 1);
+var_dump($result["RFCTABLE"][1]["RFCINT4"] == $importStruct["RFCINT4"] + 1);
 
-var_dump(rtrim($result["RFCTABLE"][1]["RFCCHAR1"]) == "X");
-//var_dump(rtrim($result["RFCTABLE"][1]["RFCCHAR4"]) == "SYS"); // system name
-var_dump(rtrim($result["RFCTABLE"][1]["RFCHEX3"]) == hex2bin("F1F2F3"));
-var_dump(rtrim($result["RFCTABLE"][1]["RFCCHAR2"]) == "YZ");
+var_dump($result["RFCTABLE"][1]["RFCCHAR1"] == "X");
+//var_dump($result["RFCTABLE"][1]["RFCCHAR4"] == "SYS"); // system name
+var_dump($result["RFCTABLE"][1]["RFCHEX3"] == hex2bin("F1F2F3"));
+var_dump($result["RFCTABLE"][1]["RFCCHAR2"] == "YZ");
 --EXPECT--
 bool(true)
 bool(true)

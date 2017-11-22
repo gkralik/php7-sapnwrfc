@@ -169,6 +169,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 1, IS_
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 1, IS_ARRAY, NULL, 0)
 #endif
     ZEND_ARG_ARRAY_INFO(0, parameters, 0)
+    ZEND_ARG_ARRAY_INFO(0, options, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_RemoteFunction_setParameterActive, 0, 0, 2)
@@ -494,7 +495,6 @@ PHP_METHOD(Connection, getFunction)
     func_intern->rfc_handle = intern->rfc_handle;
     func_intern->function_desc_handle = function_desc_handle;
     func_intern->name = zend_string_copy(function_name);
-
     add_property_str(return_value, "name", zend_string_copy(function_name));
 
     // get nr of parameters
@@ -678,15 +678,17 @@ PHP_METHOD(RemoteFunction, invoke)
     unsigned int i = 0;
     zval *in_parameters;
     HashTable *in_parameters_hash;
+    HashTable *options_hash = NULL;
     zend_string *tmp;
     zend_string *key;
     zval *val;
     zval retval;
     SAP_UC *parameter_name_u;
+    unsigned char rtrim_enabled = 1;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "a", &in_parameters) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "a|h", &in_parameters, &options_hash) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
     }
@@ -787,6 +789,15 @@ PHP_METHOD(RemoteFunction, invoke)
     // now get the return values
     array_init(return_value);
 
+    // check for rtrim option
+    if (options_hash) {
+        zval *rtrim;
+        if ((rtrim = zend_hash_str_find(options_hash, "rtrim", strlen("rtrim"))) != NULL) {
+            convert_to_boolean(rtrim);
+            rtrim_enabled = zend_is_true(rtrim);
+        }
+    }
+
     for (i = 0; i < intern->parameter_count; i++) {
         rc = RfcGetParameterDescByIndex(intern->function_desc_handle, i, &parameter_desc, &error_info);
         if (rc != RFC_OK) {
@@ -816,7 +827,7 @@ PHP_METHOD(RemoteFunction, invoke)
             case RFC_CHANGING:
             case RFC_TABLES:
                 tmp = sapuc_to_zend_string(parameter_desc.name);
-                retval = rfc_get_parameter_value(function_handle, intern->function_desc_handle, tmp);
+                retval = rfc_get_parameter_value(function_handle, intern->function_desc_handle, tmp, rtrim_enabled);
 
                 if (ZVAL_IS_NULL(&retval)) {
                     zend_string_release(tmp);

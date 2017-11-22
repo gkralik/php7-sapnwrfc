@@ -35,3 +35,4 @@ run-tests.php
 *.la
 *.lo
 *.trc
+playground/

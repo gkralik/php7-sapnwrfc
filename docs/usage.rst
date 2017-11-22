@@ -15,7 +15,7 @@ passing connection parameters:
 .. code-block:: php
 
     <?php
-    $config = [
+    $parameters = [
         'ashost' => 'my.sap.system.local',
         'sysnr'  => '00',
         'client' => '123',
@@ -24,7 +24,7 @@ passing connection parameters:
     ];
 
     // connect
-    $connection = new SAPNWRFC\Connection($config);
+    $connection = new SAPNWRFC\Connection($parameters);
 
     // do work here
 
@@ -69,7 +69,7 @@ Calling the function module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After we have retrieved a ``SAPNWRFC\RemoteFunction`` object, we can invoke
-the function module by using its ``invoke(array $parameters = [])`` method.
+the function module by using its ``invoke()`` method.
 
 To invoke the function module ``RFC_PING``, we can simply call ``invoke()``
 without parameters.
@@ -135,35 +135,63 @@ Parameter type mappings
 Remote function modules execute ABAP code and therefor use ABAB data types. This extension
 maps between RFC data types and builtin PHP data types as follows:
 
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| ABAP type | RFC type | PHP type  | Meaning                                           | Notes                                    |
-+===========+==========+===========+===================================================+==========================================+
-| C         | CHAR     | string    | Text field (alphanumeric characters)              |                                          |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| D         | DATE     | string    | Date field (format: YYYYMMDD)                     |                                          |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| T         | TIME     | string    | Time field (format: HHMMSS)                       |                                          |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| X         | BYTE     | string    | Hexadecimal field                                 | use ``hex2bin()`` to convert to binary   |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| N         | NUM      | string    | Numeric text field                                |                                          |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| STRING    | STRING   | string    | String (dynamic length)                           |                                          |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| XSTRING   | BYTE     | string    | Hexadecimal string (dynamic length)               | use ``hex2bin()`` to convert to binary   |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| I         | INT      | integer   | Integer                                           | INT1 and INT2 are also mapped to integer |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| P         | BCD      | double    | Packed number / BCD                               |                                          |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
-| F         | FLOAT    | double    | Floating point number                             |                                          |
-+-----------+----------+-----------+---------------------------------------------------+------------------------------------------+
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| ABAP type | RFC type | PHP type  | Meaning                                           | Notes                                          |
++===========+==========+===========+===================================================+================================================+
+| C         | CHAR     | string    | Text field (alphanumeric characters)              | right-padded with blanks; see ``rtrim`` option |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| D         | DATE     | string    | Date field (format: YYYYMMDD)                     |                                                |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| T         | TIME     | string    | Time field (format: HHMMSS)                       |                                                |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| X         | BYTE     | string    | Hexadecimal field                                 | use ``hex2bin()`` to convert to binary         |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| N         | NUM      | string    | Numeric text field                                |                                                |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| STRING    | STRING   | string    | String (dynamic length)                           |                                                |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| XSTRING   | BYTE     | string    | Hexadecimal string (dynamic length)               | use ``hex2bin()`` to convert to binary         |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| I         | INT      | integer   | Integer                                           | INT1 and INT2 are also mapped to integer       |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| P         | BCD      | double    | Packed number / BCD                               |                                                |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| F         | FLOAT    | double    | Floating point number                             |                                                |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
 
 Additionally, there are also tables and structures:
 
 - A structure is mapped to an associative array, with the keys being the field names
   and the values the field values.
 - A table is an array of structures.
+
+Passing options when calling function modules
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When calling function modules using ``RemoteFunction::invoke()`` a second parameter can
+be passed specifying options for the function call.
+
+.. code-block:: php
+
+    <?php
+
+    // ...
+    $options = [
+        'rtrim' => false
+    ];
+
+    $function->invoke($parameters, $options);
+
+The following options are available:
+
+rtrim
+    In ABAP, there are two ways to store strings: as fixed length string type C or as dynamic
+    length type STRING. When using type C strings are right-padded with blanks, if the string
+    is shorter than the predefined length. To unify the extensions behaviour with strings, the
+    ``rtrim`` option is available. If set to ``true``, type C strings are right-trimmed before
+    being returned.
+
+    *Default:* ``true``
 
 Activating/Deactivating parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -683,7 +683,7 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
     return ret;
 }
 
-zval rfc_get_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
+zval rfc_get_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len, unsigned char rtrim_enabled)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -704,7 +704,7 @@ zval rfc_get_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
         return value;
     }
 
-    value = sapuc_to_zval_len(buf, len);
+    value = sapuc_to_zval_len_ex(buf, len, rtrim_enabled);
     free(buf);
 
     return value;
@@ -783,7 +783,7 @@ zval rfc_get_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len)
     return value;
 }
 
-zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
+zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned char rtrim_enabled)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -810,7 +810,7 @@ zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
         RfcMoveTo(h, i, NULL);
         line_handle = RfcGetCurrentRow(h, NULL);
 
-        line_value = rfc_get_table_line(line_handle, zname);
+        line_value = rfc_get_table_line(line_handle, zname, rtrim_enabled);
         if (ZVAL_IS_NULL(&line_value)) {
             // error; exception has been thrown
             ZVAL_NULL(&value);
@@ -944,7 +944,7 @@ zval rfc_get_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     return value;
 }
 
-zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
+zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned char rtrim_enabled)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -963,7 +963,7 @@ zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
         return value;
     }
 
-    value = rfc_get_table_line(line_handle, zname);
+    value = rfc_get_table_line(line_handle, zname, rtrim_enabled);
     zend_string_release(zname);
 
     return value;
@@ -1057,7 +1057,7 @@ zval rfc_get_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     return value;
 }
 
-zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line, zend_string *param_name)
+zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line, zend_string *param_name, unsigned char rtrim_enabled)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -1096,7 +1096,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line, zend_string *param_name)
             return value;
         }
 
-        field_value = rfc_get_field_value(line, field_desc);
+        field_value = rfc_get_field_value(line, field_desc, rtrim_enabled);
         if (ZVAL_IS_NULL(&field_value)) {
             // error; exception has been thrown
             ZVAL_NULL(&value);
@@ -1111,7 +1111,7 @@ zval rfc_get_table_line(RFC_STRUCTURE_HANDLE line, zend_string *param_name)
     return value;
 }
 
-zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
+zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc, unsigned char rtrim_enabled)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -1121,7 +1121,7 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
 
     switch(field_desc.type) {
         case RFCTYPE_CHAR:
-            value = rfc_get_char_value(h, field_desc.name, field_desc.nucLength);
+            value = rfc_get_char_value(h, field_desc.name, field_desc.nucLength, rtrim_enabled);
             break;
         case RFCTYPE_DATE:
             value = rfc_get_date_value(h, field_desc.name);
@@ -1143,7 +1143,7 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
                 return value;
             }
 
-            value = rfc_get_table_value(table_handle, field_desc.name);
+            value = rfc_get_table_value(table_handle, field_desc.name, rtrim_enabled);
             break;
         case RFCTYPE_NUM:
             value = rfc_get_num_value(h, field_desc.name, field_desc.nucLength);
@@ -1162,7 +1162,7 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
             value = rfc_get_int2_value(h, field_desc.name);
             break;
         case RFCTYPE_STRUCTURE:
-            value = rfc_get_structure_value(h, field_desc.name);
+            value = rfc_get_structure_value(h, field_desc.name, rtrim_enabled);
             break;
         case RFCTYPE_STRING:
             value = rfc_get_string_value(h, field_desc.name);
@@ -1182,7 +1182,8 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc)
 
 zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
                                                RFC_FUNCTION_DESC_HANDLE function_desc_handle,
-                                               zend_string *name)
+                                               zend_string *name,
+                                               unsigned char rtrim_enabled)
 {
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
@@ -1203,7 +1204,7 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
 
     switch(parameter_desc.type) {
         case RFCTYPE_CHAR:
-            value = rfc_get_char_value(function_handle, parameter_name_u, parameter_desc.nucLength);
+            value = rfc_get_char_value(function_handle, parameter_name_u, parameter_desc.nucLength, rtrim_enabled);
             break;
         case RFCTYPE_DATE:
             value = rfc_get_date_value(function_handle, parameter_name_u);
@@ -1223,7 +1224,7 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
 
                 ZVAL_NULL(&value);
             }
-            value = rfc_get_table_value(table_handle, parameter_name_u);
+            value = rfc_get_table_value(table_handle, parameter_name_u, rtrim_enabled);
             break;
         case RFCTYPE_NUM:
             value = rfc_get_num_value(function_handle, parameter_name_u, parameter_desc.nucLength);
@@ -1242,7 +1243,7 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
             value = rfc_get_int2_value(function_handle, parameter_name_u);
             break;
         case RFCTYPE_STRUCTURE:
-            value = rfc_get_structure_value(function_handle, parameter_name_u);
+            value = rfc_get_structure_value(function_handle, parameter_name_u, rtrim_enabled);
             break;
         case RFCTYPE_STRING:
             value = rfc_get_string_value(function_handle, parameter_name_u);

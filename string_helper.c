@@ -38,7 +38,7 @@ SAP_UC *zend_string_to_sapuc(zend_string *str)
     return sapuc;
 }
 
-zval sapuc_to_zval_len(SAP_UC *str, unsigned len)
+zval sapuc_to_zval_len_ex(SAP_UC *str, unsigned len, unsigned char rtrim)
 {
     RFC_ERROR_INFO error_info;
     unsigned utf8size, result_length;
@@ -50,6 +50,17 @@ zval sapuc_to_zval_len(SAP_UC *str, unsigned len)
 
     result_length = 0;
     RfcSAPUCToUTF8(str, len, (RFC_BYTE *)utf8, &utf8size, &result_length, &error_info);
+
+    if (rtrim && result_length > 0) {
+        int i = result_length-1;
+
+        while (i >= 0 && isspace(utf8[i])) {
+            i--;
+        }
+
+        utf8[i+1] = '\0';
+        result_length = i+1;
+    }
 
     ZVAL_STRINGL(&out, utf8, result_length);
     free(utf8);
