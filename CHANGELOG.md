@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Allow `rtrim` option for `RemoteFunction::invoke()` to unify string handling (enabled by default)
+- Add scripts/publish_docs.sh
 - Add scripts/bump_version.php
 - Support for PHP 7.2
 - Custom make targets `extclean` and `extdistclean` to remove intermediary build artefacts
