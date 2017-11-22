@@ -110,6 +110,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#calling-the-function-module">Calling the function module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#parameters-and-return-values">Parameters and return values</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#parameter-type-mappings">Parameter type mappings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#passing-options-when-calling-function-modules">Passing options when calling function modules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#activating-deactivating-parameters">Activating/Deactivating parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#function-module-details">Function module details</a></li>
 </ul>
@@ -194,7 +195,7 @@ For a more detailed overview of available methods, refer to the <a class="refere
 <p>To connect to a SAP system, we create a new instance of <code class="docutils literal"><span class="pre">SAPNWRFC\Connection</span></code>,
 passing connection parameters:</p>
 <div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
-<span class="nv">$config</span> <span class="o">=</span> <span class="p">[</span>
+<span class="nv">$parameters</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;ashost&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;my.sap.system.local&#39;</span><span class="p">,</span>
     <span class="s1">&#39;sysnr&#39;</span>  <span class="o">=&gt;</span> <span class="s1">&#39;00&#39;</span><span class="p">,</span>
     <span class="s1">&#39;client&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;123&#39;</span><span class="p">,</span>
@@ -203,7 +204,7 @@ passing connection parameters:</p>
 <span class="p">];</span>
 
 <span class="c1">// connect</span>
-<span class="nv">$connection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SAPNWRFC\Connection</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
+<span class="nv">$connection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SAPNWRFC\Connection</span><span class="p">(</span><span class="nv">$parameters</span><span class="p">);</span>
 
 <span class="c1">// do work here</span>
 
@@ -240,7 +241,7 @@ which can be used for invoking the function.</p>
 <div class="section" id="calling-the-function-module">
 <h3>Calling the function module<a class="headerlink" href="#calling-the-function-module" title="Permalink to this headline">¶</a></h3>
 <p>After we have retrieved a <code class="docutils literal"><span class="pre">SAPNWRFC\RemoteFunction</span></code> object, we can invoke
-the function module by using its <code class="docutils literal"><span class="pre">invoke(array</span> <span class="pre">$parameters</span> <span class="pre">=</span> <span class="pre">[])</span></code> method.</p>
+the function module by using its <code class="docutils literal"><span class="pre">invoke()</span></code> method.</p>
 <p>To invoke the function module <code class="docutils literal"><span class="pre">RFC_PING</span></code>, we can simply call <code class="docutils literal"><span class="pre">invoke()</span></code>
 without parameters.</p>
 <div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
@@ -298,11 +299,11 @@ as returns parameters to the caller, we can do as follows:</p>
 maps between RFC data types and builtin PHP data types as follows:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="9%" />
 <col width="8%" />
-<col width="9%" />
-<col width="41%" />
-<col width="34%" />
+<col width="8%" />
+<col width="8%" />
+<col width="39%" />
+<col width="37%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">ABAP type</th>
@@ -317,7 +318,7 @@ maps between RFC data types and builtin PHP data types as follows:</p>
 <td>CHAR</td>
 <td>string</td>
 <td>Text field (alphanumeric characters)</td>
-<td>&#160;</td>
+<td>right-padded with blanks; see <code class="docutils literal"><span class="pre">rtrim</span></code> option</td>
 </tr>
 <tr class="row-odd"><td>D</td>
 <td>DATE</td>
@@ -381,6 +382,32 @@ maps between RFC data types and builtin PHP data types as follows:</p>
 and the values the field values.</li>
 <li>A table is an array of structures.</li>
 </ul>
+</div>
+<div class="section" id="passing-options-when-calling-function-modules">
+<h3>Passing options when calling function modules<a class="headerlink" href="#passing-options-when-calling-function-modules" title="Permalink to this headline">¶</a></h3>
+<p>When calling function modules using <code class="docutils literal"><span class="pre">RemoteFunction::invoke()</span></code> a second parameter can
+be passed specifying options for the function call.</p>
+<div class="highlight-php"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="c1">// ...</span>
+<span class="nv">$options</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;rtrim&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+<span class="p">];</span>
+
+<span class="nv">$function</span><span class="o">-&gt;</span><span class="na">invoke</span><span class="p">(</span><span class="nv">$parameters</span><span class="p">,</span> <span class="nv">$options</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The following options are available:</p>
+<dl class="docutils">
+<dt>rtrim</dt>
+<dd><p class="first">In ABAP, there are two ways to store strings: as fixed length string type C or as dynamic
+length type STRING. When using type C strings are right-padded with blanks, if the string
+is shorter than the predefined length. To unify the extensions behaviour with strings, the
+<code class="docutils literal"><span class="pre">rtrim</span></code> option is available. If set to <code class="docutils literal"><span class="pre">true</span></code>, type C strings are right-trimmed before
+being returned.</p>
+<p class="last"><em>Default:</em> <code class="docutils literal"><span class="pre">true</span></code></p>
+</dd>
+</dl>
 </div>
 <div class="section" id="activating-deactivating-parameters">
 <h3>Activating/Deactivating parameters<a class="headerlink" href="#activating-deactivating-parameters" title="Permalink to this headline">¶</a></h3>

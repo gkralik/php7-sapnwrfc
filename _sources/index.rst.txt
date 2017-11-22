@@ -7,9 +7,10 @@ ABAP function modules via the SAP Remote Function Call (RFC) protocol.
 
 To start using ``php7-sapnwrfc``, follow the :ref:`quick-start`.
 
-.. warning::
+.. note::
 
-   This documentation is a work in progress.
+   This documentation is updated continually and thus always reflects 
+   the latest development version of the extension.
 
 Documentation
 -------------

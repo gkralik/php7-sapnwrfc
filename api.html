@@ -360,11 +360,12 @@
 <span class="sd">     * Invoke the RFC function.</span>
 <span class="sd">     *</span>
 <span class="sd">     * @param array $parameters Function parameters.</span>
-<span class="sd">     * @returns array Return value from the backend.</span>
+<span class="sd">     * @param array $options Additional invoke options. Only &#39;rtrim&#39; supported for now.</span>
+<span class="sd">     * @return array Return value from the backend.</span>
 <span class="sd">     *</span>
 <span class="sd">     * @throws FunctionCallException if any error occurs during execution.</span>
 <span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">invoke</span><span class="p">(</span><span class="k">array</span> <span class="nv">$parameters</span> <span class="o">=</span> <span class="p">[])</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">invoke</span><span class="p">(</span><span class="k">array</span> <span class="nv">$parameters</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$options</span> <span class="o">=</span> <span class="p">[])</span>
     <span class="p">{</span>
     <span class="p">}</span>
 
