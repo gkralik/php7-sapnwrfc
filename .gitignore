@@ -36,3 +36,4 @@ run-tests.php
 *.lo
 *.trc
 playground/
+todo.txt
