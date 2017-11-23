@@ -14,8 +14,8 @@
 #include "php.h"
 #include "php_ini.h"
 #include "ext/standard/info.h"
-#include "Zend/zend_exceptions.h"
 #include "ext/spl/spl_exceptions.h"
+#include "Zend/zend_exceptions.h"
 
 #include "php_sapnwrfc.h"
 #include "exceptions.h"
@@ -164,9 +164,9 @@ ZEND_END_ARG_INFO()
 
 
 #if PHP_VERSION_ID >= 70200
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 1, IS_ARRAY, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 0, IS_ARRAY, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 1, IS_ARRAY, NULL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 0, IS_ARRAY, NULL, 0)
 #endif
     ZEND_ARG_ARRAY_INFO(0, parameters, 0)
     ZEND_ARG_ARRAY_INFO(0, options, 0)
@@ -676,8 +676,7 @@ PHP_METHOD(RemoteFunction, invoke)
     RFC_PARAMETER_DESC parameter_desc;
     int is_active;
     unsigned int i = 0;
-    zval *in_parameters;
-    HashTable *in_parameters_hash;
+    HashTable *in_parameters_hash = NULL;
     HashTable *options_hash = NULL;
     zend_string *tmp;
     zend_string *key;
@@ -688,7 +687,7 @@ PHP_METHOD(RemoteFunction, invoke)
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "a|h", &in_parameters, &options_hash) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "|hh", &in_parameters_hash, &options_hash) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
     }
@@ -721,61 +720,62 @@ PHP_METHOD(RemoteFunction, invoke)
         }
     } ZEND_HASH_FOREACH_END();
 
-    in_parameters_hash = Z_ARRVAL_P(in_parameters);
-    ZEND_HASH_FOREACH_STR_KEY_VAL(in_parameters_hash, key, val) {
-        if (!key) {
-            // not a string key
-            zend_error(E_WARNING, "All parameter keys must be strings");
-            RfcDestroyFunction(function_handle, &error_info);
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-            RETURN_NULL();
-        }
-
-        // get parameter desc by name
-        rc = RfcGetParameterDescByName(intern->function_desc_handle, (parameter_name_u = zend_string_to_sapuc(key)), &parameter_desc, &error_info);
-        free((char *)parameter_name_u);
-
-        if (rc != RFC_OK) {
-            sapnwrfc_throw_function_exception(error_info, "Failed to get description for parameter %s", ZSTR_VAL(key));
-            RfcDestroyFunction(function_handle, &error_info);
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-            RETURN_NULL();
-        }
-
-        // a parameter is provided, so make sure it is active
-        rc = RfcSetParameterActive(function_handle, (parameter_name_u = zend_string_to_sapuc(key)), 1, &error_info);
-        free((char *)parameter_name_u);
-        if (rc != RFC_OK) {
-            sapnwrfc_throw_function_exception(error_info, "Failed to activate parameter %s", ZSTR_VAL(key));
-
-            RfcDestroyFunction(function_handle, &error_info);
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-            RETURN_NULL();
-        }
-
-        // set the parameter value
-        switch(parameter_desc.direction) {
-            case RFC_EXPORT:
-                break;
-            case RFC_IMPORT:
-            case RFC_CHANGING:
-            case RFC_TABLES:
-                if (rfc_set_parameter_value(function_handle, intern->function_desc_handle, key, val) == RFC_SET_VALUE_ERROR) {
-                    // setting the parameter failed; an exception has been thrown
-                    RfcDestroyFunction(function_handle, &error_info);
-                    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
-                    RETURN_NULL();
-                }
-                break;
-            default:
-                // unknown direction
-                zend_error(E_WARNING, "Unknown parameter direction");
+    if (in_parameters_hash) {
+        ZEND_HASH_FOREACH_STR_KEY_VAL(in_parameters_hash, key, val) {
+            if (!key) {
+                // not a string key
+                zend_error(E_WARNING, "All parameter keys must be strings");
                 RfcDestroyFunction(function_handle, &error_info);
                 zend_replace_error_handling(EH_NORMAL, NULL, NULL);
                 RETURN_NULL();
-        }
+            }
 
-    } ZEND_HASH_FOREACH_END();
+            // get parameter desc by name
+            rc = RfcGetParameterDescByName(intern->function_desc_handle, (parameter_name_u = zend_string_to_sapuc(key)), &parameter_desc, &error_info);
+            free((char *)parameter_name_u);
+
+            if (rc != RFC_OK) {
+                sapnwrfc_throw_function_exception(error_info, "Failed to get description for parameter %s", ZSTR_VAL(key));
+                RfcDestroyFunction(function_handle, &error_info);
+                zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                RETURN_NULL();
+            }
+
+            // a parameter is provided, so make sure it is active
+            rc = RfcSetParameterActive(function_handle, (parameter_name_u = zend_string_to_sapuc(key)), 1, &error_info);
+            free((char *)parameter_name_u);
+            if (rc != RFC_OK) {
+                sapnwrfc_throw_function_exception(error_info, "Failed to activate parameter %s", ZSTR_VAL(key));
+
+                RfcDestroyFunction(function_handle, &error_info);
+                zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                RETURN_NULL();
+            }
+
+            // set the parameter value
+            switch(parameter_desc.direction) {
+                case RFC_EXPORT:
+                    break;
+                case RFC_IMPORT:
+                case RFC_CHANGING:
+                case RFC_TABLES:
+                    if (rfc_set_parameter_value(function_handle, intern->function_desc_handle, key, val) == RFC_SET_VALUE_ERROR) {
+                        // setting the parameter failed; an exception has been thrown
+                        RfcDestroyFunction(function_handle, &error_info);
+                        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                        RETURN_NULL();
+                    }
+                    break;
+                default:
+                    // unknown direction
+                    zend_error(E_WARNING, "Unknown parameter direction");
+                    RfcDestroyFunction(function_handle, &error_info);
+                    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                    RETURN_NULL();
+            }
+
+        } ZEND_HASH_FOREACH_END();
+    }
 
     // invoke the function
     rc = RfcInvoke(intern->rfc_handle, function_handle, &error_info);
