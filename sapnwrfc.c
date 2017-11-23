@@ -303,6 +303,7 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, HashTab
 
     ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params, key, val) {
         if (key) { // is string
+            ZVAL_DEREF(val);
             convert_to_string_ex(val);
 
             // those are free'd in sapnwrfc_connection_object_free
@@ -727,6 +728,8 @@ PHP_METHOD(RemoteFunction, invoke)
                 zend_replace_error_handling(EH_NORMAL, NULL, NULL);
                 RETURN_NULL();
             }
+
+            ZVAL_DEREF(val);
 
             // get parameter desc by name
             rc = RfcGetParameterDescByName(intern->function_desc_handle, (parameter_name_u = zend_string_to_sapuc(key)), &parameter_desc, &error_info);
