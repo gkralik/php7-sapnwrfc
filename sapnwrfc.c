@@ -290,20 +290,18 @@ static void sapnwrfc_function_object_free(zend_object *object)
     zend_object_std_dtor(&intern->zobj);
 }
 
-static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *connection_params)
+static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, HashTable *connection_params)
 {
     RFC_ERROR_INFO error_info;
-    HashTable *connection_params_hash;
     int i = 0;
     zend_string *key;
     zval *val;
 
-    connection_params_hash = Z_ARRVAL_P(connection_params);
-    intern->rfc_login_params_len = zend_hash_num_elements(connection_params_hash);
+    intern->rfc_login_params_len = zend_hash_num_elements(connection_params);
 
     intern->rfc_login_params = ecalloc(intern->rfc_login_params_len, sizeof(RFC_CONNECTION_PARAMETER));
 
-    ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params_hash, key, val) {
+    ZEND_HASH_FOREACH_STR_KEY_VAL(connection_params, key, val) {
         if (key) { // is string
             convert_to_string_ex(val);
 
@@ -325,18 +323,18 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, zval *c
 PHP_METHOD(Connection, __construct)
 {
     sapnwrfc_connection_object *intern;
-    zval *connection_params;
+    HashTable *connection_params;
     long len;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
 
     // get the connection parameters
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "a", &connection_params) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "h", &connection_params) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
     }
 
-    len = zend_hash_num_elements(Z_ARRVAL_P(connection_params));
+    len = zend_hash_num_elements(connection_params);
     if (len == 0) {
         zend_error(E_WARNING, "No connection parameters given");
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
