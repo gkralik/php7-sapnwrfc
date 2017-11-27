@@ -260,7 +260,7 @@ for the trace file is the current working directory.
 Getting the version
 -------------------
 
-The extension provides the methods ``SAPNWRFC\Connection::version()``and
+The extension provides the methods ``SAPNWRFC\Connection::version()`` and
 ``SAPNWRFC\Connection::rfcVersion()`` for getting the extension version
 and the RFC SDK version in use.
 
