@@ -192,7 +192,7 @@ class RemoteFunction
      *
      * @throws FunctionCallException if any error occurs during execution.
      */
-    public function invoke(array $parameters, array $options = [])
+    public function invoke(array $parameters = [], array $options = [])
     {
     }
 
