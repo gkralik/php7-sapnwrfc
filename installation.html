@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; php7-sapnwrfc 1.1.3 documentation</title>
+  <title>Installation &mdash; php7-sapnwrfc 1.2.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="php7-sapnwrfc 1.1.3 documentation" href="index.html"/>
+    <link rel="top" title="php7-sapnwrfc 1.2.0 documentation" href="index.html"/>
         <link rel="next" title="Usage" href="usage.html"/>
         <link rel="prev" title="Introduction" href="introduction.html"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108703036-1"></script>
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.1.3
+                1.2.0
               </div>
             
           
@@ -183,7 +183,7 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>The installation of the <code class="docutils literal"><span class="pre">php7-sapnwrfc</span></code> extension consists of two parts.</p>
+<p>The installation of the <code class="docutils literal notranslate"><span class="pre">php7-sapnwrfc</span></code> extension consists of two parts.</p>
 <ul class="simple">
 <li>Installing the <em>SAP NW RFC library</em></li>
 <li>Enabling the extension in your PHP configuration</li>
@@ -196,33 +196,33 @@ the <em>SAP NW RFC library</em> on <a class="reference external" href="http://se
 <h3>Download the SAP NW RFC library<a class="headerlink" href="#download-the-sap-nw-rfc-library" title="Permalink to this headline">¶</a></h3>
 <p>To download the <em>SAP NW RFC library</em>, go to the <a class="reference external" href="https://launchpad.support.sap.com/#/softwarecenter">Software Center on the
 SAP ONE Support Launchpad</a>.</p>
-<p>Enter <code class="docutils literal"><span class="pre">SAP</span> <span class="pre">NW</span> <span class="pre">RFC</span> <span class="pre">SDK</span> <span class="pre">7.20</span></code> in the search box. Then download the library version
+<p>Enter <code class="docutils literal notranslate"><span class="pre">SAP</span> <span class="pre">NW</span> <span class="pre">RFC</span> <span class="pre">SDK</span> <span class="pre">7.20</span></code> in the search box. Then download the library version
 that suits your platform.</p>
 <img alt="Search for SAP NW RFC SDK 7.20" src="_images/search_nwrfcsdk.png" />
 <p>If you don’t already have it, you also need the <em>SAPCAR</em> utility to extract the
 library. You can also download it from the SAP Support Portal. Search for
-<code class="docutils literal"><span class="pre">SAPCAR</span> <span class="pre">7.20</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">SAPCAR</span> <span class="pre">7.20</span></code>.</p>
 <img alt="Search for SAPCAR 7.20" src="_images/search_sapcar.png" />
 <p>Extract the library to a directory on your machine. This guide uses
-<code class="docutils literal"><span class="pre">/usr/sap/nwrfcsdk</span></code> (on Linux) or <code class="docutils literal"><span class="pre">C:\nwrfcsdk</span></code> (on Windows) as the
+<code class="docutils literal notranslate"><span class="pre">/usr/sap/nwrfcsdk</span></code> (on Linux) or <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk</span></code> (on Windows) as the
 default path. You are free to choose another directory. If you do so,
 make sure to substitute the correct path in the instructions below.</p>
 </div>
 <div class="section" id="configuring-the-library-path">
 <h3>Configuring the library path<a class="headerlink" href="#configuring-the-library-path" title="Permalink to this headline">¶</a></h3>
-<p>You have to configure your system to include the <code class="docutils literal"><span class="pre">lib</span></code> directory of your
+<p>You have to configure your system to include the <code class="docutils literal notranslate"><span class="pre">lib</span></code> directory of your
 <em>SAP NW RFC library</em> installation in the library search path.</p>
 <div class="section" id="linux">
 <h4>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h4>
-<p>Create the file <code class="docutils literal"><span class="pre">/etc/ld.so.conf.d/nwrfcsdk.conf</span></code> with following contents:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sap</span><span class="o">/</span><span class="n">nwrfcsdk</span><span class="o">/</span><span class="n">lib</span>
+<p>Create the file <code class="docutils literal notranslate"><span class="pre">/etc/ld.so.conf.d/nwrfcsdk.conf</span></code> with following contents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sap</span><span class="o">/</span><span class="n">nwrfcsdk</span><span class="o">/</span><span class="n">lib</span>
 </pre></div>
 </div>
-<p>Then run <code class="docutils literal"><span class="pre">ldconfig</span></code>.</p>
+<p>Then run <code class="docutils literal notranslate"><span class="pre">ldconfig</span></code>.</p>
 </div>
 <div class="section" id="windows">
 <h4>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h4>
-<p>On a command prompt, execute <code class="docutils literal"><span class="pre">set</span> <span class="pre">PATH=%PATH%;C:\nwrfcsdk\lib</span></code>. This is temporary
+<p>On a command prompt, execute <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">PATH=%PATH%;C:\nwrfcsdk\lib</span></code>. This is temporary
 the change will be lost as soon as you close the command prompt.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -231,10 +231,10 @@ the change will be lost as soon as you close the command prompt.</p>
 <p>To permanently add the library to the PATH environment variable, follow these steps:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>Open the Start menu and type <code class="docutils literal"><span class="pre">environment</span></code></li>
-<li>Select <code class="docutils literal"><span class="pre">Edit</span> <span class="pre">the</span> <span class="pre">system</span> <span class="pre">environment</span> <span class="pre">variables</span></code> or <code class="docutils literal"><span class="pre">Edit</span> <span class="pre">environment</span> <span class="pre">variables</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">account</span></code>,
+<li>Open the Start menu and type <code class="docutils literal notranslate"><span class="pre">environment</span></code></li>
+<li>Select <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">the</span> <span class="pre">system</span> <span class="pre">environment</span> <span class="pre">variables</span></code> or <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">environment</span> <span class="pre">variables</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">account</span></code>,
 depending on whether you want to set the path for the user or the whole system.</li>
-<li>Select the <code class="docutils literal"><span class="pre">PATH</span></code> environment variable, click <code class="docutils literal"><span class="pre">Edit</span></code> and add the path <code class="docutils literal"><span class="pre">C:\nwrfcsdk\lib</span></code>.</li>
+<li>Select the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable, click <code class="docutils literal notranslate"><span class="pre">Edit</span></code> and add the path <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\lib</span></code>.</li>
 </ol>
 </div></blockquote>
 </div>
@@ -242,8 +242,8 @@ depending on whether you want to set the path for the user or the whole system.<
 </div>
 <div class="section" id="enabling-the-extension">
 <h2>Enabling the extension<a class="headerlink" href="#enabling-the-extension" title="Permalink to this headline">¶</a></h2>
-<p>To enable the extension, add one of the following lines to your <code class="docutils literal"><span class="pre">php.ini</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># for Linux/Unix</span>
+<p>To enable the extension, add one of the following lines to your <code class="docutils literal notranslate"><span class="pre">php.ini</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># for Linux/Unix</span>
 <span class="n">extension</span><span class="o">=</span><span class="n">sapnwrfc</span><span class="o">.</span><span class="n">so</span>
 
 <span class="c1"># for Windows</span>
@@ -251,7 +251,7 @@ depending on whether you want to set the path for the user or the whole system.<
 </pre></div>
 </div>
 <p>You can verify that the extension is loaded by inspecting the output
-of <code class="docutils literal"><span class="pre">php</span> <span class="pre">-m</span></code>. It should contain a line <code class="docutils literal"><span class="pre">sapnwrfc</span></code>.</p>
+of <code class="docutils literal notranslate"><span class="pre">php</span> <span class="pre">-m</span></code>. It should contain a line <code class="docutils literal notranslate"><span class="pre">sapnwrfc</span></code>.</p>
 </div>
 </div>
 
@@ -299,7 +299,7 @@ of <code class="docutils literal"><span class="pre">php</span> <span class="pre"
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.1.3',
+            VERSION:'1.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,

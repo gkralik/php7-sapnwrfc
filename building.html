@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Building from source &mdash; php7-sapnwrfc 1.1.3 documentation</title>
+  <title>Building from source &mdash; php7-sapnwrfc 1.2.0 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="php7-sapnwrfc 1.1.3 documentation" href="index.html"/>
+    <link rel="top" title="php7-sapnwrfc 1.2.0 documentation" href="index.html"/>
         <link rel="prev" title="API" href="api.html"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108703036-1"></script>
 <script>
@@ -75,7 +75,7 @@
             
             
               <div class="version">
-                1.1.3
+                1.2.0
               </div>
             
           
@@ -182,7 +182,7 @@
 installed. See <a class="reference internal" href="installation.html#installing-nwrfcsdk"><span class="std std-ref">Installing the SAP NW RFC library</span></a> for instructions.</p>
 <div class="section" id="building-on-linux">
 <h2>Building on Linux<a class="headerlink" href="#building-on-linux" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>$ git clone https://github.com/gkralik/php7-sapnwrfc.git
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/gkralik/php7-sapnwrfc.git
 $ <span class="nb">cd</span> php7-sapnwrfc
 $ phpize
 $ ./configure
@@ -192,14 +192,14 @@ $ sudo make install
 </div>
 <p>The build script looks for the <em>SAP NW RFC library</em> in the following locations
 by default:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>/usr/sap/nwrfcsdk
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/sap/nwrfcsdk
 /usr/local/sap/nwrfcsdk
 /usr/local/nwrfcsdk
 /opt/nwrfcsdk
 </pre></div>
 </div>
-<p>If you installed the library in another location, replace the <code class="docutils literal"><span class="pre">./configure</span></code> step
-above with <code class="docutils literal"><span class="pre">./configure</span> <span class="pre">--with-sapnwrfc=/path/to/rfc-library</span></code>.</p>
+<p>If you installed the library in another location, replace the <code class="docutils literal notranslate"><span class="pre">./configure</span></code> step
+above with <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">--with-sapnwrfc=/path/to/rfc-library</span></code>.</p>
 </div>
 <div class="section" id="building-on-windows">
 <h2>Building on Windows<a class="headerlink" href="#building-on-windows" title="Permalink to this headline">¶</a></h2>
@@ -210,7 +210,7 @@ If you don’t find your desired version there or still want to build yourself, 
 <h3>Set up a buid environment<a class="headerlink" href="#set-up-a-buid-environment" title="Permalink to this headline">¶</a></h3>
 <p>Make sure you have a valid <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">build enviroment as described here</a>.</p>
 <p>After you have set up the enviroment, try to build PHP itself:</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>$ configure --disable-all --enable-cli
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ configure --disable-all --enable-cli
 $ nmake
 $ nmake snap
 </pre></div>
@@ -227,9 +227,9 @@ $ nmake snap
 <li>We also assume the SDK files are in C:nwrfcsdk</li>
 </ol>
 </div>
-<p>Copy all header files (<code class="docutils literal"><span class="pre">*.h</span></code>) from <code class="docutils literal"><span class="pre">C:\nwrfcsdk\include</span></code> to <code class="docutils literal"><span class="pre">C:\php-sdk\phpdev\vc14\x64\deps\include</span></code>.
-Copy all library files (<code class="docutils literal"><span class="pre">*.lib</span></code>) from <code class="docutils literal"><span class="pre">C:\nwrfcsdk\lib</span></code> to <code class="docutils literal"><span class="pre">C:\php-sdk\phpdev\vc14\x64\deps\lib.</span></code></p>
-<p>Download the latest release of this extension and extract it to <code class="docutils literal"><span class="pre">C:\php-sdk\phpdev\vc14\x64\php-7.0-src\ext\sapnwrfc</span></code>.</p>
+<p>Copy all header files (<code class="docutils literal notranslate"><span class="pre">*.h</span></code>) from <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\include</span></code> to <code class="docutils literal notranslate"><span class="pre">C:\php-sdk\phpdev\vc14\x64\deps\include</span></code>.
+Copy all library files (<code class="docutils literal notranslate"><span class="pre">*.lib</span></code>) from <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\lib</span></code> to <code class="docutils literal notranslate"><span class="pre">C:\php-sdk\phpdev\vc14\x64\deps\lib.</span></code></p>
+<p>Download the latest release of this extension and extract it to <code class="docutils literal notranslate"><span class="pre">C:\php-sdk\phpdev\vc14\x64\php-7.0-src\ext\sapnwrfc</span></code>.</p>
 <p>Open the <em>Developer Command Prompt for VS2015</em> and execute the commands for
 steps 1-4 as described in the <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">PHP Windows step by step build page</a>.</p>
 <p>The configure command (step 6) must be replaced with one of the following commands
@@ -282,7 +282,7 @@ steps 1-4 as described in the <a class="reference external" href="https://wiki.p
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.1.3',
+            VERSION:'1.2.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
