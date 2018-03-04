@@ -3,12 +3,6 @@
 
 This extension is intended to provide a means for PHP 7 developers to interface with the SAP NetWeaver SDK.
 
-*If you like/use the extension and want to donate:*
-```
-LTC: LQ9XajbxJY2wxC44dwHTLCQCjoAmx2Uvfg
-BTC: 18edm8meRzxYn2znxHYj1McjvWvV53GTAY
-```
-
 ## Usage
 
 You can find detailed instructions on how to build and use this extension at https://gkralik.github.io/php7-sapnwrfc.
