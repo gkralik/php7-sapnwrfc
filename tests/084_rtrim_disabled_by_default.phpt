@@ -1,5 +1,5 @@
 --TEST--
-rtrim is enabled by default.
+rtrim is disabled by default.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -28,8 +28,8 @@ $f = $c->getFunction("STFC_STRUCTURE");
 $f->setParameterActive('RFCTABLE', false);
 $ret = $f->invoke($params);
 
-var_dump($ret['ECHOSTRUCT']['RFCDATA1'] == '1DATA1');
-var_dump($ret['ECHOSTRUCT']['RFCDATA2'] == 'DATA222');
+var_dump($ret['ECHOSTRUCT']['RFCDATA1'] == str_pad('1DATA1', 50, ' ', STR_PAD_RIGHT));
+var_dump($ret['ECHOSTRUCT']['RFCDATA2'] == str_pad('DATA222', 50, ' ', STR_PAD_RIGHT));
 
 --EXPECT--
 bool(true)

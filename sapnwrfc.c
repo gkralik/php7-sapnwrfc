@@ -682,7 +682,7 @@ PHP_METHOD(RemoteFunction, invoke)
     zval *val;
     zval retval;
     SAP_UC *parameter_name_u;
-    unsigned char rtrim_enabled = 1;
+    unsigned char rtrim_enabled = 0;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 

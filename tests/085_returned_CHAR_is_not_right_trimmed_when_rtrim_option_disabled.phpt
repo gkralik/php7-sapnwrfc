@@ -1,5 +1,5 @@
 --TEST--
-Returned CHAR value is not right-trimmed when rtrim option disabled.
+Returned CHAR value is right-trimmed when rtrim option enabled.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -27,10 +27,10 @@ $params = [
 $f = $c->getFunction("STFC_STRUCTURE");
 $f->setParameterActive('RFCTABLE', false);
 
-$ret = $f->invoke($params, ['rtrim' => false]);
+$ret = $f->invoke($params, ['rtrim' => true]);
 
-var_dump($ret['ECHOSTRUCT']['RFCDATA1'] == str_pad('1DATA1', 50, ' ', STR_PAD_RIGHT));
-var_dump($ret['ECHOSTRUCT']['RFCDATA2'] == str_pad('DATA222', 50, ' ', STR_PAD_RIGHT));
+var_dump($ret['ECHOSTRUCT']['RFCDATA1'] == '1DATA1');
+var_dump($ret['ECHOSTRUCT']['RFCDATA2'] == 'DATA222');
 
 --EXPECT--
 bool(true)

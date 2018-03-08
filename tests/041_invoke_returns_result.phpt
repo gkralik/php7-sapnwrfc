@@ -44,8 +44,8 @@ var_dump($result["ECHOSTRUCT"]["RFCFLOAT"] == $importStruct["RFCFLOAT"]);
 var_dump($result["ECHOSTRUCT"]["RFCINT1"] == $importStruct["RFCINT1"]);
 var_dump($result["ECHOSTRUCT"]["RFCINT2"] == $importStruct["RFCINT2"]);
 var_dump($result["ECHOSTRUCT"]["RFCINT4"] == $importStruct["RFCINT4"]);
-var_dump($result["ECHOSTRUCT"]["RFCDATA1"] == $importStruct["RFCDATA1"]);
-var_dump($result["ECHOSTRUCT"]["RFCDATA2"] == $importStruct["RFCDATA2"]);
+var_dump($result["ECHOSTRUCT"]["RFCDATA1"] == str_pad($importStruct["RFCDATA1"], 50, ' ', STR_PAD_RIGHT));
+var_dump($result["ECHOSTRUCT"]["RFCDATA2"] == str_pad($importStruct["RFCDATA2"], 50, ' ', STR_PAD_RIGHT));
 
 var_dump(count($result["RFCTABLE"]) == 2);
 var_dump($result["RFCTABLE"][1]["RFCFLOAT"] == $importStruct["RFCFLOAT"] + 1);
