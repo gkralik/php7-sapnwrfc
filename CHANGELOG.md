@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.2.1] - 2018-03-08
+### Fixed
+- Disable `rtrim` option by default (BC)
+
 ## [1.2.0] - 2018-03-04
 ### Added
 - Allow `rtrim` option for `RemoteFunction::invoke()` to unify string handling (enabled by default)
@@ -98,7 +102,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.2.0...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.2.1...HEAD
+[1.2.1]: https://github.com/gkralik/php7-sapnwrfc/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.3...1.2.0
 [1.1.3]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.1...1.1.2
