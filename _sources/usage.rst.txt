@@ -177,7 +177,7 @@ be passed specifying options for the function call.
 
     // ...
     $options = [
-        'rtrim' => false
+        'rtrim' => true
     ];
 
     $function->invoke($parameters, $options);
@@ -191,7 +191,7 @@ rtrim
     ``rtrim`` option is available. If set to ``true``, type C strings are right-trimmed before
     being returned.
 
-    *Default:* ``true``
+    *Default:* ``false``
 
 Activating/Deactivating parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

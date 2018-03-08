@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Usage &mdash; php7-sapnwrfc 1.2.0 documentation</title>
+  <title>Usage &mdash; php7-sapnwrfc 1.2.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="php7-sapnwrfc 1.2.0 documentation" href="index.html"/>
+    <link rel="top" title="php7-sapnwrfc 1.2.1 documentation" href="index.html"/>
         <link rel="next" title="API" href="api.html"/>
         <link rel="prev" title="Installation" href="installation.html"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108703036-1"></script>
@@ -76,7 +76,7 @@
             
             
               <div class="version">
-                1.2.0
+                1.2.1
               </div>
             
           
@@ -391,7 +391,7 @@ be passed specifying options for the function call.</p>
 
 <span class="c1">// ...</span>
 <span class="nv">$options</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;rtrim&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span>
+    <span class="s1">&#39;rtrim&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span>
 <span class="p">];</span>
 
 <span class="nv">$function</span><span class="o">-&gt;</span><span class="na">invoke</span><span class="p">(</span><span class="nv">$parameters</span><span class="p">,</span> <span class="nv">$options</span><span class="p">);</span>
@@ -405,7 +405,7 @@ length type STRING. When using type C strings are right-padded with blanks, if t
 is shorter than the predefined length. To unify the extensions behaviour with strings, the
 <code class="docutils literal notranslate"><span class="pre">rtrim</span></code> option is available. If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, type C strings are right-trimmed before
 being returned.</p>
-<p class="last"><em>Default:</em> <code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+<p class="last"><em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
 </dd>
 </dl>
 </div>
@@ -535,7 +535,7 @@ with detailed information: <code class="docutils literal notranslate"><span clas
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.2.0',
+            VERSION:'1.2.1',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
