@@ -24,20 +24,12 @@
 
   
 
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="php7-sapnwrfc 1.2.1 documentation" href="index.html"/>
-        <link rel="next" title="API" href="api.html"/>
-        <link rel="prev" title="Installation" href="installation.html"/>
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108703036-1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -54,7 +46,7 @@
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -133,7 +125,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">php7-sapnwrfc</a>
@@ -141,9 +133,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -201,6 +194,8 @@ passing connection parameters:</p>
     <span class="s1">&#39;client&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;123&#39;</span><span class="p">,</span>
     <span class="s1">&#39;user&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;DEMO&#39;</span><span class="p">,</span>
     <span class="s1">&#39;passwd&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;XXXX&#39;</span><span class="p">,</span>
+    <span class="c1">// if you need to connect through saprouter, uncomment the following line</span>
+    <span class="c1">//&#39;saprouter&#39; =&gt; &#39;/H/my.saprouter.local/H/&#39;,</span>
 <span class="p">];</span>
 
 <span class="c1">// connect</span>
@@ -217,7 +212,7 @@ with details about the error.</p>
 <p>We can also use a <code class="docutils literal notranslate"><span class="pre">sapnwrfc.ini</span></code> file to specify connection details. See
 <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::setIniPath($path)</span></code> and <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::reloadIniFile()</span></code>
 in the <a class="reference internal" href="api.html"><span class="doc">API overview</span></a> for details.</p>
-<p>For available connection parameters refer to the <a class="reference external" href="https://help.sap.com/saphelp_nw73ehp1/helpdata/en/48/a88c805134307de10000000a42189b/frameset.htm?frameset=/en/48/a994a77e28674be10000000a421937/frameset.htm">sapnwrfc.ini parameter overview</a>.</p>
+<p>For available connection parameters refer to the <a class="reference external" href="https://help.sap.com/viewer/753088fc00704d0a80e7fbd6803c8adb/7.5.9/en-US/48ce50e418d3424be10000000a421937.html">sapnwrfc.ini parameter overview</a>.</p>
 <p>After we are done using the connection, it is recommended to close the connection
 using <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::close()</span></code>.</p>
 </div>
@@ -493,9 +488,7 @@ with detailed information: <code class="docutils literal notranslate"><span clas
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -517,7 +510,7 @@ with detailed information: <code class="docutils literal notranslate"><span clas
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -536,6 +529,7 @@ with detailed information: <code class="docutils literal notranslate"><span clas
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
             VERSION:'1.2.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -545,22 +539,17 @@ with detailed information: <code class="docutils literal notranslate"><span clas
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
