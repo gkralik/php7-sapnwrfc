@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Update documentation: fix link to sapnwrfc.ini settings, give saprouter example
 
 ## [1.2.1] - 2018-03-08
 ### Fixed

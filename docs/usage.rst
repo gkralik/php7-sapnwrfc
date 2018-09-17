@@ -21,6 +21,8 @@ passing connection parameters:
         'client' => '123',
         'user' => 'DEMO',
         'passwd' => 'XXXX',
+        // if you need to connect through saprouter, uncomment the following line
+        //'saprouter' => '/H/my.saprouter.local/H/',
     ];
 
     // connect
@@ -38,7 +40,7 @@ We can also use a ``sapnwrfc.ini`` file to specify connection details. See
 ``SAPNWRFC\Connection::setIniPath($path)`` and ``SAPNWRFC\Connection::reloadIniFile()``
 in the :doc:`API overview </api>` for details.
 
-For available connection parameters refer to the `sapnwrfc.ini parameter overview <https://help.sap.com/saphelp_nw73ehp1/helpdata/en/48/a88c805134307de10000000a42189b/frameset.htm?frameset=/en/48/a994a77e28674be10000000a421937/frameset.htm>`_.
+For available connection parameters refer to the `sapnwrfc.ini parameter overview <https://help.sap.com/viewer/753088fc00704d0a80e7fbd6803c8adb/7.5.9/en-US/48ce50e418d3424be10000000a421937.html>`_.
 
 After we are done using the connection, it is recommended to close the connection
 using ``SAPNWRFC\Connection::close()``.
