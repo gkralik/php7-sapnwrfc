@@ -37,6 +37,9 @@ typedef struct _sapnwrfc_connection_object {
     RFC_CONNECTION_HANDLE rfc_handle;
     RFC_CONNECTION_PARAMETER *rfc_login_params;
     int rfc_login_params_len;
+    // used as the repository ID when clearing the cache
+    zend_string *system_id;
+    unsigned int use_function_desc_cache;
     zend_object zobj;
 } sapnwrfc_connection_object;
 
@@ -65,6 +68,9 @@ static inline sapnwrfc_function_object *sapnwrfc_function_object_fetch(zend_obje
 #define SAPNWRFC_FUNCTION_OBJ_P(zv) SAPNWRFC_FUNCTION_OBJ(Z_OBJ_P(zv))
 #define SAPNWRFC_FUNCTION_OBJ(zo) sapnwrfc_function_object_fetch(zo)
 
+// forward declaration of helper methods
+unsigned int rfc_clear_function_desc_cache(zend_string *function_name, zend_string *repository_id);
+
 // forward declaration of class methods
 PHP_METHOD(Connection, __construct);
 PHP_METHOD(Connection, getAttributes);
@@ -85,6 +91,7 @@ PHP_METHOD(RemoteFunction, isParameterActive);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_Connection___construct, 0, 0, 1)
     ZEND_ARG_ARRAY_INFO(0, parameters, 0)
+    ZEND_ARG_ARRAY_INFO(0, options, 1)
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -108,6 +115,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_Connection_getFunction, 0, 1, SAP
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_getFunction, 0, 1, IS_OBJECT, "SAPNWRFC\\RemoteFunction", 0)
 #endif
     ZEND_ARG_TYPE_INFO(0, functionName, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, invalidateCache, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
@@ -185,6 +193,15 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_isParameterActive
     ZEND_ARG_TYPE_INFO(0, parameterName, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
+#if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, NULL, 0)
+#endif
+    ZEND_ARG_TYPE_INFO(0, functionName, IS_STRING, 0)
+    ZEND_ARG_TYPE_INFO(0, repositoryId, IS_STRING, 1)
+ZEND_END_ARG_INFO()
+
 
 // class method tables
 static zend_function_entry sapnwrfc_connection_class_functions[] = {
@@ -247,6 +264,11 @@ static void sapnwrfc_connection_object_free(zend_object *object)
         efree(intern->rfc_login_params);
     }
 
+    // free the system_id
+    if (intern->system_id) {
+        zend_string_release(intern->system_id);
+    }
+
     /* call Zend's free handler, which will free the object properties */
     zend_object_std_dtor(&intern->zobj);
 }
@@ -290,9 +312,34 @@ static void sapnwrfc_function_object_free(zend_object *object)
     zend_object_std_dtor(&intern->zobj);
 }
 
+static void sapnwrfc_connection_set_options(sapnwrfc_connection_object *intern, HashTable *options)
+{
+    zend_string *key;
+    zval *val;
+
+    // set defaults
+    intern->use_function_desc_cache = 1;
+
+    if (!options) {
+        return;
+    }
+
+    ZEND_HASH_FOREACH_STR_KEY_VAL(options, key, val) {
+        if (key) {
+            if (strncasecmp(ZSTR_VAL(key), "use_function_desc_cache", strlen("use_function_desc_cache")) == 0) {
+                convert_to_boolean(val);
+
+                intern->use_function_desc_cache = zend_is_true(val);
+            }
+        }
+    } ZEND_HASH_FOREACH_END();
+}
+
 static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, HashTable *connection_params)
 {
     RFC_ERROR_INFO error_info;
+    RFC_ATTRIBUTES attributes;
+    RFC_RC rc;
     int i = 0;
     zend_string *key;
     zval *val;
@@ -319,18 +366,27 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, HashTab
     if (!intern->rfc_handle) {
         sapnwrfc_throw_connection_exception(error_info, "Could not open connection");
     }
+
+    // lookup the system ID. it is used as a key for the function desc cache
+    rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
+    if (rc == RFC_OK && attributes.sysId != NULL) {
+        intern->system_id = sapuc_to_zend_string(attributes.sysId);
+    } else {
+        intern->system_id = NULL;
+    }
 }
 
 PHP_METHOD(Connection, __construct)
 {
     sapnwrfc_connection_object *intern;
     HashTable *connection_params;
+    HashTable *options = NULL;
     long len;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
 
     // get the connection parameters
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "h", &connection_params) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "h|h", &connection_params, &options) == FAILURE) {
         zend_replace_error_handling(EH_NORMAL, NULL, NULL);
         return;
     }
@@ -344,6 +400,9 @@ PHP_METHOD(Connection, __construct)
 
     // get the connection object (we need access to the rfc_handle)
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
+
+    // set connection options
+    sapnwrfc_connection_set_options(intern, options);
 
     // open connection
     // TODO inline?
@@ -457,16 +516,17 @@ PHP_METHOD(Connection, getFunction)
 {
     sapnwrfc_connection_object *intern;
     sapnwrfc_function_object *func_intern;
-    RFC_ERROR_INFO error_info;
-    RFC_RC rc = RFC_OK;
-    RFC_FUNCTION_DESC_HANDLE function_desc_handle;
     zend_string *function_name;
     zend_string *tmp;
     zval zv_true;
-    SAP_UC *function_name_u;
-    RFC_PARAMETER_DESC parameter_desc;
     zval parameter_description;
     unsigned i;
+
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+    RFC_FUNCTION_DESC_HANDLE function_desc_handle;
+    RFC_PARAMETER_DESC parameter_desc;
+    SAP_UC *function_name_u;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &function_name) == FAILURE) {
@@ -475,6 +535,12 @@ PHP_METHOD(Connection, getFunction)
     }
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
+
+    // clear the function desc cache before looking up the function if requested
+    if (!intern->use_function_desc_cache) {
+        (void) rfc_clear_function_desc_cache(function_name, intern->system_id);
+        // if clearing the cache did not work, we just try to continue anyway...
+    }
 
     // get function description
     function_desc_handle = RfcGetFunctionDesc(intern->rfc_handle,
@@ -934,6 +1000,56 @@ static void register_sapnwrfc_function_object()
     sapnwrfc_function_ce->ce_flags |= ZEND_ACC_FINAL;
 }
 
+unsigned int rfc_clear_function_desc_cache(zend_string *function_name, zend_string *repository_id)
+{
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    SAP_UC *function_name_u = NULL;
+    SAP_UC *repository_id_u = NULL;
+    
+    // TODO check the patchlevel to find out if we need the 6x \0 hack
+    //      see SAP note 1818687 and https://archive.sap.com/discussions/thread/3328863
+
+    function_name_u = zend_string_to_sapuc(function_name);
+
+    // remove from the default repository
+    rc = RfcRemoveFunctionDesc(NULL, function_name_u, &error_info);
+
+    // if a repository ID was passed, use that
+    // (usually the repository ID is the sysId)
+    if (repository_id) {
+        rc = RfcRemoveFunctionDesc(
+            (repository_id_u = zend_string_to_sapuc(repository_id)), 
+            function_name_u,
+            &error_info);
+        free((void *) repository_id_u);
+    }
+
+    free((void *) function_name_u);
+
+    return rc == RFC_OK;
+}
+
+PHP_FUNCTION(clearFunctionDescCache)
+{
+    zend_string *function_name;
+    zend_string *repository_id = NULL;
+
+    zend_replace_error_handling(EH_THROW, sapnwrfc_exception_ce, NULL);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS(), "S|S", &function_name, &repository_id) == FAILURE) {
+        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        return;
+    }
+
+    if (rfc_clear_function_desc_cache(function_name, repository_id)) {
+        RETVAL_BOOL(1);
+    } else {
+        RETVAL_BOOL(0);
+    }
+
+    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+}
 
 /* {{{ PHP_MINIT_FUNCTION
  */
@@ -952,7 +1068,6 @@ PHP_MINIT_FUNCTION(sapnwrfc)
  */
 PHP_MSHUTDOWN_FUNCTION(sapnwrfc)
 {
-
     return SUCCESS;
 }
 /* }}} */
@@ -980,6 +1095,7 @@ PHP_MINFO_FUNCTION(sapnwrfc)
  * Every user visible function must have an entry in sapnwrfc_functions[].
  */
 const zend_function_entry sapnwrfc_functions[] = {
+    ZEND_NS_FE("SAPNWRFC", clearFunctionDescCache, arginfo_clearFunctionDescCache)
     PHP_FE_END    /* Must be the last line in sapnwrfc_functions[] */
 };
 /* }}} */

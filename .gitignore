@@ -37,3 +37,4 @@ run-tests.php
 *.trc
 playground/
 todo.txt
+.gdbinit
