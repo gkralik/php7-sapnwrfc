@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Add optional `$options` parameter to `Connection::__construct()`
+- Connnection constructor accepts `use_function_desc_cache` option (defaults to `true`)
+- `Connection::getFunction()` clears the function desc cache if `use_function_desc_cache` set to `false` before looking up the function
+- Add `\SAPNWRFC\clearFunctionDescCache($functionName, $repositoryId)` function
 
 ## [1.2.1] - 2018-03-08
 ### Fixed
