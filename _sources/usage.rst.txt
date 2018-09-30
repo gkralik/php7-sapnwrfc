@@ -45,6 +45,47 @@ For available connection parameters refer to the `sapnwrfc.ini parameter overvie
 After we are done using the connection, it is recommended to close the connection
 using ``SAPNWRFC\Connection::close()``.
 
+Connection options
+^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 1.2.0
+
+The ``SAPNWRFC\Connection`` takes a second (optional) parameter specifying options for the connection.
+
+.. code-block:: php
+
+    <?php
+
+    $parameters = [ /* <...> */ ];
+
+    $options = [
+        'use_function_desc_cache' => false,
+    ];
+
+    $connection = new SAPNWRFC\Connection($parameters, $options);
+
+The following options are available:
+
+use_function_desc_cache
+    If set to ``false`` the local function desc cache is cleared before looking up a function
+    using ``Connection::getFunction()``.
+    This can be useful if a function module signature changes in the backend while a script
+    is still running. If the script continues to use the old (cached) function description
+    this will result in garbage/missing values.
+
+    .. note::
+
+        Setting this option to ``false`` can result in degraded performance as the
+        function description has to be fetched from the backend every time ``Connection::getFunction()``
+        is called. 
+
+    .. seealso::
+
+        See :ref:`manually_clearing_function_desc_cache` for a way to clear the cache for individual
+        function modules.
+
+    *Default:* ``true``
+
 Calling remote function modules
 -------------------------------
 
@@ -231,6 +272,47 @@ to check if a parameter is active or not.
     $result = $function->invoke([
         'RFCTABLE' => [],
     ]);
+
+
+.. _manually_clearing_function_desc_cache:
+
+Manually clearing the function module description cache
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 1.3.0
+
+A call to ``Connection::getFunction()`` uses a local cache of the function module
+descriptions to speed up the lookup. This usually is desired behaviour but can
+lead to unexpected results when the function module signature changes in the
+backend while a script is still running (missing/garbage return values, etc.).
+
+In addition to setting the ``use_function_desc_cache`` option on the connection
+level the cache can also be cleared for individual function modules using the
+function ``\SAPNWRFC\clearFunctionDescCache($functionName, $repositoryId = null)``.
+
+.. code-block:: php
+
+    <?php
+
+    \SAPNWRFC\clearFunctionDescCache('STFC_STRUCTURE');
+    // or using the system ID
+    \SAPNWRFC\clearFunctionDescCache('STFC_STRUCTURE', 'X01');
+
+.. warning::
+
+    Manually clearing the function desc cache does not affect already
+    existing ``RemoteFunction`` objects:
+
+    .. code-block:: php
+
+        <?php
+
+        $oldFn = $connection->getFunction('STFC_STRUCTURE');
+        \SAPNWRFC\clearFunctionDescCache('STFC_STRUCTURE');
+        $newFn = $connection->getFunction('STFC_STRUCTURE');
+
+        // $oldFn still uses the old function description!
+
 
 Function module details
 ^^^^^^^^^^^^^^^^^^^^^^^
