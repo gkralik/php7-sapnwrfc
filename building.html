@@ -99,7 +99,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Building from source</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#building-on-linux">Building on Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#building-on-windows">Building on Windows</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#set-up-a-buid-environment">Set up a buid environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-up-a-build-environment">Set up a build environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#build-the-extension">Build the extension</a></li>
 </ul>
 </li>
@@ -199,8 +199,8 @@ above with <code class="docutils literal notranslate"><span class="pre">./config
 <p>We try to provide pre-built extensions for Windows users (see the
 <a class="reference external" href="https://github.com/gkralik/php7-sapnwrfc/releases">release</a> page).
 If you don’t find your desired version there or still want to build yourself, follow the instructions below.</p>
-<div class="section" id="set-up-a-buid-environment">
-<h3>Set up a buid environment<a class="headerlink" href="#set-up-a-buid-environment" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="set-up-a-build-environment">
+<h3>Set up a build environment<a class="headerlink" href="#set-up-a-build-environment" title="Permalink to this headline">¶</a></h3>
 <p>Make sure you have a valid <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">build enviroment as described here</a>.</p>
 <p>After you have set up the enviroment, try to build PHP itself:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ configure --disable-all --enable-cli
@@ -229,6 +229,10 @@ steps 1-4 as described in the <a class="reference external" href="https://wiki.p
 (depending on which version you want to build):</p>
 <p>Then continue with steps 7-9.</p>
 <p>If you built a shared extension, the extension files should be available in one of the following locations:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release\php-7.0\ext for the NTS version
+C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release_TS\php-7.0\ext for the TS version
+</pre></div>
+</div>
 </div>
 </div>
 </div>

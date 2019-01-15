@@ -38,8 +38,8 @@ We try to provide pre-built extensions for Windows users (see the
 `release <https://github.com/gkralik/php7-sapnwrfc/releases>`_ page). 
 If you don't find your desired version there or still want to build yourself, follow the instructions below.
 
-Set up a buid environment
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Set up a build environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Make sure you have a valid `build enviroment as described here <https://wiki.php.net/internals/windows/stepbystepbuild>`_.
 
@@ -89,7 +89,7 @@ Then continue with steps 7-9.
 
 If you built a shared extension, the extension files should be available in one of the following locations:
 
-.. code-block: none
+.. code-block:: none
 
     C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release\php-7.0\ext for the NTS version
     C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release_TS\php-7.0\ext for the TS version
