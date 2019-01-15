@@ -1,9 +1,10 @@
 Installation
 ============
 
-The installation of the ``php7-sapnwrfc`` extension consists of two parts.
+The installation of the ``php7-sapnwrfc`` extension consists of three steps.
 
 - Installing the *SAP NW RFC library*
+- Compiling the PHP extension
 - Enabling the extension in your PHP configuration
 
 .. _installing-nwrfcsdk:
@@ -71,6 +72,11 @@ To permanently add the library to the PATH environment variable, follow these st
     2. Select ``Edit the system environment variables`` or ``Edit environment variables for your account``,
        depending on whether you want to set the path for the user or the whole system.
     3. Select the ``PATH`` environment variable, click ``Edit`` and add the path ``C:\nwrfcsdk\lib``.
+
+Compiling the PHP extension
+---------------------------
+
+Follow the steps in :ref:`building-from-source` to build the extension.
 
 Enabling the extension
 ----------------------
