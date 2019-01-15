@@ -38,8 +38,8 @@ We try to provide pre-built extensions for Windows users (see the
 `release <https://github.com/gkralik/php7-sapnwrfc/releases>`_ page). 
 If you don't find your desired version there or still want to build yourself, follow the instructions below.
 
-Set up a buid environment
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Set up a build environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Make sure you have a valid `build enviroment as described here <https://wiki.php.net/internals/windows/stepbystepbuild>`_.
 
