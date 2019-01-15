@@ -89,7 +89,7 @@ Then continue with steps 7-9.
 
 If you built a shared extension, the extension files should be available in one of the following locations:
 
-.. code-block: none
+.. code-block:: none
 
     C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release\php-7.0\ext for the NTS version
     C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release_TS\php-7.0\ext for the TS version
