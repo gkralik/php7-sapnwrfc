@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+- Fix a memory leak in `PHP_MINFO_FUNCTION(sapnwrfc)`: free `version`
 
 ## [1.3.0] - 2019-02-23
 ### Added
