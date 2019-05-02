@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -40,21 +47,16 @@
 </script>
  
 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -222,7 +224,7 @@ using <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Conn
 <div class="section" id="connection-options">
 <h3>Connection options<a class="headerlink" href="#connection-options" title="Permalink to this headline">¶</a></h3>
 <div class="versionadded">
-<p><span class="versionmodified">New in version 1.2.0.</span></p>
+<p><span class="versionmodified added">New in version 1.2.0.</span></p>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection</span></code> takes a second (optional) parameter specifying options for the connection.</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
@@ -237,25 +239,24 @@ using <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Conn
 </pre></div>
 </div>
 <p>The following options are available:</p>
-<dl class="docutils">
-<dt>use_function_desc_cache</dt>
-<dd><p class="first">If set to <code class="docutils literal notranslate"><span class="pre">false</span></code> the local function desc cache is cleared before looking up a function
+<dl>
+<dt>use_function_desc_cache</dt><dd><p>If set to <code class="docutils literal notranslate"><span class="pre">false</span></code> the local function desc cache is cleared before looking up a function
 using <code class="docutils literal notranslate"><span class="pre">Connection::getFunction()</span></code>.
 This can be useful if a function module signature changes in the backend while a script
 is still running. If the script continues to use the old (cached) function description
 this will result in garbage/missing values.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Setting this option to <code class="docutils literal notranslate"><span class="pre">false</span></code> can result in degraded performance as the
+<p class="admonition-title">Note</p>
+<p>Setting this option to <code class="docutils literal notranslate"><span class="pre">false</span></code> can result in degraded performance as the
 function description has to be fetched from the backend every time <code class="docutils literal notranslate"><span class="pre">Connection::getFunction()</span></code>
 is called.</p>
 </div>
 <div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last">See <a class="reference internal" href="#manually-clearing-function-desc-cache"><span class="std std-ref">Manually clearing the function module description cache</span></a> for a way to clear the cache for individual
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="#manually-clearing-function-desc-cache"><span class="std std-ref">Manually clearing the function module description cache</span></a> for a way to clear the cache for individual
 function modules.</p>
 </div>
-<p class="last"><em>Default:</em> <code class="docutils literal notranslate"><span class="pre">true</span></code></p>
+<p><em>Default:</em> <code class="docutils literal notranslate"><span class="pre">true</span></code></p>
 </dd>
 </dl>
 </div>
@@ -301,13 +302,13 @@ key being the name of the parameter and the value the value to pass.</p>
 <p>The same is true for return values. If a remote function module returns parameters,
 they will be available in the array returned from <code class="docutils literal notranslate"><span class="pre">invoke()</span></code>.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
+<p class="admonition-title">Note</p>
 <p>ABAP function modules know four different types of parameters:</p>
-<ul class="last simple">
-<li><code class="docutils literal notranslate"><span class="pre">IMPORT</span></code>: set by the client.</li>
-<li><code class="docutils literal notranslate"><span class="pre">EXPORT</span></code>: set by the server.</li>
-<li><code class="docutils literal notranslate"><span class="pre">CHANGING</span></code>: set by the client and can be modified by the server.</li>
-<li><code class="docutils literal notranslate"><span class="pre">TABLE</span></code>: set by the client and can be modified by the server.</li>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IMPORT</span></code>: set by the client.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXPORT</span></code>: set by the server.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CHANGING</span></code>: set by the client and can be modified by the server.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TABLE</span></code>: set by the client and can be modified by the server.</p></li>
 </ul>
 </div>
 <p>To call a function module <code class="docutils literal notranslate"><span class="pre">STFC_CHANGING</span></code> that requires input parameters as well
@@ -336,90 +337,90 @@ as returns parameters to the caller, we can do as follows:</p>
 <h3>Parameter type mappings<a class="headerlink" href="#parameter-type-mappings" title="Permalink to this headline">¶</a></h3>
 <p>Remote function modules execute ABAP code and therefor use ABAB data types. This extension
 maps between RFC data types and builtin PHP data types as follows:</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="8%" />
-<col width="8%" />
-<col width="8%" />
-<col width="39%" />
-<col width="37%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 39%" />
+<col style="width: 37%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">ABAP type</th>
-<th class="head">RFC type</th>
-<th class="head">PHP type</th>
-<th class="head">Meaning</th>
-<th class="head">Notes</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>ABAP type</p></th>
+<th class="head"><p>RFC type</p></th>
+<th class="head"><p>PHP type</p></th>
+<th class="head"><p>Meaning</p></th>
+<th class="head"><p>Notes</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>C</td>
-<td>CHAR</td>
-<td>string</td>
-<td>Text field (alphanumeric characters)</td>
-<td>right-padded with blanks; see <code class="docutils literal notranslate"><span class="pre">rtrim</span></code> option</td>
+<tbody>
+<tr class="row-even"><td><p>C</p></td>
+<td><p>CHAR</p></td>
+<td><p>string</p></td>
+<td><p>Text field (alphanumeric characters)</p></td>
+<td><p>right-padded with blanks; see <code class="docutils literal notranslate"><span class="pre">rtrim</span></code> option</p></td>
 </tr>
-<tr class="row-odd"><td>D</td>
-<td>DATE</td>
-<td>string</td>
-<td>Date field (format: YYYYMMDD)</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>D</p></td>
+<td><p>DATE</p></td>
+<td><p>string</p></td>
+<td><p>Date field (format: YYYYMMDD)</p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>T</td>
-<td>TIME</td>
-<td>string</td>
-<td>Time field (format: HHMMSS)</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>T</p></td>
+<td><p>TIME</p></td>
+<td><p>string</p></td>
+<td><p>Time field (format: HHMMSS)</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>X</td>
-<td>BYTE</td>
-<td>string</td>
-<td>Hexadecimal field</td>
-<td>use <code class="docutils literal notranslate"><span class="pre">hex2bin()</span></code> to convert to binary</td>
+<tr class="row-odd"><td><p>X</p></td>
+<td><p>BYTE</p></td>
+<td><p>string</p></td>
+<td><p>Hexadecimal field</p></td>
+<td><p>use <code class="docutils literal notranslate"><span class="pre">hex2bin()</span></code> to convert to binary</p></td>
 </tr>
-<tr class="row-even"><td>N</td>
-<td>NUM</td>
-<td>string</td>
-<td>Numeric text field</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>N</p></td>
+<td><p>NUM</p></td>
+<td><p>string</p></td>
+<td><p>Numeric text field</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>STRING</td>
-<td>STRING</td>
-<td>string</td>
-<td>String (dynamic length)</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>STRING</p></td>
+<td><p>STRING</p></td>
+<td><p>string</p></td>
+<td><p>String (dynamic length)</p></td>
+<td></td>
 </tr>
-<tr class="row-even"><td>XSTRING</td>
-<td>BYTE</td>
-<td>string</td>
-<td>Hexadecimal string (dynamic length)</td>
-<td>use <code class="docutils literal notranslate"><span class="pre">hex2bin()</span></code> to convert to binary</td>
+<tr class="row-even"><td><p>XSTRING</p></td>
+<td><p>BYTE</p></td>
+<td><p>string</p></td>
+<td><p>Hexadecimal string (dynamic length)</p></td>
+<td><p>use <code class="docutils literal notranslate"><span class="pre">hex2bin()</span></code> to convert to binary</p></td>
 </tr>
-<tr class="row-odd"><td>I</td>
-<td>INT</td>
-<td>integer</td>
-<td>Integer</td>
-<td>INT1 and INT2 are also mapped to integer</td>
+<tr class="row-odd"><td><p>I</p></td>
+<td><p>INT</p></td>
+<td><p>integer</p></td>
+<td><p>Integer</p></td>
+<td><p>INT1 and INT2 are also mapped to integer</p></td>
 </tr>
-<tr class="row-even"><td>P</td>
-<td>BCD</td>
-<td>double</td>
-<td>Packed number / BCD</td>
-<td>&#160;</td>
+<tr class="row-even"><td><p>P</p></td>
+<td><p>BCD</p></td>
+<td><p>double</p></td>
+<td><p>Packed number / BCD</p></td>
+<td></td>
 </tr>
-<tr class="row-odd"><td>F</td>
-<td>FLOAT</td>
-<td>double</td>
-<td>Floating point number</td>
-<td>&#160;</td>
+<tr class="row-odd"><td><p>F</p></td>
+<td><p>FLOAT</p></td>
+<td><p>double</p></td>
+<td><p>Floating point number</p></td>
+<td></td>
 </tr>
 </tbody>
 </table>
 <p>Additionally, there are also tables and structures:</p>
 <ul class="simple">
-<li>A structure is mapped to an associative array, with the keys being the field names
-and the values the field values.</li>
-<li>A table is an array of structures.</li>
+<li><p>A structure is mapped to an associative array, with the keys being the field names
+and the values the field values.</p></li>
+<li><p>A table is an array of structures.</p></li>
 </ul>
 </div>
 <div class="section" id="passing-options-when-calling-function-modules">
@@ -437,14 +438,13 @@ be passed specifying options for the function call.</p>
 </pre></div>
 </div>
 <p>The following options are available:</p>
-<dl class="docutils">
-<dt>rtrim</dt>
-<dd><p class="first">In ABAP, there are two ways to store strings: as fixed length string type C or as dynamic
+<dl>
+<dt>rtrim</dt><dd><p>In ABAP, there are two ways to store strings: as fixed length string type C or as dynamic
 length type STRING. When using type C strings are right-padded with blanks, if the string
 is shorter than the predefined length. To unify the extensions behaviour with strings, the
 <code class="docutils literal notranslate"><span class="pre">rtrim</span></code> option is available. If set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, type C strings are right-trimmed before
 being returned.</p>
-<p class="last"><em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
+<p><em>Default:</em> <code class="docutils literal notranslate"><span class="pre">false</span></code></p>
 </dd>
 </dl>
 </div>
@@ -485,7 +485,7 @@ to check if a parameter is active or not.</p>
 <div class="section" id="manually-clearing-the-function-module-description-cache">
 <span id="manually-clearing-function-desc-cache"></span><h3>Manually clearing the function module description cache<a class="headerlink" href="#manually-clearing-the-function-module-description-cache" title="Permalink to this headline">¶</a></h3>
 <div class="versionadded">
-<p><span class="versionmodified">New in version 1.3.0.</span></p>
+<p><span class="versionmodified added">New in version 1.3.0.</span></p>
 </div>
 <p>A call to <code class="docutils literal notranslate"><span class="pre">Connection::getFunction()</span></code> uses a local cache of the function module
 descriptions to speed up the lookup. This usually is desired behaviour but can
@@ -502,10 +502,10 @@ function <code class="docutils literal notranslate"><span class="pre">\SAPNWRFC\
 </pre></div>
 </div>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
+<p class="admonition-title">Warning</p>
 <p>Manually clearing the function desc cache does not affect already
 existing <code class="docutils literal notranslate"><span class="pre">RemoteFunction</span></code> objects:</p>
-<div class="last highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
 
 <span class="nv">$oldFn</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">getFunction</span><span class="p">(</span><span class="s1">&#39;STFC_STRUCTURE&#39;</span><span class="p">);</span>
 <span class="nx">\SAPNWRFC\clearFunctionDescCache</span><span class="p">(</span><span class="s1">&#39;STFC_STRUCTURE&#39;</span><span class="p">);</span>
@@ -550,8 +550,8 @@ and the RFC SDK version in use.</p>
 <p>If an error occurs during any interaction, an exception is thrown with error details.
 Currently, there are two exception classes:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">SAPNWRFC\ConnectionException</span></code> for any errors that concern the connection itself.</li>
-<li><code class="docutils literal notranslate"><span class="pre">SAPNWRFC\FunctionCallException</span></code> for errors that stem from function module invocations.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SAPNWRFC\ConnectionException</span></code> for any errors that concern the connection itself.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SAPNWRFC\FunctionCallException</span></code> for errors that stem from function module invocations.</p></li>
 </ul>
 <p>Both exception classes extend the base exception class <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Exception</span></code>, which
 adds an additional <code class="docutils literal notranslate"><span class="pre">getErrorInfo()</span></code> method to the standard methods and properties
@@ -575,7 +575,7 @@ with detailed information: <code class="docutils literal notranslate"><span clas
         <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -601,26 +601,16 @@ with detailed information: <code class="docutils literal notranslate"><span clas
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -40,21 +47,16 @@
 </script>
  
 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -179,9 +181,9 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>The installation of the <code class="docutils literal notranslate"><span class="pre">php7-sapnwrfc</span></code> extension consists of three steps.</p>
 <ul class="simple">
-<li>Installing the <em>SAP NW RFC library</em></li>
-<li>Compiling the PHP extension</li>
-<li>Enabling the extension in your PHP configuration</li>
+<li><p>Installing the <em>SAP NW RFC library</em></p></li>
+<li><p>Compiling the PHP extension</p></li>
+<li><p>Enabling the extension in your PHP configuration</p></li>
 </ul>
 <div class="section" id="installing-the-sap-nw-rfc-library">
 <span id="installing-nwrfcsdk"></span><h2>Installing the SAP NW RFC library<a class="headerlink" href="#installing-the-sap-nw-rfc-library" title="Permalink to this headline">¶</a></h2>
@@ -220,16 +222,16 @@ make sure to substitute the correct path in the instructions below.</p>
 <p>On a command prompt, execute <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">PATH=%PATH%;C:\nwrfcsdk\lib</span></code>. This is temporary
 the change will be lost as soon as you close the command prompt.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The steps might differ depending on your version of Windows.</p>
+<p class="admonition-title">Note</p>
+<p>The steps might differ depending on your version of Windows.</p>
 </div>
 <p>To permanently add the library to the PATH environment variable, follow these steps:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>Open the Start menu and type <code class="docutils literal notranslate"><span class="pre">environment</span></code></li>
-<li>Select <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">the</span> <span class="pre">system</span> <span class="pre">environment</span> <span class="pre">variables</span></code> or <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">environment</span> <span class="pre">variables</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">account</span></code>,
-depending on whether you want to set the path for the user or the whole system.</li>
-<li>Select the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable, click <code class="docutils literal notranslate"><span class="pre">Edit</span></code> and add the path <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\lib</span></code>.</li>
+<li><p>Open the Start menu and type <code class="docutils literal notranslate"><span class="pre">environment</span></code></p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">the</span> <span class="pre">system</span> <span class="pre">environment</span> <span class="pre">variables</span></code> or <code class="docutils literal notranslate"><span class="pre">Edit</span> <span class="pre">environment</span> <span class="pre">variables</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">account</span></code>,
+depending on whether you want to set the path for the user or the whole system.</p></li>
+<li><p>Select the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment variable, click <code class="docutils literal notranslate"><span class="pre">Edit</span></code> and add the path <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\lib</span></code>.</p></li>
 </ol>
 </div></blockquote>
 </div>
@@ -265,7 +267,7 @@ of <code class="docutils literal notranslate"><span class="pre">php</span> <span
         <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="introduction.html" class="btn btn-neutral" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -291,26 +293,16 @@ of <code class="docutils literal notranslate"><span class="pre">php</span> <span
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

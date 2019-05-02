@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -39,21 +46,16 @@
 </script>
  
 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -214,10 +216,10 @@ $ nmake snap
 <h3>Build the extension<a class="headerlink" href="#build-the-extension" title="Permalink to this headline">¶</a></h3>
 <p>Make sure that you dont mix up x86/x64 (PHP and <em>SAP NW RFC library</em> platforms must match).</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ol class="last arabic simple">
-<li>This guide assumes you want to build the x64 version.</li>
-<li>We also assume the SDK files are in C:nwrfcsdk</li>
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>This guide assumes you want to build the x64 version.</p></li>
+<li><p>We also assume the SDK files are in C:nwrfcsdk</p></li>
 </ol>
 </div>
 <p>Copy all header files (<code class="docutils literal notranslate"><span class="pre">*.h</span></code>) from <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\include</span></code> to <code class="docutils literal notranslate"><span class="pre">C:\php-sdk\phpdev\vc14\x64\deps\include</span></code>.
@@ -227,6 +229,17 @@ Copy all library files (<code class="docutils literal notranslate"><span class="
 steps 1-4 as described in the <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">PHP Windows step by step build page</a>.</p>
 <p>The configure command (step 6) must be replaced with one of the following commands
 (depending on which version you want to build):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>// for NTS (shared module)
+configure --disable-all --enable-cli --disable-zts --with-sapnwrfc=shared
+// for NTS (compile in)
+configure --disable-all --enable-cli --disable-zts --with-sapnwrfc
+
+// for TS (shared module)
+configure --disable-all --enable-cli --with-sapnwrfc=shared
+// for TS (compile in)
+configure --disable-all --enable-cli --with-sapnwrfc
+</pre></div>
+</div>
 <p>Then continue with steps 7-9.</p>
 <p>If you built a shared extension, the extension files should be available in one of the following locations:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release\php-7.0\ext for the NTS version
@@ -246,7 +259,7 @@ C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release_TS\php-7.0\ext for the TS ver
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="api.html" class="btn btn-neutral" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -272,26 +285,16 @@ C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release_TS\php-7.0\ext for the TS ver
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

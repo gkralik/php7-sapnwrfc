@@ -73,7 +73,7 @@ steps 1-4 as described in the `PHP Windows step by step build page <https://wiki
 The configure command (step 6) must be replaced with one of the following commands 
 (depending on which version you want to build):
 
-.. code-block: none
+.. code-block:: none
 
     // for NTS (shared module)
     configure --disable-all --enable-cli --disable-zts --with-sapnwrfc=shared
