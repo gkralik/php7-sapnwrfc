@@ -16,6 +16,10 @@
 
 #include "sapnwrfc.h"
 
+zend_class_entry *sapnwrfc_exception_ce;
+zend_class_entry *sapnwrfc_connection_exception_ce;
+zend_class_entry *sapnwrfc_function_exception_ce;
+
 typedef struct _sapnwrfc_exception_object {
     zend_object *zobj;
 } sapnwrfc_exception_object;

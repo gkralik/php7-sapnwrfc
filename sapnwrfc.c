@@ -18,7 +18,6 @@
 #include "Zend/zend_exceptions.h"
 
 #include "php_sapnwrfc.h"
-#include "exceptions.h"
 #include "string_helper.h"
 #include "rfc_parameters.h"
 
@@ -27,6 +26,9 @@
 // class entries
 zend_class_entry *sapnwrfc_connection_ce;
 zend_class_entry *sapnwrfc_function_ce;
+extern zend_class_entry *sapnwrfc_exception_ce;
+extern zend_class_entry *sapnwrfc_connection_exception_ce;
+extern zend_class_entry *sapnwrfc_function_exception_ce;
 
 // object handlers
 zend_object_handlers sapnwrfc_connection_object_handlers;
