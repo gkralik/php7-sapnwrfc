@@ -36,24 +36,22 @@ if test "$PHP_SAPNWRFC" != "no"; then
 	SAPNWRFC_INCLUDE_DIR=$SAPNWRFC_DIR/include
 	PHP_ADD_INCLUDE($SAPNWRFC_INCLUDE_DIR)
 
-	SDK_LIB_NAMES="libsapnwrfc libsapucum"
+	SDK_LIB_NAMES="sapnwrfc sapucum"
+	SDK_LIB_SUFFIX=".so"
 
 	case $host_alias in
 		*darwin*)
 			SDK_LIB_SUFFIX=".dylib"
 			;;
-		*)
-			SDK_LIB_SUFFIX=".so"
-			;;
 	esac
 
 	# check for libraries
 	for f in $SDK_LIB_NAMES ; do
-		AC_MSG_CHECKING([for $f$SDK_LIB_SUFFIX])
+		AC_MSG_CHECKING([for lib$f$SDK_LIB_SUFFIX])
 
-		if test ! -f $SAPNWRFC_DIR/lib/$f$SDK_LIB_SUFFIX; then
+		if test ! -f $SAPNWRFC_DIR/lib/lib$f$SDK_LIB_SUFFIX; then
 			AC_MSG_RESULT([not found])
-			AC_MSG_ERROR([SAP NW RFC shared library $f$SDK_LIB_SUFFIX missing])
+			AC_MSG_ERROR([SAP NW RFC shared library lib$f$SDK_LIB_SUFFIX missing])
 		fi
 
 		AC_MSG_RESULT([found])
