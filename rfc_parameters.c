@@ -9,7 +9,6 @@
 
 #include "php.h"
 
-#include "exceptions.h"
 #include "string_helper.h"
 #include "rfc_parameters.h"
 

@@ -29,11 +29,10 @@ missing
 mkinstalldirs
 modules/
 run-tests.php
-*.c.i
-*.ii
 *.info
 *.la
 *.lo
+*.loT
 *.trc
 playground/
 todo.txt

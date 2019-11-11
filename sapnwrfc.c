@@ -18,7 +18,6 @@
 #include "Zend/zend_exceptions.h"
 
 #include "php_sapnwrfc.h"
-#include "exceptions.h"
 #include "string_helper.h"
 #include "rfc_parameters.h"
 
@@ -27,6 +26,9 @@
 // class entries
 zend_class_entry *sapnwrfc_connection_ce;
 zend_class_entry *sapnwrfc_function_ce;
+extern zend_class_entry *sapnwrfc_exception_ce;
+extern zend_class_entry *sapnwrfc_connection_exception_ce;
+extern zend_class_entry *sapnwrfc_function_exception_ce;
 
 // object handlers
 zend_object_handlers sapnwrfc_connection_object_handlers;
@@ -481,12 +483,8 @@ PHP_METHOD(Connection, getAttributes)
     add_assoc_str(return_value, "kernelRel", sapuc_to_zend_string(attributes.kernelRel));
     add_assoc_str(return_value, "cpicConvId", sapuc_to_zend_string(attributes.cpicConvId));
     add_assoc_str(return_value, "progName", sapuc_to_zend_string(attributes.progName));
-#ifdef HAVE_RFC_ATTRIBUTES_PARTNER_BYTES_PER_CHAR
     add_assoc_str(return_value, "partnerBytesPerChar", sapuc_to_zend_string(attributes.partnerBytesPerChar));
-#endif
-#ifdef HAVE_RFC_ATTRIBUTES_PARTNER_SYSTEM_CODEPAGE
     add_assoc_str(return_value, "partnerSystemCodepage", sapuc_to_zend_string(attributes.partnerSystemCodepage));
-#endif
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
 }

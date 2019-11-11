@@ -13,7 +13,16 @@ Installing the SAP NW RFC library
 ---------------------------------
 
 You can find detailed instructions on how to compile, install and use 
-the *SAP NW RFC library* on http://service.sap.com/rfc-library.
+the *SAP NW RFC library* on https://support.sap.com/en/product/connectors/nwrfcsdk.html.
+
+The SAP NW RFC SDK is fully backwards compatible, supporting all NetWeaver systems, 
+from today's S4 down to R/3 release 4.6C. Using the latest version is recommended.
+
+.. note::
+
+   .. versionchanged:: 1.5.0
+   
+      This extension only supports building for SAP NW RFC SDK 7.50.
 
 Download the SAP NW RFC library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -21,18 +30,18 @@ Download the SAP NW RFC library
 To download the *SAP NW RFC library*, go to the `Software Center on the 
 SAP ONE Support Launchpad <https://launchpad.support.sap.com/#/softwarecenter>`_.
 
-Enter ``SAP NW RFC SDK 7.20`` in the search box. Then download the library version 
+Enter ``SAP NW RFC SDK 7.50`` in the search box. Then download the library version 
 that suits your platform.
 
 .. image:: /images/search_nwrfcsdk.png
-   :alt: Search for SAP NW RFC SDK 7.20
+   :alt: Search for SAP NW RFC SDK 7.50
 
 If you don't already have it, you also need the *SAPCAR* utility to extract the 
 library. You can also download it from the SAP Support Portal. Search for
-``SAPCAR 7.20``.
+``SAPCAR``.
 
 .. image:: /images/search_sapcar.png
-   :alt: Search for SAPCAR 7.20
+   :alt: Search for SAPCAR
 
 Extract the library to a directory on your machine. This guide uses 
 ``/usr/sap/nwrfcsdk`` (on Linux) or ``C:\nwrfcsdk`` (on Windows) as the 

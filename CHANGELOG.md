@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Support for building with SAP NW RFC SDK 7.50
+- Support for building on macOS
+### Removed
+- Drop support for building with SAP NW RFC SDK < 7.50
 ### Fixed
 - Fix a memory leak in `PHP_MINFO_FUNCTION(sapnwrfc)`: free `version`
 
