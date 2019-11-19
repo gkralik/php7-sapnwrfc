@@ -11,6 +11,7 @@
 
 #include "string_helper.h"
 #include "rfc_parameters.h"
+#include "exceptions.h"
 
 #include "sapnwrfc.h"
 
