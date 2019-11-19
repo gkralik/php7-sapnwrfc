@@ -66,6 +66,12 @@ if test "$PHP_SAPNWRFC" != "no"; then
 		PHP_ADD_INCLUDE(ext)
 	])
 
+	# check for RfcGetPartnerSSOTicket
+	# not needed, has always been available
+	#AC_CHECK_FUNC([RfcGetPartnerSSOTicket], [
+	#		AC_DEFINE([HAVE_RFC_GET_PARTNER_SSO_TICKET], [1], [Define to 1 if RfcGetPartnerSSOTicket is available])
+	#	]
+	#)
 	# set up CFLAGS
 	PHP_SAPNWRFC_CFLAGS="-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -std=gnu11 -DSAPwithUNICODE -Wall"
 
