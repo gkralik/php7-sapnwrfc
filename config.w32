@@ -7,12 +7,12 @@
 //
 // Author: Martin Keckeis <martin.keckeis1 (at) gmail.com>
 
-ARG_WITH("sapnwrfc", "*****SAP NW RFC*****", "no");
+ARG_WITH("sapnwrfc", "SAP NW RFC support", "no");
 
 if (PHP_SAPNWRFC != "no") {
 
     if (
-        CHECK_HEADER_ADD_INCLUDE("sapnwrfc.h", "CFLAGS_SAPNWRFC") &&
+        CHECK_HEADER_ADD_INCLUDE("sapnwrfc.h", "CFLAGS_SAPNWRFC", PHP_SAPNWRFC + "\\include") &&
         CHECK_LIB("libsapucum.lib", "sapnwrfc", PHP_SAPNWRFC) &&
         CHECK_LIB("sapnwrfc.lib", "sapnwrfc", PHP_SAPNWRFC)
     ) {

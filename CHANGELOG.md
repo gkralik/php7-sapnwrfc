@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Support for building with SAP NW RFC SDK 7.50
 - Support for building with clang
+- Windows builds: support passing search path via `--with-sapnwrfc=`
 ### Removed
 - Drop support for building with SAP NW RFC SDK < 7.50
 ### Fixed
