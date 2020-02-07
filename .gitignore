@@ -37,3 +37,5 @@ run-tests.php
 playground/
 todo.txt
 .gdbinit
+.vscode
+*.o
