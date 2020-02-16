@@ -5,5 +5,5 @@ version() returns version string x.y.z
 --FILE--
 <?php
 echo \SAPNWRFC\Connection::version();
---EXPECTF--
-%d.%d.%d
+--EXPECTREGEX--
+\d\.\d\.\d(-.*)
