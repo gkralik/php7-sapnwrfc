@@ -217,4 +217,11 @@ class RemoteFunction
      * @throws FunctionCallException if the interface description cannot be retrieved.
      */
     public function getFunctionDescription(): array {}
+
+    /**
+     * Get the function's name.
+     *
+     * @return string The function name.
+     */
+    public function getName(): string {}
 }

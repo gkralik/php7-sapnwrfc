@@ -1,5 +1,5 @@
 --TEST--
-RemoteFunction object has name and parameter properties.
+RemoteFunction::getName() returns the function's name.
 --SKIPIF--
 <?php include("should_run_online_tests.inc"); ?>
 --FILE--
@@ -9,16 +9,8 @@ $c = new \SAPNWRFC\Connection($config);
 
 $f = $c->getFunction('STFC_STRUCTURE');
 
-var_dump(property_exists($f, "name"));
-var_dump(trim($f->name));
-var_dump(property_exists($f, "IMPORTSTRUCT"));
-var_dump(is_array($f->IMPORTSTRUCT));
-var_dump(property_exists($f, "RFCTABLE"));
-var_dump(is_array($f->RFCTABLE));
+var_dump(method_exists($f, 'getName'));
+var_dump($f->getName());
 --EXPECT--
 bool(true)
 string(14) "STFC_STRUCTURE"
-bool(true)
-bool(true)
-bool(true)
-bool(true)

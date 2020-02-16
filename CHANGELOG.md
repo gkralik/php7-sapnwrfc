@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 - Support for building with SAP NW RFC SDK 7.50
 - Support for building with clang
 - Windows builds: support passing search path via `--with-sapnwrfc=`
+- Add `RemoteFunction::getName()` retrieve a function's name
 ### Removed
 - Drop support for building with SAP NW RFC SDK < 7.50
 ### Fixed

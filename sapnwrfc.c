@@ -91,6 +91,7 @@ PHP_METHOD(RemoteFunction, invoke);
 PHP_METHOD(RemoteFunction, setParameterActive);
 PHP_METHOD(RemoteFunction, isParameterActive);
 PHP_METHOD(RemoteFunction, getFunctionDescription);
+PHP_METHOD(RemoteFunction, getName);
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_Connection___construct, 0, 0, 1)
@@ -205,6 +206,14 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getFunctionDescri
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getName, 0, 1, IS_STRING, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getName, 0, 1, IS_STRING, NULL, 0)
+#endif
+ZEND_END_ARG_INFO()
+
+
+#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, 0)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, NULL, 0)
@@ -235,6 +244,7 @@ static zend_function_entry sapnwrfc_function_class_functions[] = {
     PHP_ME(RemoteFunction, setParameterActive, arginfo_RemoteFunction_setParameterActive, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(RemoteFunction, isParameterActive, arginfo_RemoteFunction_isParameterActive, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(RemoteFunction, getFunctionDescription, arginfo_RemoteFunction_getFunctionDescription, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(RemoteFunction, getName, arginfo_RemoteFunction_getName, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_FE_END
 };
 
@@ -1017,6 +1027,19 @@ PHP_METHOD(RemoteFunction, getFunctionDescription)
     zend_restore_error_handling(&zeh);
 
     RETURN_ZVAL(&parameter_description, 1, 1);
+}
+
+PHP_METHOD(RemoteFunction, getName)
+{
+    sapnwrfc_function_object *intern;
+
+    if (zend_parse_parameters_none() == FAILURE) {
+        return;
+    }
+
+    intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
+
+    RETURN_STR(intern->name);
 }
 
 static void register_sapnwrfc_connection_object()
