@@ -208,4 +208,13 @@ class RemoteFunction
      * @return bool True if parameter is active, false if not.
      */
     public function isParameterActive(string $parameterName): bool {}
+
+    /**
+     * Get the function's parameter description.
+     * 
+     * @return array The parameter descriptions, indexed by parameter name.
+     * 
+     * @throws FunctionCallException if the interface description cannot be retrieved.
+     */
+    public function getFunctionDescription(): array {}
 }
