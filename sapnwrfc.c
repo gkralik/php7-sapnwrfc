@@ -535,9 +535,8 @@ PHP_METHOD(Connection, getFunction)
     sapnwrfc_connection_object *intern;
     sapnwrfc_function_object *func_intern;
     zend_string *function_name;
-    zend_string *tmp;
+    zend_string *parameter_name;
     zval zv_true;
-    zval parameter_description;
     unsigned i;
 
     RFC_ERROR_INFO error_info;
@@ -578,6 +577,9 @@ PHP_METHOD(Connection, getFunction)
     func_intern->rfc_handle = intern->rfc_handle;
     func_intern->function_desc_handle = function_desc_handle;
     func_intern->name = zend_string_copy(function_name);
+
+    // add a 'name' property to the function object. this helps to identify the object
+    // when dumping it with var_dump()
     add_property_str(return_value, "name", zend_string_copy(function_name));
 
     // get nr of parameters
@@ -601,39 +603,10 @@ PHP_METHOD(Connection, getFunction)
             RETURN_NULL();
         }
 
-        array_init(&parameter_description);
-
-        add_assoc_str(&parameter_description, "type", sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type)));
-        add_assoc_str(&parameter_description, "direction", sapuc_to_zend_string((SAP_UC *)RfcGetDirectionAsString(parameter_desc.direction)));
-        add_assoc_str(&parameter_description, "description", sapuc_to_zend_string(parameter_desc.parameterText));
-        add_assoc_bool(&parameter_description, "optional", parameter_desc.optional);
-        add_assoc_str(&parameter_description, "defaultValue", sapuc_to_zend_string(parameter_desc.defaultValue));
-
-/*
-        if (parameter_desc.typeDescHandle) {
-            // TODO extract to helper function and assemble parameter_description zval
-            // if parameter_desc.typeDescHandle is set, recurse down and get all type infos
-            // via RfcGetFieldDescByIndex
-            // describe_function_interface(func_desc_handle): zval(array)
-            add_assoc_bool(&parameter_description, "isStructure", 1);
-            int field_count = 0;
-            RFC_FIELD_DESC field_desc;
-            RFC_ABAP_NAME field_name;
-            rc = RfcGetFieldCount(parameter_desc.typeDescHandle, &field_count, &error_info);
-
-            rc = RfcGetFieldDescByIndex(parameter_desc.typeDescHandle, 0, &field_desc, &error_info);
-
-            tmp = sapuc_to_zend_string(field_desc.name);
-        }
-*/
-        tmp = sapuc_to_zend_string(parameter_desc.name);
-        add_property_zval(return_value, ZSTR_VAL(tmp), &parameter_description);
-
         // make the parameter active by default
-        zend_hash_add(func_intern->parameter_status, tmp, &zv_true);
-
-        zend_string_release(tmp);
-        zval_ptr_dtor(&parameter_description);
+        parameter_name = sapuc_to_zend_string(parameter_desc.name);
+        zend_hash_add(func_intern->parameter_status, parameter_name, &zv_true);
+        zend_string_release(parameter_name);
     }
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);

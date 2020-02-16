@@ -14,6 +14,7 @@ marked with **BC break**.
 - Add `RemoteFunction::getName()` retrieve a function's name
 ### Removed
 - Drop support for building with SAP NW RFC SDK < 7.50 **BC break**
+- Remove the `RemoteFunction` properties (parameter description) **BC break**
 ### Fixed
 - Fix a memory leak in `PHP_MINFO_FUNCTION(sapnwrfc)`: free `version`
 
