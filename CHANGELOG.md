@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+This is a major release with breaking changes. For details, see changes below
+marked with **BC break**.
+
 ### Added
 - Support for building with SAP NW RFC SDK 7.50
 - Support for building with clang
@@ -9,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Add `RemoteFunction::getFunctionDescription()` to retrieve a function's metadata (#79)
 - Add `RemoteFunction::getName()` retrieve a function's name
 ### Removed
-- Drop support for building with SAP NW RFC SDK < 7.50
+- Drop support for building with SAP NW RFC SDK < 7.50 **BC break**
 ### Fixed
 - Fix a memory leak in `PHP_MINFO_FUNCTION(sapnwrfc)`: free `version`
 
