@@ -90,6 +90,7 @@ PHP_METHOD(Connection, rfcVersion);
 PHP_METHOD(RemoteFunction, invoke);
 PHP_METHOD(RemoteFunction, setParameterActive);
 PHP_METHOD(RemoteFunction, isParameterActive);
+PHP_METHOD(RemoteFunction, getFunctionDescription);
 
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_Connection___construct, 0, 0, 1)
@@ -197,6 +198,13 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_isParameterActive
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 70200
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getFunctionDescription, 0, 1, IS_ARRAY, 1)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getFunctionDescription, 0, 1, IS_ARRAY, NULL, 1)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, 0)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, NULL, 0)
@@ -226,6 +234,7 @@ static zend_function_entry sapnwrfc_function_class_functions[] = {
     PHP_ME(RemoteFunction, invoke, arginfo_RemoteFunction_invoke, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(RemoteFunction, setParameterActive, arginfo_RemoteFunction_setParameterActive, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(RemoteFunction, isParameterActive, arginfo_RemoteFunction_isParameterActive, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(RemoteFunction, getFunctionDescription, arginfo_RemoteFunction_getFunctionDescription, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_FE_END
 };
 
@@ -590,6 +599,23 @@ PHP_METHOD(Connection, getFunction)
         add_assoc_bool(&parameter_description, "optional", parameter_desc.optional);
         add_assoc_str(&parameter_description, "defaultValue", sapuc_to_zend_string(parameter_desc.defaultValue));
 
+/*
+        if (parameter_desc.typeDescHandle) {
+            // TODO extract to helper function and assemble parameter_description zval
+            // if parameter_desc.typeDescHandle is set, recurse down and get all type infos
+            // via RfcGetFieldDescByIndex
+            // describe_function_interface(func_desc_handle): zval(array)
+            add_assoc_bool(&parameter_description, "isStructure", 1);
+            int field_count = 0;
+            RFC_FIELD_DESC field_desc;
+            RFC_ABAP_NAME field_name;
+            rc = RfcGetFieldCount(parameter_desc.typeDescHandle, &field_count, &error_info);
+
+            rc = RfcGetFieldDescByIndex(parameter_desc.typeDescHandle, 0, &field_desc, &error_info);
+
+            tmp = sapuc_to_zend_string(field_desc.name);
+        }
+*/
         tmp = sapuc_to_zend_string(parameter_desc.name);
         add_property_zval(return_value, ZSTR_VAL(tmp), &parameter_description);
 
@@ -963,6 +989,34 @@ PHP_METHOD(RemoteFunction, isParameterActive)
 
     zend_replace_error_handling(EH_NORMAL, NULL, NULL);
     RETURN_ZVAL(tmp, 1, 0);
+}
+
+PHP_METHOD(RemoteFunction, getFunctionDescription)
+{
+    sapnwrfc_function_object *intern;
+    zend_error_handling zeh;
+    zval parameter_description;
+
+    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, &zeh);
+
+    if (zend_parse_parameters_none() == FAILURE) {
+        zend_restore_error_handling(&zeh);
+
+        return;
+    }
+
+    intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
+
+    if (rfc_describe_function_interface(intern->function_desc_handle, &parameter_description)) {
+        zend_throw_exception(sapnwrfc_function_exception_ce, "Failed to get function interface description.", 0);
+        zend_restore_error_handling(&zeh);
+
+        return;
+    }
+
+    zend_restore_error_handling(&zeh);
+
+    RETURN_ZVAL(&parameter_description, 1, 1);
 }
 
 static void register_sapnwrfc_connection_object()

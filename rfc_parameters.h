@@ -39,7 +39,7 @@ zval rfc_get_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len, uns
 zval rfc_get_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
 zval rfc_get_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
 zval rfc_get_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len);
-zval fc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned char rtrim_enabled);
+zval rfc_get_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned char rtrim_enabled);
 zval rfc_get_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned len);
 zval rfc_get_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
 zval rfc_get_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
@@ -56,5 +56,8 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
                                RFC_FUNCTION_DESC_HANDLE function_desc_handle,
                                zend_string *name,
                                unsigned char rtrim_enabled);
+
+
+int rfc_describe_function_interface(RFC_FUNCTION_DESC_HANDLE function_desc_handle, zval *function_description);
 
 #endif /* _RFC_PARAMETERS_H */

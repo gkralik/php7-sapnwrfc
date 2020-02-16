@@ -1260,3 +1260,139 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
 
     return value;
 }
+
+static int rfc_describe_type(RFC_TYPE_DESC_HANDLE type_desc_handle, zval *type_description);
+static int rfc_wrap_parameter_description(RFC_PARAMETER_DESC parameter_desc, zval *parameter_description);
+static int rfc_wrap_field_description(RFC_FIELD_DESC field_desc, zval *type_description);
+
+static int rfc_describe_type(RFC_TYPE_DESC_HANDLE type_desc_handle, zval *type_description)
+{
+    unsigned int field_count;
+    zend_string *field_name;
+    zval field_description;
+
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    RFC_FIELD_DESC field_desc;
+
+    rc = RfcGetFieldCount(type_desc_handle, &field_count, &error_info);
+    if (rc != RFC_OK) {
+        return -1;
+    }
+
+    array_init(type_description);
+
+    // loop over the fields and get their description
+    for (unsigned int field_idx = 0; field_idx < field_count; field_idx++) {
+        rc = RfcGetFieldDescByIndex(type_desc_handle, field_idx, &field_desc, &error_info);
+        if (rc != RFC_OK) {
+            return -1;
+        }
+
+        // wrap the field description in an array
+        if (rfc_wrap_field_description(field_desc, &field_description) == -1) {
+            return -1;
+        }
+
+        // add this field's description to the type description
+        field_name = sapuc_to_zend_string(field_desc.name);
+        add_assoc_zval(type_description, ZSTR_VAL(field_name), &field_description);
+        zend_string_release(field_name);
+    }
+
+    return 0;
+}
+
+static int rfc_wrap_parameter_description(RFC_PARAMETER_DESC parameter_desc, zval *parameter_description)
+{
+    zval type_description;
+
+    // create array with parameter description
+    array_init(parameter_description);
+    add_assoc_str(parameter_description, "name", sapuc_to_zend_string(parameter_desc.name));
+    add_assoc_str(parameter_description, "type", sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type)));
+    add_assoc_str(parameter_description, "direction", sapuc_to_zend_string((SAP_UC *)RfcGetDirectionAsString(parameter_desc.direction)));
+    add_assoc_str(parameter_description, "description", sapuc_to_zend_string(parameter_desc.parameterText));
+    add_assoc_long(parameter_description, "ucLength", parameter_desc.ucLength);
+    add_assoc_long(parameter_description, "nucLength", parameter_desc.nucLength);
+    add_assoc_long(parameter_description, "decimals", parameter_desc.decimals);
+    add_assoc_bool(parameter_description, "optional", parameter_desc.optional);
+    add_assoc_str(parameter_description, "default", sapuc_to_zend_string(parameter_desc.defaultValue));
+    // TODO extendedDescription?
+
+    // for structures and tables, there is additional type information available
+    if (parameter_desc.typeDescHandle) {
+        if (rfc_describe_type(parameter_desc.typeDescHandle, &type_description) == -1) {
+            return -1;
+        }
+
+        add_assoc_zval(parameter_description, "typedef", &type_description);
+    }
+
+    return 0;
+}
+
+static int rfc_wrap_field_description(RFC_FIELD_DESC field_desc, zval *type_description)
+{
+    zval type_def;
+
+    array_init(type_description);
+    add_assoc_str(type_description, "name", sapuc_to_zend_string(field_desc.name));
+    add_assoc_str(type_description, "type", sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(field_desc.type)));
+    add_assoc_long(type_description, "ucLength", field_desc.ucLength);
+    add_assoc_long(type_description, "ucOffset", field_desc.ucOffset);
+    add_assoc_long(type_description, "nucLength", field_desc.nucLength);
+    add_assoc_long(type_description, "nucOffset", field_desc.nucOffset);
+    add_assoc_long(type_description, "decimals", field_desc.decimals);
+    // TODO extendedDescription?
+
+    // if this field is a complex type, describe it
+    if (field_desc.typeDescHandle) {
+        if (rfc_describe_type(field_desc.typeDescHandle, &type_def) == -1) {
+            return -1;
+        }
+
+        add_assoc_zval(type_description, "typedef", &type_def);
+    }
+
+    return 0;
+}
+
+int rfc_describe_function_interface(RFC_FUNCTION_DESC_HANDLE function_desc_handle, zval *function_description)
+{
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    RFC_PARAMETER_DESC parameter_desc;
+
+    unsigned int param_count = 0;
+    zval parameter_description;
+    zend_string *parameter_name;
+
+    // get the number of function parameters
+    rc = RfcGetParameterCount(function_desc_handle, &param_count, &error_info);
+    if (rc != RFC_OK) {
+        return -1;
+    }
+
+    array_init(function_description);
+
+    // loop over the parameters and get type information
+    for (int param_idx = 0; param_idx < param_count; param_idx++) {
+        rc = RfcGetParameterDescByIndex(function_desc_handle, param_idx, &parameter_desc, &error_info);
+        if (rc != RFC_OK) {
+            return -1;
+        }
+
+        // wrap the type information in an array
+        if (rfc_wrap_parameter_description(parameter_desc, &parameter_description) == -1) {
+            return -1;
+        }
+
+        // add array key with param name and desription
+        parameter_name = sapuc_to_zend_string(parameter_desc.name);
+        add_assoc_zval(function_description, ZSTR_VAL(parameter_name), &parameter_description);
+        zend_string_release(parameter_name);
+    }
+
+    return 0;
+}
