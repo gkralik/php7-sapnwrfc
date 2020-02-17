@@ -12,6 +12,8 @@ marked with **BC break**.
 - Windows builds: support passing search path via `--with-sapnwrfc=`
 - Add `RemoteFunction::getFunctionDescription()` to retrieve a function's metadata (#79)
 - Add `RemoteFunction::getName()` retrieve a function's name
+### Chamged
+- use `zend_restore_error_handling()` to restore previous error handling
 ### Removed
 - Drop support for building with SAP NW RFC SDK < 7.50 **BC break**
 - Remove the `RemoteFunction` properties (parameter description) **BC break**

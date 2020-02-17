@@ -401,22 +401,25 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, HashTab
 PHP_METHOD(Connection, __construct)
 {
     sapnwrfc_connection_object *intern;
+    zend_error_handling zeh;
     HashTable *connection_params;
     HashTable *options = NULL;
     long len;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
 
     // get the connection parameters
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "h|h", &connection_params, &options) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
     len = zend_hash_num_elements(connection_params);
     if (len == 0) {
         zend_error(E_WARNING, "No connection parameters given");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -430,16 +433,17 @@ PHP_METHOD(Connection, __construct)
     // TODO inline?
     sapnwrfc_open_connection(intern, connection_params);
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 PHP_METHOD(Connection, close)
 {
     sapnwrfc_connection_object *intern;
+    zend_error_handling zeh;
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
     zend_parse_parameters_none();
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
@@ -453,32 +457,36 @@ PHP_METHOD(Connection, close)
     if (rc == RFC_OK) {
         intern->rfc_handle = NULL;
 
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_TRUE;
     }
 
     // we got an error, throw an exception with details
     sapnwrfc_throw_connection_exception(error_info, "Could not close connection");
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
+
     RETURN_NULL();
 }
 
 PHP_METHOD(Connection, getAttributes)
 {
     sapnwrfc_connection_object *intern;
+    zend_error_handling zeh;
     RFC_ATTRIBUTES attributes;
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
     zend_parse_parameters_none();
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception(error_info, "Could not fetch connection attributes");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
@@ -506,27 +514,30 @@ PHP_METHOD(Connection, getAttributes)
     add_assoc_str(return_value, "partnerBytesPerChar", sapuc_to_zend_string(attributes.partnerBytesPerChar));
     add_assoc_str(return_value, "partnerSystemCodepage", sapuc_to_zend_string(attributes.partnerSystemCodepage));
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 PHP_METHOD(Connection, ping)
 {
     sapnwrfc_connection_object *intern;
+    zend_error_handling zeh;
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
     zend_parse_parameters_none();
 
     intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
     rc = RfcPing(intern->rfc_handle, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception(error_info, "Failed to ping connection");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
+
     RETURN_TRUE;
 }
 
@@ -534,6 +545,7 @@ PHP_METHOD(Connection, getFunction)
 {
     sapnwrfc_connection_object *intern;
     sapnwrfc_function_object *func_intern;
+    zend_error_handling zeh;
     zend_string *function_name;
     zend_string *parameter_name;
     zval zv_true;
@@ -545,9 +557,11 @@ PHP_METHOD(Connection, getFunction)
     RFC_PARAMETER_DESC parameter_desc;
     SAP_UC *function_name_u;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
+
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &function_name) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -567,7 +581,8 @@ PHP_METHOD(Connection, getFunction)
 
     if (function_desc_handle == NULL) {
         sapnwrfc_throw_function_exception(error_info, "Failed to lookup function %s", ZSTR_VAL(function_name));
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
@@ -586,7 +601,8 @@ PHP_METHOD(Connection, getFunction)
     rc = RfcGetParameterCount(func_intern->function_desc_handle, &func_intern->parameter_count, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_function_exception(error_info, "Failed to get parameter count for function %s", ZSTR_VAL(func_intern->name));
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
@@ -599,7 +615,8 @@ PHP_METHOD(Connection, getFunction)
         rc = RfcGetParameterDescByIndex(func_intern->function_desc_handle, i, &parameter_desc, &error_info);
         if (rc != RFC_OK) {
             sapnwrfc_throw_function_exception(error_info, "Failed to get parameter description for function %s", ZSTR_VAL(func_intern->name));
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
+
             RETURN_NULL();
         }
 
@@ -609,19 +626,22 @@ PHP_METHOD(Connection, getFunction)
         zend_string_release(parameter_name);
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 PHP_METHOD(Connection, setIniPath)
 {
+    zend_error_handling zeh;
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
     zend_string *path;
     SAP_UC *path_u;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
+
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &path) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -629,44 +649,51 @@ PHP_METHOD(Connection, setIniPath)
     free((char *)path_u);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception(error_info, "Failed to set INI file path");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
+
     RETURN_TRUE;
 }
 
 PHP_METHOD(Connection, reloadIniFile)
 {
+    zend_error_handling zeh;
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
     zend_parse_parameters_none();
 
     rc = RfcReloadIniFile(&error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception(error_info, "Failed to reload INI file");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
+
     RETURN_TRUE;
 }
 
 PHP_METHOD(Connection, setTraceDir)
 {
+    zend_error_handling zeh;
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
     zend_string *path;
     SAP_UC *path_u;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &path) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -674,40 +701,45 @@ PHP_METHOD(Connection, setTraceDir)
     free((char *)path_u);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception(error_info, "Failed to set trace directory");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 PHP_METHOD(Connection, setTraceLevel)
 {
+    zend_error_handling zeh;
     RFC_ERROR_INFO error_info;
     RFC_RC rc = RFC_OK;
     unsigned int level;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "l", &level) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
     if (level < 0 || level > 3) {
         zend_error(E_WARNING, "Failed to set trace level, out of range (0 - 3)");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
     rc = RfcSetTraceLevel(NULL, NULL, level, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_connection_exception(error_info, "Failed to set trace level");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 // Connection class methods
@@ -743,6 +775,7 @@ PHP_METHOD(Connection, rfcVersion)
 PHP_METHOD(RemoteFunction, invoke)
 {
     sapnwrfc_function_object *intern;
+    zend_error_handling zeh;
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     RFC_FUNCTION_HANDLE function_handle;
@@ -758,10 +791,11 @@ PHP_METHOD(RemoteFunction, invoke)
     SAP_UC *parameter_name_u;
     unsigned char rtrim_enabled = 0;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, &zeh);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "|hh", &in_parameters_hash, &options_hash) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -771,7 +805,8 @@ PHP_METHOD(RemoteFunction, invoke)
     function_handle = RfcCreateFunction(intern->function_desc_handle, &error_info);
     if (rc != RFC_OK) {
         sapnwrfc_throw_function_exception(error_info, "Failed to create function handle");
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
@@ -788,7 +823,8 @@ PHP_METHOD(RemoteFunction, invoke)
             sapnwrfc_throw_function_exception(error_info, "Failed to deactivate parameter %s", ZSTR_VAL(key));
 
             RfcDestroyFunction(function_handle, &error_info);
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
+
             RETURN_NULL();
         }
     } ZEND_HASH_FOREACH_END();
@@ -799,7 +835,8 @@ PHP_METHOD(RemoteFunction, invoke)
                 // not a string key
                 zend_error(E_WARNING, "All parameter keys must be strings");
                 RfcDestroyFunction(function_handle, &error_info);
-                zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                zend_restore_error_handling(&zeh);
+
                 RETURN_NULL();
             }
 
@@ -812,7 +849,8 @@ PHP_METHOD(RemoteFunction, invoke)
             if (rc != RFC_OK) {
                 sapnwrfc_throw_function_exception(error_info, "Failed to get description for parameter %s", ZSTR_VAL(key));
                 RfcDestroyFunction(function_handle, &error_info);
-                zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                zend_restore_error_handling(&zeh);
+
                 RETURN_NULL();
             }
 
@@ -823,7 +861,8 @@ PHP_METHOD(RemoteFunction, invoke)
                 sapnwrfc_throw_function_exception(error_info, "Failed to activate parameter %s", ZSTR_VAL(key));
 
                 RfcDestroyFunction(function_handle, &error_info);
-                zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                zend_restore_error_handling(&zeh);
+
                 RETURN_NULL();
             }
 
@@ -837,7 +876,8 @@ PHP_METHOD(RemoteFunction, invoke)
                     if (rfc_set_parameter_value(function_handle, intern->function_desc_handle, key, val) == RFC_SET_VALUE_ERROR) {
                         // setting the parameter failed; an exception has been thrown
                         RfcDestroyFunction(function_handle, &error_info);
-                        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                        zend_restore_error_handling(&zeh);
+
                         RETURN_NULL();
                     }
                     break;
@@ -845,7 +885,8 @@ PHP_METHOD(RemoteFunction, invoke)
                     // unknown direction
                     zend_error(E_WARNING, "Unknown parameter direction");
                     RfcDestroyFunction(function_handle, &error_info);
-                    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                    zend_restore_error_handling(&zeh);
+
                     RETURN_NULL();
             }
 
@@ -857,7 +898,8 @@ PHP_METHOD(RemoteFunction, invoke)
     if (rc != RFC_OK) {
         sapnwrfc_throw_function_exception(error_info, "Failed to invoke function %s", ZSTR_VAL(intern->name));
         RfcDestroyFunction(function_handle, &error_info);
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
@@ -878,7 +920,8 @@ PHP_METHOD(RemoteFunction, invoke)
         if (rc != RFC_OK) {
             sapnwrfc_throw_function_exception(error_info, "Failed to get parameter description for function %s", ZSTR_VAL(intern->name));
             RfcDestroyFunction(function_handle, &error_info);
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
+
             RETURN_NULL();
         }
 
@@ -887,7 +930,8 @@ PHP_METHOD(RemoteFunction, invoke)
         if (rc != RFC_OK) {
             sapnwrfc_throw_function_exception(error_info, "Failed to get parameter status");
             RfcDestroyFunction(function_handle, &error_info);
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
+
             RETURN_NULL();
         }
 
@@ -908,7 +952,8 @@ PHP_METHOD(RemoteFunction, invoke)
                     zend_string_release(tmp);
                     RfcDestroyFunction(function_handle, &error_info);
                     // getting the parameter failed; an exception has been thrown
-                    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+                    zend_restore_error_handling(&zeh);
+
                     RETURN_NULL();
                 }
 
@@ -922,20 +967,22 @@ PHP_METHOD(RemoteFunction, invoke)
     // destroy the function handle
     RfcDestroyFunction(function_handle, &error_info);
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 PHP_METHOD(RemoteFunction, setParameterActive)
 {
     sapnwrfc_function_object *intern;
+    zend_error_handling zeh;
     zend_string *parameter_name;
     zend_bool parameter_active;
     zval tmp;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, &zeh);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "Sb", &parameter_name, &parameter_active) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -944,19 +991,21 @@ PHP_METHOD(RemoteFunction, setParameterActive)
     ZVAL_BOOL(&tmp, parameter_active);
     zend_hash_update(intern->parameter_status, parameter_name, &tmp);
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 PHP_METHOD(RemoteFunction, isParameterActive)
 {
     sapnwrfc_function_object *intern;
+    zend_error_handling zeh;
     zend_string *parameter_name;
     zval *tmp;
 
     zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &parameter_name) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -966,11 +1015,13 @@ PHP_METHOD(RemoteFunction, isParameterActive)
 
     if(tmp == NULL) {
         zend_error(E_WARNING, "Failed to get status for parameter %s", ZSTR_VAL(parameter_name));
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         RETURN_NULL();
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
+
     RETURN_ZVAL(tmp, 1, 0);
 }
 
@@ -1081,13 +1132,15 @@ unsigned int rfc_clear_function_desc_cache(zend_string *function_name, zend_stri
 
 PHP_FUNCTION(clearFunctionDescCache)
 {
+    zend_error_handling zeh;
     zend_string *function_name;
     zend_string *repository_id = NULL;
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_exception_ce, &zeh);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS(), "S|S", &function_name, &repository_id) == FAILURE) {
-        zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+        zend_restore_error_handling(&zeh);
+
         return;
     }
 
@@ -1097,7 +1150,7 @@ PHP_FUNCTION(clearFunctionDescCache)
         RETVAL_BOOL(0);
     }
 
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 /* {{{ PHP_MINIT_FUNCTION

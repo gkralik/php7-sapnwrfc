@@ -50,6 +50,7 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
     zend_string *message;
     zval info;
     zval ex;
+    zend_error_handling zeh;
 
     va_start(args, msg);
     message = vstrpprintf(0, msg, args);
@@ -57,7 +58,7 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
 
     array_init(&info);
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
 
     object_init_ex(&ex, sapnwrfc_connection_exception_ce);
     zend_update_property_string(sapnwrfc_connection_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message));
@@ -88,14 +89,16 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
             break;
         case RFC_OK: // LCOV_EXCL_START
             zend_error(E_ERROR, "Internal error: exception handler called for RFC_OK");
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
             zend_string_release(message);
+
             return;
             // LCOV_EXCL_STOP
         default:
             zend_error(E_ERROR, "Internal error: unknown error group");
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
             zend_string_release(message);
+
             return;
     }
 
@@ -105,7 +108,7 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
     zend_string_release(message);
 
     zend_throw_exception_object(&ex);
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...)
@@ -114,6 +117,7 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
     zend_string *message;
     zval info;
     zval ex;
+    zend_error_handling zeh;
 
     va_start(args, msg);
     message = vstrpprintf(0, msg, args);
@@ -121,7 +125,7 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
 
     array_init(&info);
 
-    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, NULL);
+    zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, &zeh);
 
     object_init_ex(&ex, sapnwrfc_function_exception_ce);
     zend_update_property_string(sapnwrfc_function_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message));
@@ -152,13 +156,15 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
             break;
         case RFC_OK: // LCOV_EXCL_START
             zend_error(E_ERROR, "Internal error: exception handler called for RFC_OK");
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
+
             zend_string_release(message);
             return;
             // LCOV_EXCL_STOP
         default:
             zend_error(E_ERROR, "Internal error: unknown error group");
-            zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+            zend_restore_error_handling(&zeh);
+
             zend_string_release(message);
             return;
     }
@@ -169,7 +175,7 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
     zend_string_release(message);
 
     zend_throw_exception_object(&ex);
-    zend_replace_error_handling(EH_NORMAL, NULL, NULL);
+    zend_restore_error_handling(&zeh);
 }
 
 PHP_METHOD(Exception, getErrorInfo)
