@@ -10,9 +10,10 @@ marked with **BC break**.
 - Support for building with SAP NW RFC SDK 7.50
 - Support for building with clang
 - Windows builds: support passing search path via `--with-sapnwrfc=`
+- Windows builds: search for includes in `C:\nwrfcsdk` and `C:\nwrfcsdk_750` by default
 - Add `RemoteFunction::getFunctionDescription()` to retrieve a function's metadata (#79)
 - Add `RemoteFunction::getName()` retrieve a function's name
-### Chamged
+### Changed
 - use `zend_restore_error_handling()` to restore previous error handling
 ### Removed
 - Drop support for building with SAP NW RFC SDK < 7.50 **BC break**
