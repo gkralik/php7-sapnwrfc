@@ -35,8 +35,16 @@ if (PHP_SAPNWRFC != "no") {
         // all header files from the extension
         PHP_INSTALL_HEADERS("ext/sapnwrfc", "exceptions.h php_sapnwrfc.h rfc_parameters.h string_helper.h");
 
-        // flags needed for the sapnwrfc? (not tried it without yet, or what each do!!!)
-        ADD_FLAG("CFLAGS_SAPNWRFC", "/D SAPwithUNICODE /D UNICODE /D _UNICODE /D _AFXDLL /D _CRT_NON_CONFORMING_SWPRINTFS /D _CRT_SECURE_NO_DEPRECATE /D _CRT_NONSTDC_NO_DEPRECATE /D SAPonNT")
+        // set up CFLAGS
+        var CFLAGS_SAPNWRFC = "-DSAPonNT -D_CRT_NON_CONFORMING_SWPRINTFS -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_AFXDLL -DWIN32"
+            + " -D_WIN32_WINNT=0x0502 -DWIN64 -D_AMD64_ -DNDEBUG -DSAPwithUNICODE -DUNICODE -D_UNICODE -DSAPwithTHREADS"
+            + " -EHs -Gy -J -MD -nologo -W3 -Z7 -D_ATL_ALLOW_CHAR_UNSIGNED -GL -O2 -Oy- /we4552 /we4700 /we4789";
+        ADD_FLAG("CFLAGS_SAPNWRFC", CFLAGS_SAPNWRFC)
+
+        // skip  -MACHINE:amd64
+        var LDFLAGS_SAPNWRFC = "-NXCOMPAT -STACK:0x2000000 -SWAPRUN:NET -DEBUG -OPT:REF"
+            + " -DEBUGTYPE:CV,FIXUP -nologo -LTCG";
+		ADD_FLAG("LDFLAGS_SAPNWRFC", LDFLAGS_SAPNWRFC);
     }
 
 }
