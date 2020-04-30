@@ -1,7 +1,11 @@
 
 # SAP NW RFC extension for PHP 7
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WC3SGPNSW2NV4&source=url)
+
 This extension is intended to provide a means for PHP 7 developers to interface with the SAP NetWeaver SDK.
+
+If you find this project useful consider giving me a cup of coffee using the "Donate" button above.
 
 ## Usage
 
