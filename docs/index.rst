@@ -12,6 +12,12 @@ To start using ``php7-sapnwrfc``, follow the :ref:`quick-start`.
    This documentation is updated continually and thus always reflects 
    the latest development version of the extension.
 
+If you find this project useful, consider buying me a cup of coffee.
+
+.. image:: https://www.paypalobjects.com/en_US/AT/i/btn/btn_donateCC_LG.gif
+  :target: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WC3SGPNSW2NV4&source=url
+  :alt: Donate via PayPal
+
 Documentation
 -------------
 
