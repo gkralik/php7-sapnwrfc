@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -376,6 +376,22 @@
 <span class="sd">     * @return bool True if parameter is active, false if not.</span>
 <span class="sd">     */</span>
     <span class="k">public</span> <span class="k">function</span> <span class="nf">isParameterActive</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$parameterName</span><span class="p">)</span><span class="o">:</span> <span class="nx">bool</span> <span class="p">{}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Get the function&#39;s parameter description.</span>
+<span class="sd">     * </span>
+<span class="sd">     * @return array The parameter descriptions, indexed by parameter name.</span>
+<span class="sd">     * </span>
+<span class="sd">     * @throws FunctionCallException if the interface description cannot be retrieved.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getFunctionDescription</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span> <span class="p">{}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Get the function&#39;s name.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @return string The function name.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getName</span><span class="p">()</span><span class="o">:</span> <span class="nx">string</span> <span class="p">{}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -401,7 +417,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Gregor Kralik
+        &copy; Copyright 2016 - 2020 Gregor Kralik
 
     </p>
   </div>
