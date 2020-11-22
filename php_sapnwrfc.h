@@ -13,7 +13,9 @@
 extern zend_module_entry sapnwrfc_module_entry;
 #define phpext_sapnwrfc_ptr &sapnwrfc_module_entry
 
-#define PHP_SAPNWRFC_VERSION "2.0.0-alpha"
+#include "version.h"
+#define PHP_SAPNWRFC_VERSION GIT_VERSION
+
 #ifdef PHP_WIN32
 #    define PHP_SAPNWRFC_API __declspec(dllexport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
