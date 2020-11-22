@@ -1,7 +1,7 @@
 --TEST--
 setTraceDir() does only accept a string parameter.
 --SKIPIF--
-<?php include("skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"); ?>
 --FILE--
 <?php
 

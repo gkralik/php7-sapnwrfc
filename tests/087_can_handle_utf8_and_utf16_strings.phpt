@@ -1,7 +1,7 @@
 --TEST--
 UTF-8 and UTF-16 strings are handled correctly.
 --SKIPIF--
-<?php include('should_run_online_tests.inc'); ?>
+<?php include(__DIR__ . "/skipif_no_online_tests.inc"); ?>
 --FILE--
 <?php
 $config = include 'sapnwrfc.config.inc';

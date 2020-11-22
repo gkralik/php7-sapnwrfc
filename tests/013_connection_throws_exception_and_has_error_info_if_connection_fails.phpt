@@ -1,7 +1,7 @@
 --TEST--
 Connection throws ConnectionException with errorInfo set if connection fails.
 --SKIPIF--
-<?php include("skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"); ?>
 --FILE--
 <?php
 try {

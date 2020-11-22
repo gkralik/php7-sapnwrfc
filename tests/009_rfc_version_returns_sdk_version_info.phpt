@@ -1,7 +1,7 @@
 --TEST--
 rfcVersion() returns SDK version string x.y.z
 --SKIPIF--
-<?php include("skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"); ?>
 --FILE--
 <?php
 echo \SAPNWRFC\Connection::rfcVersion();

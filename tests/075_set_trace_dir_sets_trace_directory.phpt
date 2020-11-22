@@ -1,7 +1,7 @@
 --TEST--
 setTraceDir() sets trace directory.
 --SKIPIF--
-<?php include("should_run_online_tests.inc"); ?>
+<?php include(__DIR__ . "/skipif_no_online_tests.inc"); ?>
 --FILE--
 <?php
 $dir = __DIR__ . DIRECTORY_SEPARATOR . 'traces';
@@ -12,7 +12,7 @@ if(!is_dir($dir)) {
 
 \SAPNWRFC\Connection::setTraceDir($dir);
 
-$config = include "sapnwrfc.config.inc";
+$config = include __DIR__ .  "/sapnwrfc.config.inc";
 $config['trace'] = \SAPNWRFC\Connection::TRACE_LEVEL_FULL;
 $c = new \SAPNWRFC\Connection($config);
 $f = $c->getFunction('RFC_PING');

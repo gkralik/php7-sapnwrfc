@@ -1,10 +1,10 @@
 --TEST--
 Throws FunctionCallException if integer is out of range (0 - 255) for RFC INT1.
 --SKIPIF--
-<?php include("should_run_online_tests.inc"); ?>
+<?php include(__DIR__ . "/skipif_no_online_tests.inc"); ?>
 --FILE--
 <?php
-$config = include "sapnwrfc.config.inc";
+$config = include __DIR__ .  "/sapnwrfc.config.inc";
 $c = new \SAPNWRFC\Connection($config);
 
 $f = $c->getFunction("STFC_STRUCTURE");

@@ -1,13 +1,13 @@
 --TEST--
 Clearing the function desc cache works.
 --SKIPIF--
-<?php include("tests/should_run_online_tests.inc"); ?>
+<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
 --FILE--
 <?php
 use \SAPNWRFC\Connection;
 use function \SAPNWRFC\clearFunctionDescCache;
 
-$config = include "tests/sapnwrfc.config.inc";
+$config = include __DIR__ . "/../sapnwrfc.config.inc";;
 $c = new Connection($config);
 
 // lookup a function to warm the cache

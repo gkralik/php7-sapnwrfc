@@ -1,7 +1,7 @@
 --TEST--
 Connection constructor takes options hash as second parameter.
 --SKIPIF--
-<?php include(__DIR__ . "/../should_run_online_tests.inc"); ?>
+<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
 --FILE--
 <?php
 use \SAPNWRFC\Connection;

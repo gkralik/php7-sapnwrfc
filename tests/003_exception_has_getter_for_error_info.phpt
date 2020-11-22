@@ -1,7 +1,7 @@
 --TEST--
 SAPNWRFC\Exception has getter for "errorInfo"
 --SKIPIF--
-<?php include("skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"); ?>
 --FILE--
 <?php
 $e = new \SAPNWRFC\Exception;
