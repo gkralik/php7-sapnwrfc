@@ -1,7 +1,7 @@
 --TEST--
 SAPNWRFC\Exception extends \RuntimeException
 --SKIPIF--
-<?php include __DIR__ . "/skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"; ?>
 --FILE--
 <?php
 $e = new \SAPNWRFC\Exception;

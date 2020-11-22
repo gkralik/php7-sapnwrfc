@@ -1,7 +1,7 @@
 --TEST--
 SAPNWRFC\Connection has constants for trace levels.
 --SKIPIF--
-<?php include __DIR__ . "/skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"; ?>
 --FILE--
 <?php
 var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_OFF);

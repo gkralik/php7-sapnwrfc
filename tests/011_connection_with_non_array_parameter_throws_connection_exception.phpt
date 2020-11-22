@@ -1,7 +1,7 @@
 --TEST--
 Connection with a non-array parameter throws ConnectionException.
 --SKIPIF--
-<?php include __DIR__ . "/skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"; ?>
 --FILE--
 <?php
 function testConnection($param) {

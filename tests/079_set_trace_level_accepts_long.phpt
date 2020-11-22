@@ -1,7 +1,7 @@
 --TEST--
 setTraceLevel() does only accept a long parameter.
 --SKIPIF--
-<?php include __DIR__ . "/skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"; ?>
 --FILE--
 <?php
 

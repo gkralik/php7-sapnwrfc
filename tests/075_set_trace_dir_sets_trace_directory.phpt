@@ -1,7 +1,7 @@
 --TEST--
 setTraceDir() sets trace directory.
 --SKIPIF--
-<?php include(__DIR__ . "/skipif_no_online_tests.inc"); ?>
+<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
 --FILE--
 <?php
 $dir = __DIR__ . DIRECTORY_SEPARATOR . 'traces';

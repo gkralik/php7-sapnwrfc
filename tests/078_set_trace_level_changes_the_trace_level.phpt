@@ -1,7 +1,7 @@
 --TEST--
 setTraceLevel() changes the trace level.
 --SKIPIF--
-<?php include(__DIR__ . "/skipif_no_online_tests.inc"); ?>
+<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
 --FILE--
 <?php
 

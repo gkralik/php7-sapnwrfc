@@ -1,7 +1,7 @@
 --TEST--
 setIniPath() returns true if path is correct and INI file is loaded.
 --SKIPIF--
-<?php include __DIR__ . "/skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"; ?>
 --FILE--
 <?php
 chdir(dirname(__FILE__));

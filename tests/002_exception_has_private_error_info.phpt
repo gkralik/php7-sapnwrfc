@@ -1,7 +1,7 @@
 --TEST--
 SAPNWRFC\Exception has private "errorInfo" property
 --SKIPIF--
-<?php include __DIR__ . "/skipif.inc"); ?>
+<?php include __DIR__ . "/skipif.inc"; ?>
 --FILE--
 <?php
 $e = new \SAPNWRFC\Exception;

@@ -1,7 +1,7 @@
 --TEST--
 clearFunctionDescCache function exists.
 --SKIPIF--
-<?php include __DIR__ . "/../skipif.inc"); ?>
+<?php include __DIR__ . "/../skipif.inc"; ?>
 --FILE--
 <?php
 \var_dump(function_exists('\SAPNWRFC\clearFunctionDescCache'));
