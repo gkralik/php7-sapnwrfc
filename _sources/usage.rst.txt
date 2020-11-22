@@ -201,6 +201,11 @@ maps between RFC data types and builtin PHP data types as follows:
 +-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
 | F         | FLOAT    | double    | Floating point number                             |                                                |
 +-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| DECFLOAT16| DECF16   | string    | Decimal floating point number                     | Uses string to prevent rounding errors.        |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+| DECFLOAT34| DECF34   | string    | Decimal floating point number                     | Uses string to prevent rounding errors.        |
++-----------+----------+-----------+---------------------------------------------------+------------------------------------------------+
+
 
 Additionally, there are also tables and structures:
 
