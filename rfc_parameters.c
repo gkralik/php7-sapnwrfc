@@ -286,6 +286,48 @@ rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     return RFC_SET_VALUE_OK;
 }
 
+rfc_set_value_return_t rfc_set_decfloat_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+{
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    zend_string *zname;
+    SAP_UC *value_u;
+
+    // if the value is a reference, get the reference value first
+    if (Z_ISREF_P(value)) {
+        value = Z_REFVAL_P(value);
+    }
+
+    // if argument type is int or double, convert to string
+    if (Z_TYPE_P(value) == IS_LONG || Z_TYPE_P(value) == IS_DOUBLE) {
+        convert_to_string(value);
+    }
+
+    // if the value is still not a string, error out
+    if (Z_TYPE_P(value) != IS_STRING) {
+        zname = sapuc_to_zend_string(name);
+        zend_error(E_WARNING, "Failed to set DECFLOAT parameter %s, expected int, double or string", ZSTR_VAL(zname));
+        zend_string_release(zname);
+
+        return RFC_SET_VALUE_ERROR;
+    }
+
+    // set the parameter
+    value_u = zval_to_sapuc(value);
+    rc = RfcSetString(h, name, value_u, strlenU(value_u), &error_info);
+    free((char *)value_u);
+
+    if (rc != RFC_OK) {
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set DECFLOAT parameter %s", ZSTR_VAL(zname));
+        zend_string_release(zname);
+
+        return RFC_SET_VALUE_ERROR;
+    }
+
+    return RFC_SET_VALUE_OK;
+}
+
 rfc_set_value_return_t rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
@@ -573,6 +615,10 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
         case RFCTYPE_FLOAT:
             ret = rfc_set_float_value(h, field_desc.name, value);
             break;
+        case RFCTYPE_DECF16:
+        case RFCTYPE_DECF34:
+            ret = rfc_set_decfloat_value(h, field_desc.name, value);
+            break;
         case RFCTYPE_INT:
             ret = rfc_set_int_value(h, field_desc.name, value);
             break;
@@ -655,6 +701,10 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
         case RFCTYPE_BCD: // fall through; map to float
         case RFCTYPE_FLOAT:
             ret = rfc_set_float_value(function_handle, parameter_name_u, value);
+            break;
+        case RFCTYPE_DECF16:
+        case RFCTYPE_DECF34:
+            ret = rfc_set_decfloat_value(function_handle, parameter_name_u, value);
             break;
         case RFCTYPE_INT:
             ret = rfc_set_int_value(function_handle, parameter_name_u, value);
@@ -871,6 +921,52 @@ zval rfc_get_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     }
 
     ZVAL_DOUBLE(&value, (double)buf);
+
+    return value;
+}
+
+zval rfc_get_decfloat_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned int len)
+{
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    zend_string *zname;
+    zval value;
+    SAP_UC *buf;
+    unsigned int str_len, result_len;
+
+    // upper bound for the length of the string representation of a DECFLOAT
+    // is given by (2*len)-1 (each digit is encoded in 4 bits, first 4 bits are
+    // reserved for sign).
+    // additionally, a sign char and a decimal separator may be present, which
+    // increases it to (2*len)+1.
+    // and an exponent character, sign and the exponent itself increase it by 9, so
+    // we end up with (2*len)+10
+    str_len = 2 * len + 10;
+
+    buf = mallocU(str_len + 1);
+
+    rc = RfcGetString(h, name, buf, str_len + 1, &result_len, &error_info);
+    if (rc == RFC_BUFFER_TOO_SMALL) {
+        // the buffer is too small
+        free(buf);
+        str_len = result_len;
+        buf = mallocU(str_len + 1);
+
+        rc = RfcGetString(h, name, buf, str_len + 1, &result_len, &error_info);
+        if (rc != RFC_OK) {
+            free(buf);
+
+            zname = sapuc_to_zend_string(name);
+            sapnwrfc_throw_function_exception(error_info, "Failed to get DECFLOAT parameter %s", ZSTR_VAL(zname));
+            zend_string_release(zname);
+
+            ZVAL_NULL(&value);
+            return value;
+        }
+    }
+
+    value = sapuc_to_zval_len(buf, result_len);
+    free(buf);
 
     return value;
 }
@@ -1152,6 +1248,10 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc, unsi
         case RFCTYPE_FLOAT:
             value = rfc_get_float_value(h, field_desc.name);
             break;
+        case RFCTYPE_DECF16:
+        case RFCTYPE_DECF34:
+            value = rfc_get_decfloat_value(h, field_desc.name, field_desc.nucLength);
+            break;
         case RFCTYPE_INT:
             value = rfc_get_int_value(h, field_desc.name);
             break;
@@ -1232,6 +1332,10 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
         case RFCTYPE_BCD: // fall through; map to float
         case RFCTYPE_FLOAT:
             value = rfc_get_float_value(function_handle, parameter_name_u);
+            break;
+        case RFCTYPE_DECF16:
+        case RFCTYPE_DECF34:
+            value = rfc_get_decfloat_value(function_handle, parameter_name_u, parameter_desc.nucLength);
             break;
         case RFCTYPE_INT:
             value = rfc_get_int_value(function_handle, parameter_name_u);
