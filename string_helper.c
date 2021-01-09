@@ -14,75 +14,84 @@
 SAP_UC *zval_to_sapuc(zval *zv)
 {
     RFC_ERROR_INFO error_info;
-    SAP_UC *sapuc;
-    unsigned sapuc_size, result_length = 0;
+    SAP_UC *uc_str;
+    unsigned int uc_str_size;
+    unsigned int result_len = 0;
 
-    sapuc_size = Z_STRLEN_P(zv) + 1;
-    sapuc = callocU(1, sapuc_size);
-    RfcUTF8ToSAPUC((RFC_BYTE *) Z_STRVAL_P(zv), Z_STRLEN_P(zv), sapuc, &sapuc_size,
-            &result_length, &error_info);
-    return sapuc;
+    uc_str_size = Z_STRLEN_P(zv) + 1;
+    uc_str = (SAP_UC *)mallocU(uc_str_size);
+    memsetU(uc_str, 0, uc_str_size);
+
+    RfcUTF8ToSAPUC((RFC_BYTE *)Z_STRVAL_P(zv), Z_STRLEN_P(zv), uc_str, &uc_str_size, &result_len, &error_info);
+
+    return uc_str;
 }
 
 SAP_UC *zend_string_to_sapuc(zend_string *str)
 {
-    RFC_ERROR_INFO error_info;
-    SAP_UC *sapuc;
-    unsigned sapuc_size, result_length = 0;
 
-    sapuc_size = ZSTR_LEN(str) + 1;
-    sapuc = callocU(1, sapuc_size);
+    zval zv;
 
-    RfcUTF8ToSAPUC((RFC_BYTE *) ZSTR_VAL(str), ZSTR_LEN(str), sapuc,
-            &sapuc_size, &result_length, &error_info);
-    return sapuc;
+    ZVAL_STR(&zv, str);
+
+    return zval_to_sapuc(&zv);
 }
 
-zval sapuc_to_zval_len_ex(SAP_UC *str, unsigned len, unsigned char rtrim)
+zval sapuc_to_zval_len_ex(SAP_UC *uc_str, unsigned int uc_str_len, unsigned char rtrim)
 {
     RFC_ERROR_INFO error_info;
-    unsigned utf8size, result_length;
+    unsigned int utf8_size;
+    unsigned int result_len = 0;
     char *utf8;
-    zval out;
+    zval zv;
 
-    utf8size = len * 2 + 1;
-    utf8 = calloc(1, utf8size);
+    // try with 5 bytes per unicode character
+    utf8_size = uc_str_len * 5 + 1;
+    utf8 = (char *)malloc(utf8_size);
+    utf8[0] = '\0';
 
-    result_length = 0;
-    RfcSAPUCToUTF8(str, len, (RFC_BYTE *)utf8, &utf8size, &result_length, &error_info);
+    RfcSAPUCToUTF8(uc_str, uc_str_len, (RFC_BYTE *)utf8, &utf8_size, &result_len, &error_info);
 
-    if (rtrim && result_length > 0) {
-        int i = result_length-1;
+    if (error_info.code != RFC_OK) {
+        // buffer was too small
+        free(utf8);
+
+        ZVAL_NULL(&zv);
+        return zv;
+    }
+
+    if (rtrim && result_len > 0) {
+        int i = result_len-1;
 
         while (i >= 0 && isspace(utf8[i])) {
             i--;
         }
 
         utf8[i+1] = '\0';
-        result_length = i+1;
+        result_len = i+1;
     }
 
-    ZVAL_STRINGL(&out, utf8, result_length);
+    ZVAL_STRINGL(&zv, utf8, result_len);
     free(utf8);
 
-    return out;
+    return zv;
+
+    // XXX: checking for RFC_BUFFER_TOO_SMALL and using the returned required size does not work
+    //      -> even when calling RfcSAPUCToUTF8() with the returned lenght it always returns
+    //         RFC_BUFFER_TOO_SMALL with an even bigger size requirement... ??
 }
 
-zend_string *sapuc_to_zend_string(SAP_UC *str)
+zend_string *sapuc_to_zend_string(SAP_UC *uc_str)
 {
-    RFC_ERROR_INFO error_info;
-    unsigned utf8size, result_length;
-    char *utf8;
+    zval zv;
     zend_string *out;
 
-    utf8size = strlenU(str) * 2 + 1;
-    utf8 = calloc(1, utf8size);
+    unsigned uc_str_len = strlenU(uc_str);
 
-    result_length = 0;
-    RfcSAPUCToUTF8(str, strlenU(str), (RFC_BYTE *)utf8, &utf8size, &result_length, &error_info);
+    zv = sapuc_to_zval_len_ex(uc_str, uc_str_len, 0);
 
-    out = zend_string_init(utf8, result_length, 0);
-    free(utf8);
+    out = zend_string_init(Z_STRVAL(zv), Z_STRLEN(zv), 0);
+    zval_ptr_dtor(&zv); // release the zval
 
     return out;
 }

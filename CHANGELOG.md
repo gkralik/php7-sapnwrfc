@@ -20,6 +20,7 @@ marked with **BC break**.
 - Remove the `RemoteFunction` properties (parameter description) **BC break**
 ### Fixed
 - Fix a memory leak in `PHP_MINFO_FUNCTION(sapnwrfc)`: free `version`
+- Fix memory corruption when converting SAPUC strings to/from zval/zend_string
 
 ## [1.3.0] - 2019-02-23
 ### Added
