@@ -1,4 +1,4 @@
-dnl Copyright (c) 2016 - 2020 Gregor Kralik <g.kralik (at) gmail.com>
+dnl Copyright (c) 2016 - 2021 Gregor Kralik <g.kralik (at) gmail.com>
 dnl
 dnl This source code is licensed under the MIT license found in the
 dnl LICENSE file in the root directory of this source tree.
