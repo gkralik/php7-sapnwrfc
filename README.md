@@ -7,6 +7,14 @@ This extension is intended to provide a means for PHP 7 developers to interface 
 
 If you find this project useful consider giving me a cup of coffee using the "Donate" button above.
 
+## Supported versions
+
+The extension is tested with PHP 7.3 and 7.4 and SAP NW RFC SDK version 7.50.
+
+*Note 1:* PHP 8 support is planned, but not yet done.
+
+*Note 2:* SAP NW RFC SDK version 7.20 is supported up to release 1.3.
+
 ## Usage
 
 You can find detailed instructions on how to build and use this extension at https://gkralik.github.io/php7-sapnwrfc.
