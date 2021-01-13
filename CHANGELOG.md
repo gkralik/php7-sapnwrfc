@@ -13,6 +13,7 @@ marked with **BC break**.
 - Windows builds: search for includes in `C:\nwrfcsdk` and `C:\nwrfcsdk_750` by default
 - Add `RemoteFunction::getFunctionDescription()` to retrieve a function's metadata (#79)
 - Add `RemoteFunction::getName()` retrieve a function's name
+- Add support for `RFCTYPE_DECF16` and `RFCTYPE_DECF34` (#99)
 ### Changed
 - use `zend_restore_error_handling()` to restore previous error handling
 ### Removed
