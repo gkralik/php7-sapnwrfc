@@ -6,4 +6,4 @@ version() returns version string x.y.z
 <?php
 echo \SAPNWRFC\Connection::version();
 --EXPECTREGEX--
-\d\.\d\.\d(-.*)
+\d\.\d\.\d(-.*)?
