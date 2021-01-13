@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.4.0] - 2021-01-13
 This is a major release with breaking changes. For details, see changes below
 marked with **BC break**.
 
@@ -131,7 +132,8 @@ marked with **BC break**.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.3.0...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/gkralik/php7-sapnwrfc/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/gkralik/php7-sapnwrfc/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/gkralik/php7-sapnwrfc/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/gkralik/php7-sapnwrfc/compare/1.1.3...1.2.0
