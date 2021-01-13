@@ -19,7 +19,8 @@ The SAP NW RFC SDK is fully backwards compatible, supporting all NetWeaver syste
 from today's S4 down to R/3 release 4.6C. Using the latest version is recommended.
 
 .. note::
-   This extension only supports building for SAP NW RFC SDK 7.50.
+   .. versionchanged:: 1.4.0
+      This extension only supports building for SAP NW RFC SDK 7.50.
 
 Download the SAP NW RFC library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
