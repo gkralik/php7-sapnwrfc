@@ -7,7 +7,7 @@ This is a major release with breaking changes. For details, see changes below
 marked with **BC break**.
 
 ### Added
-- Support for building with SAP NW RFC SDK 7.50
+- Support for building with SAP NW RFC SDK 7.50 (#69)
 - Support for building with clang
 - Windows builds: support passing search path via `--with-sapnwrfc=`
 - Windows builds: search for includes in `C:\nwrfcsdk` and `C:\nwrfcsdk_750` by default
@@ -20,7 +20,7 @@ marked with **BC break**.
 - Remove the `RemoteFunction` properties (parameter description) **BC break**
 ### Fixed
 - Fix a memory leak in `PHP_MINFO_FUNCTION(sapnwrfc)`: free `version`
-- Fix memory corruption when converting SAPUC strings to/from zval/zend_string
+- Fix memory corruption when converting SAPUC strings to/from zval/zend_string (#101)
 
 ## [1.3.0] - 2019-02-23
 ### Added
