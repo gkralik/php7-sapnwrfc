@@ -99,88 +99,43 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_Connection___construct, 0, 0, 1)
     ZEND_ARG_ARRAY_INFO(0, options, 1)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_getAttributes, IS_ARRAY, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_getAttributes, IS_ARRAY, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_ping, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_ping, _IS_BOOL, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_Connection_getFunction, 0, 1, SAPNWRFC\\RemoteFunction, 0)
-#else
-// NOTE: strangeley, the macro is defined with class_name, not #class_name. enclose in quotes to mitigate
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_getFunction, 0, 1, IS_OBJECT, "SAPNWRFC\\RemoteFunction", 0)
-#endif
     ZEND_ARG_TYPE_INFO(0, functionName, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, invalidateCache, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_close, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_close, _IS_BOOL, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setIniPath, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setIniPath, 0, 1, _IS_BOOL, NULL, 0)
-#endif
     ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_reloadIniFile, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_reloadIniFile, _IS_BOOL, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceDir, 0, 1, _IS_BOOL, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceDir, 0, 1, _IS_BOOL, NULL, 1)
-#endif
     ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceLevel, 0, 1, _IS_BOOL, 1)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceLevel, 0, 1, _IS_BOOL, NULL, 1)
-#endif
     ZEND_ARG_TYPE_INFO(0, level, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_version, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_version, IS_STRING, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_rfcVersion, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_rfcVersion, IS_STRING, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 0, IS_ARRAY, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 0, IS_ARRAY, NULL, 0)
-#endif
     ZEND_ARG_ARRAY_INFO(0, parameters, 0)
     ZEND_ARG_ARRAY_INFO(0, options, 0)
 ZEND_END_ARG_INFO()
@@ -190,34 +145,18 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_RemoteFunction_setParameterActive, 0, 0, 2)
     ZEND_ARG_TYPE_INFO(0, isActive, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_isParameterActive, 0, 1, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_isParameterActive, 0, 1, _IS_BOOL, NULL, 0)
-#endif
     ZEND_ARG_TYPE_INFO(0, parameterName, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getFunctionDescription, 0, 1, IS_ARRAY, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getFunctionDescription, 0, 1, IS_ARRAY, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getName, 0, 1, IS_STRING, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getName, 0, 1, IS_STRING, NULL, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 
-#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, 0)
-#else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, NULL, 0)
-#endif
     ZEND_ARG_TYPE_INFO(0, functionName, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, repositoryId, IS_STRING, 1)
 ZEND_END_ARG_INFO()
