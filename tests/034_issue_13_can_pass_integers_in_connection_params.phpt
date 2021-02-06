@@ -1,10 +1,13 @@
 --TEST--
 Integer parameters can be passed in connection options (eg trace => 0)
 --SKIPIF--
-<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
+<?php
+require_once(__DIR__ . '/skipif.inc');
+skipif_online_tests_disabled();
+?>
 --FILE--
 <?php
-$config = include __DIR__ .  "/sapnwrfc.config.inc";
+$config = require(__DIR__ . '/sapnwrfc.config.inc');
 
 try {
     $c = new \SAPNWRFC\Connection(array_merge($config, [

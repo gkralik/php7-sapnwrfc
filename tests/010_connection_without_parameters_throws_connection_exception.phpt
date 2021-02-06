@@ -1,7 +1,9 @@
 --TEST--
 Connection without parameters throws ConnectionException.
 --SKIPIF--
-<?php include __DIR__ . "/skipif.inc"; ?>
+<?php
+require_once(__DIR__ . '/skipif.inc');
+?>
 --FILE--
 <?php
 try {

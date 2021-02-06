@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Re-organize tests (skip conditions, environment variables)
 
 ## [1.4.0] - 2021-01-13
 This is a major release with breaking changes. For details, see changes below

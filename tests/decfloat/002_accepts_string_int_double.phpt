@@ -2,11 +2,13 @@
 decfloat: accepts string, int or double
 --SKIPIF--
 <?php
-include __DIR__ . "/../skipif_no_online_tests.inc";
-include __DIR__ . "/../skipif_no_custom_tests.inc";
+require_once(__DIR__ . '/../skipif.inc');
+skipif_online_tests_disabled();
+skipif_custom_tests_disabled();
+?>
 --FILE--
 <?php
-$config = require __DIR__ . "/../sapnwrfc.config.inc";
+$config = require(__DIR__ . '/../sapnwrfc.config.inc');
 
 $c = new \SAPNWRFC\Connection($config);
 

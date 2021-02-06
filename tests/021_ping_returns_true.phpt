@@ -1,10 +1,13 @@
 --TEST--
 ping() returns true if connection is open.
 --SKIPIF--
-<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
+<?php
+require_once(__DIR__ . '/skipif.inc');
+skipif_online_tests_disabled();
+?>
 --FILE--
 <?php
-$config = include __DIR__ .  "/sapnwrfc.config.inc";
+$config = require(__DIR__ . '/sapnwrfc.config.inc');
 $c = new \SAPNWRFC\Connection($config);
 
 var_dump($c->ping());

@@ -1,9 +1,11 @@
 --TEST--
 Throws FunctionCallException if RFC NUM parameter too long.
 --SKIPIF--
-<?php include __DIR__ . "/../skipif_no_online_tests.inc"; die("skip No suitable RFC to test."); ?>
+<?php
+require_once(__DIR__ . '/skipif.inc');
+skipif_online_tests_disabled();
+die('skip No suitable RFC to test.');
+?>
 --FILE--
 <?php
-$config = include __DIR__ .  "/sapnwrfc.config.inc";
-$c = new \SAPNWRFC\Connection($config);
 --EXPECT--

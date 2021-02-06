@@ -1,12 +1,15 @@
 --TEST--
 Looking up a function with disabled function desc cache works
 --SKIPIF--
-<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
+<?php
+require_once(__DIR__ . '/../skipif.inc');
+skipif_online_tests_disabled();
+?>
 --FILE--
 <?php
 use \SAPNWRFC\Connection;
 
-$config = include __DIR__ . "/../sapnwrfc.config.inc";
+$config = require(__DIR__ . '/../sapnwrfc.config.inc');
 $c = new Connection($config, ['use_function_desc_cache' => false]);
 
 $f = $c->getFunction('STFC_STRUCTURE');
