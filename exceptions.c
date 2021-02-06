@@ -61,8 +61,9 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
     zend_replace_error_handling(EH_THROW, sapnwrfc_connection_exception_ce, &zeh);
 
     object_init_ex(&ex, sapnwrfc_connection_exception_ce);
-    zend_update_property_string(sapnwrfc_connection_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message));
-    zend_update_property_long(sapnwrfc_connection_exception_ce, &ex, "code", sizeof("code") - 1, error_info.code);
+
+    zend_update_property_string(sapnwrfc_connection_exception_ce, SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(ex), "message", sizeof("message") - 1, ZSTR_VAL(message));
+    zend_update_property_long(sapnwrfc_connection_exception_ce, SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(ex), "code", sizeof("code") - 1, error_info.code);
 
     // populate errorInfo array
     add_assoc_long(&info, "code", error_info.code);
@@ -102,7 +103,7 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
             return;
     }
 
-    zend_update_property(sapnwrfc_connection_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
+    zend_update_property(sapnwrfc_connection_exception_ce, SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(ex), "errorInfo", sizeof("errorInfo") - 1, &info);
 
     zval_ptr_dtor(&info);
     zend_string_release(message);
@@ -128,8 +129,9 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
     zend_replace_error_handling(EH_THROW, sapnwrfc_function_exception_ce, &zeh);
 
     object_init_ex(&ex, sapnwrfc_function_exception_ce);
-    zend_update_property_string(sapnwrfc_function_exception_ce, &ex, "message", sizeof("message") - 1, ZSTR_VAL(message));
-    zend_update_property_long(sapnwrfc_function_exception_ce, &ex, "code", sizeof("code") - 1, error_info.code);
+
+    zend_update_property_string(sapnwrfc_function_exception_ce, SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(ex), "message", sizeof("message") - 1, ZSTR_VAL(message));
+    zend_update_property_long(sapnwrfc_function_exception_ce, SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(ex), "code", sizeof("code") - 1, error_info.code);
 
     // populate errorInfo array
     add_assoc_long(&info, "code", error_info.code);
@@ -169,7 +171,7 @@ void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...
             return;
     }
 
-    zend_update_property(sapnwrfc_function_exception_ce, &ex, "errorInfo", sizeof("errorInfo") - 1, &info);
+    zend_update_property(sapnwrfc_function_exception_ce, SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(ex), "errorInfo", sizeof("errorInfo") - 1, &info);
 
     zval_ptr_dtor(&info);
     zend_string_release(message);
@@ -184,7 +186,8 @@ PHP_METHOD(Exception, getErrorInfo)
     zval *error_info;
 
     zend_parse_parameters_none();
-    error_info = zend_read_property(sapnwrfc_exception_ce, getThis(), "errorInfo", sizeof("errorInfo") - 1, 0, &tmp);
+
+    error_info = zend_read_property(sapnwrfc_exception_ce, SAPNWRFC_EXC_Z_OBJ_OR_ZVAL_P(getThis()), "errorInfo", sizeof("errorInfo") - 1, 0, &tmp);
 
     RETURN_ZVAL(error_info, 1, 0);
 }

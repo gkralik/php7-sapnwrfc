@@ -12,6 +12,14 @@
 #ifndef _EXCEPTIONS_H
 #define _EXCEPTIONS_H
 
+#if PHP_VERSION_ID >= 80000
+#   define SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(x) Z_OBJ(x)
+#   define SAPNWRFC_EXC_Z_OBJ_OR_ZVAL_P(x) Z_OBJ_P(x)
+#else
+#   define SAPNWRFC_EXC_Z_OBJ_OR_ZVAL(x) &x
+#   define SAPNWRFC_EXC_Z_OBJ_OR_ZVAL_P(x) x
+#endif
+
 PHP_METHOD(Exception, getErrorInfo);
 
 void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, ...);
