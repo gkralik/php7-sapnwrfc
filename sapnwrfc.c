@@ -140,7 +140,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_invoke, 0, 0, IS_
     ZEND_ARG_ARRAY_INFO(0, options, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_RemoteFunction_setParameterActive, 0, 0, 2)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_setParameterActive, 0, 2, IS_VOID, 0)
     ZEND_ARG_TYPE_INFO(0, parameterName, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, isActive, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
