@@ -356,8 +356,7 @@ PHP_METHOD(Connection, __construct)
 
     len = zend_hash_num_elements(connection_params);
     if (len == 0) {
-        zend_error(E_WARNING, "No connection parameters given");
-        zend_restore_error_handling(&zeh);
+        zend_throw_exception(sapnwrfc_connection_exception_ce, "No connection parameters given", 0);
 
         return;
     }
@@ -642,7 +641,7 @@ PHP_METHOD(Connection, setTraceLevel)
     zend_restore_error_handling(&zeh);
 
     if (level < 0 || level > 3) {
-        zend_error(E_WARNING, "Failed to set trace level, out of range (0 - 3)");
+        zend_throw_exception(sapnwrfc_connection_exception_ce, "Failed to set trace level. Value out of range (expected 0 - 3)", 0);
 
         return;
     }
@@ -743,9 +742,9 @@ PHP_METHOD(RemoteFunction, invoke)
 
     if (in_parameters_hash) {
         ZEND_HASH_FOREACH_STR_KEY_VAL(in_parameters_hash, key, val) {
-            if (!key) {
-                // not a string key
-                zend_error(E_WARNING, "All parameter keys must be strings");
+            if (!key) { // not a string key
+                zend_throw_exception(sapnwrfc_function_exception_ce, "All parameter keys must be strings", 0);
+
                 RfcDestroyFunction(function_handle, &error_info);
 
                 RETURN_NULL();
@@ -789,9 +788,9 @@ PHP_METHOD(RemoteFunction, invoke)
                         RETURN_NULL();
                     }
                     break;
-                default:
-                    // unknown direction
-                    zend_error(E_WARNING, "Unknown parameter direction");
+                default: // unknown direction
+                    zend_throw_exception(sapnwrfc_function_exception_ce, "Internal error: unknown parameter direction", 0);
+
                     RfcDestroyFunction(function_handle, &error_info);
 
                     RETURN_NULL();
@@ -912,7 +911,7 @@ PHP_METHOD(RemoteFunction, isParameterActive)
     tmp = zend_hash_find(intern->parameter_status, parameter_name);
 
     if(tmp == NULL) {
-        zend_error(E_WARNING, "Failed to get status for parameter %s", ZSTR_VAL(parameter_name));
+        zend_throw_exception_ex(sapnwrfc_function_exception_ce, 0, "Failed to get status for parameter %s: invalid parameter name", ZSTR_VAL(parameter_name));
 
         RETURN_NULL();
     }
