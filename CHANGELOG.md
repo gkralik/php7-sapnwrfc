@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Changed
 - Re-organize tests (skip conditions, environment variables)
+- Throw `\Exception` or `\TypeError` for parameter parsing errors (instead of `\SAPNWRFC\Exception`) **BC break**
 ### Removed
 - Remove support for PHP < 7.2
 

@@ -12,8 +12,8 @@ $c = new \SAPNWRFC\Connection($config);
 
 try {
     $c->getAttributes('foobar');
-} catch(\SAPNWRFC\ConnectionException $e) {
-    echo 'ok';
+} catch(\Throwable $t) {
+    echo $t->getMessage() . PHP_EOL;
 }
---EXPECT--
-ok
+--EXPECTF--
+SAPNWRFC\Connection::getAttributes() expects exactly 0 %s, %d given

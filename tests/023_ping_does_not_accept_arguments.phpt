@@ -11,8 +11,8 @@ $config = require(__DIR__ . '/sapnwrfc.config.inc');
 $c = new \SAPNWRFC\Connection($config);
 try {
     $c->ping('foobar');
-} catch(\SAPNWRFC\ConnectionException $e) {
-    echo 'ok';
+} catch(\Throwable $t) {
+    echo $t->getMessage() . PHP_EOL;
 }
---EXPECT--
-ok
+--EXPECTF--
+SAPNWRFC\Connection::ping() expects exactly 0 %s, %d given

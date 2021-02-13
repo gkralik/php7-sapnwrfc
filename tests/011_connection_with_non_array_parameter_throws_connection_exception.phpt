@@ -1,5 +1,5 @@
 --TEST--
-Connection with a non-array parameter throws ConnectionException.
+Connection with a non-array parameter throws.
 --SKIPIF--
 <?php
 require_once(__DIR__ . '/skipif.inc');
@@ -8,9 +8,11 @@ require_once(__DIR__ . '/skipif.inc');
 <?php
 function testConnection($param) {
     try {
-        $c = new \SAPNWRFC\Connection();
+        $c = new \SAPNWRFC\Connection($param);
         return true;
-    } catch(\SAPNWRFC\ConnectionException $e) {
+    } catch(\Exception $e) { // PHP 7
+        return false;
+    } catch(\TypeError $e) { // PHP 8
         return false;
     }
 }

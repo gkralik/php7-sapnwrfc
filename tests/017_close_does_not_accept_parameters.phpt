@@ -13,8 +13,8 @@ $c = new \SAPNWRFC\Connection($config);
 
 try {
     $c->close('foobar');
-} catch(\SAPNWRFC\ConnectionException $e) {
-    echo "ok";
+} catch(\Throwable $t) {
+    echo $t->getMessage() . PHP_EOL;
 }
---EXPECT--
-ok
+--EXPECTF--
+SAPNWRFC\Connection::close() expects exactly 0 %s, %d given

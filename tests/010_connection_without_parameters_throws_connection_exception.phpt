@@ -1,5 +1,5 @@
 --TEST--
-Connection without parameters throws ConnectionException.
+Connection without parameters throws.
 --SKIPIF--
 <?php
 require_once(__DIR__ . '/skipif.inc');
@@ -8,8 +8,8 @@ require_once(__DIR__ . '/skipif.inc');
 <?php
 try {
     $c = new \SAPNWRFC\Connection();
-} catch(\SAPNWRFC\ConnectionException $e) {
-    echo 'ok';
+} catch(\Throwable $t) {
+    echo $t->getMessage() . PHP_EOL;
 }
---EXPECT--
-ok
+--EXPECTF--
+SAPNWRFC\Connection::__construct() expects at least 1 %s, %d given

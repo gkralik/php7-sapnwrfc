@@ -8,8 +8,8 @@ require_once(__DIR__ . '/skipif.inc');
 <?php
 try {
     \SAPNWRFC\Connection::reloadIniFile('foo');
-} catch(\SAPNWRFC\ConnectionException $e) {
-    echo 'ok';
+} catch(\Throwable $t) {
+    echo $t->getMessage() . PHP_EOL;
 }
---EXPECT--
-ok
+--EXPECTF--
+SAPNWRFC\Connection::reloadIniFile() expects exactly 0 %s, %d given
