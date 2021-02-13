@@ -152,7 +152,7 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getFunctionDescription, 0, 1, IS_ARRAY, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getName, 0, 1, IS_STRING, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getName, 0, 0, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 
@@ -946,11 +946,16 @@ PHP_METHOD(RemoteFunction, getFunctionDescription)
 
 PHP_METHOD(RemoteFunction, getName)
 {
+    zend_error_handling zeh;
     sapnwrfc_function_object *intern;
 
+    zend_replace_error_handling(EH_THROW, NULL, &zeh);
     if (zend_parse_parameters_none() == FAILURE) {
+        zend_restore_error_handling(&zeh);
+
         return;
     }
+    zend_restore_error_handling(&zeh);
 
     intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
 
