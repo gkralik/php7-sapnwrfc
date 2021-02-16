@@ -1,7 +1,7 @@
 --TEST--
 Throws FunctionCallException if integer is out of range (-32767 - 32767) for RFC INT2
 --SKIPIF--
-<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
+<?php include __DIR__ . "/skipif_no_online_tests.inc"; ?>
 --FILE--
 <?php
 $config = include __DIR__ .  "/sapnwrfc.config.inc";
