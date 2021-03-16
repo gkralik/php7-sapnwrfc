@@ -30,8 +30,8 @@ test($f, false);
 test($f, 0);
 
 --EXPECTF--
-TypeError: %s must be of type array, null given
-TypeError: %s must be of type array, string given
-TypeError: %s must be of type array, stdClass given
-TypeError: %s must be of type array, bool given
-TypeError: %s must be of type array, int given
+TypeError: %s must be of%S type array, null given
+TypeError: %s must be of%S type array, string given
+TypeError: %s must be of%S type array, %r(stdClass|object)%r given
+TypeError: %s must be of%S type array, bool given
+TypeError: %s must be of%S type array, int given
