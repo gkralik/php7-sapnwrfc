@@ -9,11 +9,13 @@ If you find this project useful consider giving me a cup of coffee using the "Do
 
 ## Supported versions
 
-The extension is tested with PHP 7.3 and 7.4 and SAP NW RFC SDK version 7.50.
+The extension is tested with PHP 7.3, 7.4 and 8.0 using SAP NW RFC SDK version 7.50.
 
-*Note 1:* PHP 8 support is planned, but not yet done.
+Preliminary support for PHP 8 is on `main`.
 
-*Note 2:* SAP NW RFC SDK version 7.20 is supported up to release 1.3.
+For PHP 7.2 support, see branch `1.x`.
+
+*Note:* SAP NW RFC SDK version 7.20 is supported up to release 1.3.
 
 ## Usage
 
