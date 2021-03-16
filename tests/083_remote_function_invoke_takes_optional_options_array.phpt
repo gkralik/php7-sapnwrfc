@@ -1,7 +1,7 @@
 --TEST--
 RemoteFunction::invoke() takes optional $options array
 --SKIPIF--
-<?php include __DIR__ . "/skipif_no_online_tests.inc"; ?>
+<?php include __DIR__ . "/../skipif_no_online_tests.inc"; ?>
 --FILE--
 <?php
 
