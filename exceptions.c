@@ -108,6 +108,21 @@ void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, .
     zend_restore_error_handling(&zeh);
 }
 
+
+void sapnwrfc_throw_function_exception_ex(char *msg, ...)
+{
+    va_list args;
+    char *buf;
+
+    va_start(args, msg);
+    vspprintf(&buf, 0, msg, args);
+    va_end(args);
+
+    zend_throw_exception(sapnwrfc_function_exception_ce, buf, 0);
+
+    efree(buf);
+}
+
 void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...)
 {
     va_list args;

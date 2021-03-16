@@ -23,6 +23,7 @@
 PHP_METHOD(Exception, getErrorInfo);
 
 void sapnwrfc_throw_connection_exception(RFC_ERROR_INFO error_info, char *msg, ...);
+void sapnwrfc_throw_function_exception_ex(char *msg, ...);
 void sapnwrfc_throw_function_exception(RFC_ERROR_INFO error_info, char *msg, ...);
 
 void sapnwrfc_register_exceptions();
