@@ -156,7 +156,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_RemoteFunction_getName, 0, 0, IS
 ZEND_END_ARG_INFO()
 
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_clearFunctionDescCache, _IS_BOOL, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_clearFunctionDescCache, 0, 1, _IS_BOOL, 0)
     ZEND_ARG_TYPE_INFO(0, functionName, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, repositoryId, IS_STRING, 1)
 ZEND_END_ARG_INFO()
