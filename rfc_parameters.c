@@ -29,7 +29,7 @@ rfc_set_value_return_t rfc_set_char_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set CHAR parameter %s, expected string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set CHAR parameter \"%s\". Expected string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -63,7 +63,7 @@ rfc_set_value_return_t rfc_set_date_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set DATE parameter %s, expected string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set DATE parameter \"%s\". Expected string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -105,7 +105,7 @@ rfc_set_value_return_t rfc_set_time_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set TIME parameter %s, expected string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set TIME parameter \"%s\". Expected string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -145,7 +145,7 @@ rfc_set_value_return_t rfc_set_byte_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set BYTE parameter %s, expected string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set BYTE parameter \"%s\". Expected string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -185,7 +185,7 @@ rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     }
 
     if (Z_TYPE_P(value) != IS_ARRAY) {
-        zend_error(E_WARNING, "Failed to set TABLE parameter %s, expected array", ZSTR_VAL(zname));
+        zend_type_error("Failed to set TABLE parameter \"%s\". Expected array, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -224,7 +224,7 @@ rfc_set_value_return_t rfc_set_num_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, 
 
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set NUM parameter %s, expected string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set NUM parameter \"%s\". Expected string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -269,7 +269,7 @@ rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
 
     if (Z_TYPE_P(value) != IS_DOUBLE) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set FLOAT parameter %s, expected int or double", ZSTR_VAL(zname));
+        zend_type_error("Failed to set FLOAT parameter \"%s\". Expected int or double, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -306,7 +306,7 @@ rfc_set_value_return_t rfc_set_decfloat_value(DATA_CONTAINER_HANDLE h, SAP_UC *n
     // if the value is still not a string, error out
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set DECFLOAT parameter %s, expected int, double or string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set DECFLOAT parameter \"%s\". Expected int or double or string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
 
         return RFC_SET_VALUE_ERROR;
@@ -341,7 +341,7 @@ rfc_set_value_return_t rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, 
 
     if (Z_TYPE_P(value) != IS_LONG) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set INT parameter %s, expected integer", ZSTR_VAL(zname));
+        zend_type_error("Failed to set INT parameter \"%s\". Expected int, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -371,7 +371,7 @@ rfc_set_value_return_t rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 
     if (Z_TYPE_P(value) != IS_LONG) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set INT1 parameter %s, expected integer", ZSTR_VAL(zname));
+        zend_type_error("Failed to set INT1 parameter \"%s\". Expected int, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -408,7 +408,7 @@ rfc_set_value_return_t rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
 
     if (Z_TYPE_P(value) != IS_LONG) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set INT2 parameter %s, expected integer", ZSTR_VAL(zname));
+        zend_type_error("Failed to set INT2 parameter \"%s\". Expected int, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -473,7 +473,7 @@ rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *nam
 
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set STRING parameter %s, expected string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set STRING parameter \"%s\". Expected string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -505,7 +505,7 @@ rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *na
 
     if (Z_TYPE_P(value) != IS_STRING) {
         zname = sapuc_to_zend_string(name);
-        zend_error(E_WARNING, "Failed to set XSTRING parameter %s, expected string", ZSTR_VAL(zname));
+        zend_type_error("Failed to set XSTRING parameter \"%s\". Expected string, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
         zend_string_release(zname);
         return RFC_SET_VALUE_ERROR;
     }
@@ -540,7 +540,7 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value, 
     }
 
     if (Z_TYPE_P(value) != IS_ARRAY) {
-        zend_error(E_WARNING, "Failed to set TABLE row, expected array for parameter %s", ZSTR_VAL(param_name));
+        zend_type_error("Failed to set TABLE row parameter \"%s\". Expected array, %s given", ZSTR_VAL(param_name), zend_zval_type_name(value));
         return RFC_SET_VALUE_ERROR;
     }
 
@@ -554,7 +554,7 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value, 
 
     ZEND_HASH_FOREACH_KEY_VAL(value_hash, num_key, key, val) {
         if (!key) { // not string
-            zend_error(E_WARNING, "All parameter keys must be strings.");
+            zend_type_error("All TABLE parameter keys must be of type string");
             return RFC_SET_VALUE_ERROR;
         }
 

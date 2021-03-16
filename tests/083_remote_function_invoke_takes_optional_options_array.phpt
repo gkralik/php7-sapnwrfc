@@ -30,8 +30,8 @@ test($f, false);
 test($f, 0);
 
 --EXPECTF--
-TypeError: Argument 2 passed to SAPNWRFC\RemoteFunction::invoke() must be of the type array, %s given
-TypeError: Argument 2 passed to SAPNWRFC\RemoteFunction::invoke() must be of the type array, %s given
-TypeError: Argument 2 passed to SAPNWRFC\RemoteFunction::invoke() must be of the type array, %s given
-TypeError: Argument 2 passed to SAPNWRFC\RemoteFunction::invoke() must be of the type array, %s given
-TypeError: Argument 2 passed to SAPNWRFC\RemoteFunction::invoke() must be of the type array, %s given
+TypeError: %s must be of type array, null given
+TypeError: %s must be of type array, string given
+TypeError: %s must be of type array, stdClass given
+TypeError: %s must be of type array, bool given
+TypeError: %s must be of type array, int given

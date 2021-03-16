@@ -1,5 +1,5 @@
 --TEST--
-Throws FunctionCallException if given wrong type for RFC FLOAT parameter.
+Throws TypeError if given wrong type for RFC FLOAT parameter.
 --SKIPIF--
 <?php
 require_once(__DIR__ . '/skipif.inc');
@@ -29,10 +29,12 @@ $params = [
 
 $f = $c->getFunction("STFC_STRUCTURE");
 $f->setParameterActive('RFCTABLE', false);
-try {
-    $f->invoke($params);
-} catch(\SAPNWRFC\FunctionCallException $e) {
-    echo "ok";
-}
---EXPECT--
-ok
+
+$f->invoke($params);
+
+--EXPECTF--
+Fatal error: Uncaught TypeError: Failed to set %s parameter "%s". Expected %s, %s given in %s.php:%d
+Stack trace:
+#0 %s(%d): SAPNWRFC\RemoteFunction->invoke(Array)
+#1 {main}
+  thrown in %s.php on line %d
