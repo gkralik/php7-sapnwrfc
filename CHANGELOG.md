@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 - Re-organize tests (skip conditions, environment variables)
 - Throw `\Exception` or `\TypeError` for parameter parsing errors (instead of `\SAPNWRFC\Exception`) **BC break**
 - Throw `\TypeError` if wrong type is passed for an RFC field **BC break**
+- Add support for PHP 8.0
 ### Removed
 - Remove support for PHP < 7.2
 
