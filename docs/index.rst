@@ -1,11 +1,15 @@
-php7-sapnwrfc - RFC connector for PHP 7
-=======================================
+php7-sapnwrfc - RFC connector for PHP 7/8
+=========================================
 
 The `php7-sapnwrfc extension <https://github.com/gkralik/php7-sapnwrfc>`_ 
 provides an interface to use the *SAP NetWeaver RFC library* to call
 ABAP function modules via the SAP Remote Function Call (RFC) protocol.
 
 To start using ``php7-sapnwrfc``, follow the :ref:`quick-start`.
+
+.. important::
+
+   Support for PHP 8 is experimental and available in the `main` branch of the repository.
 
 .. note::
 
