@@ -7,7 +7,10 @@ ABAP function modules via the SAP Remote Function Call (RFC) protocol.
 
 To start using ``php7-sapnwrfc``, follow the :ref:`quick-start`.
 
-.. important::
+.. admonition:: Supported versions
+   :class: important
+
+   The extension is tested with PHP 7.3, 7.4 and 8.0 using SAP NW RFC SDK version 7.50.
 
    Support for PHP 8 is experimental and available in the `main` branch of the repository.
 
