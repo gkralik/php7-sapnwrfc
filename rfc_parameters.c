@@ -432,6 +432,38 @@ rfc_set_value_return_t rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name,
     return RFC_SET_VALUE_OK;
 }
 
+#if ZEND_ENABLE_ZVAL_LONG64
+rfc_set_value_return_t rfc_set_int8_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
+{
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    zend_string *zname;
+
+    // if the value is a reference, get the reference value first
+    if (Z_ISREF_P(value)) {
+        value = Z_REFVAL_P(value);
+    }
+
+    if (Z_TYPE_P(value) != IS_LONG) {
+        zname = sapuc_to_zend_string(name);
+        zend_type_error("Failed to set INT8 parameter \"%s\". Expected int, %s given", ZSTR_VAL(zname), zend_zval_type_name(value));
+        zend_string_release(zname);
+        return RFC_SET_VALUE_ERROR;
+    }
+
+    rc = RfcSetInt8(h, name, (RFC_INT8)Z_LVAL_P(value), &error_info);
+
+    if (rc != RFC_OK) {
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to set INT8 parameter \"%s\"", ZSTR_VAL(zname));
+        zend_string_release(zname);
+        return RFC_SET_VALUE_ERROR;
+    }
+
+    return RFC_SET_VALUE_OK;
+}
+#endif
+
 rfc_set_value_return_t rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value)
 {
     RFC_RC rc = RFC_OK;
@@ -628,6 +660,11 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
         case RFCTYPE_INT2:
             ret = rfc_set_int2_value(h, field_desc.name, value);
             break;
+#if ZEND_ENABLE_ZVAL_LONG64
+        case RFCTYPE_INT8:
+            ret = rfc_set_int8_value(h, field_desc.name, value);
+            break;
+#endif
         case RFCTYPE_STRUCTURE:
             ret = rfc_set_structure_value(h, field_desc.name, value);
             break;
@@ -715,6 +752,11 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
         case RFCTYPE_INT2:
             ret = rfc_set_int2_value(function_handle, parameter_name_u, value);
             break;
+#if ZEND_ENABLE_ZVAL_LONG64
+        case RFCTYPE_INT8:
+            ret = rfc_set_int8_value(function_handle, parameter_name_u, value);
+            break;
+#endif
         case RFCTYPE_STRUCTURE:
             ret = rfc_set_structure_value(function_handle, parameter_name_u, value);
             break;
@@ -1040,6 +1082,31 @@ zval rfc_get_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
     return value;
 }
 
+#if ZEND_ENABLE_ZVAL_LONG64
+zval rfc_get_int8_value(DATA_CONTAINER_HANDLE h, SAP_UC *name)
+{
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    zend_string *zname;
+    RFC_INT8 buf;
+    zval value;
+
+    rc = RfcGetInt8(h, name, &buf, &error_info);
+    if (rc != RFC_OK) {
+        zname = sapuc_to_zend_string(name);
+        sapnwrfc_throw_function_exception(error_info, "Failed to get INT8 parameter \"%s\"", ZSTR_VAL(zname));
+        zend_string_release(zname);
+
+        ZVAL_NULL(&value);
+        return value;
+    }
+
+    ZVAL_LONG(&value, (int)buf);
+
+    return value;
+}
+#endif
+
 zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned char rtrim_enabled)
 {
     RFC_RC rc = RFC_OK;
@@ -1261,6 +1328,11 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc, unsi
         case RFCTYPE_INT2:
             value = rfc_get_int2_value(h, field_desc.name);
             break;
+#if ZEND_ENABLE_ZVAL_LONG64
+        case RFCTYPE_INT8:
+            value = rfc_get_int8_value(h, field_desc.name);
+            break;
+#endif
         case RFCTYPE_STRUCTURE:
             value = rfc_get_structure_value(h, field_desc.name, rtrim_enabled);
             break;
@@ -1346,6 +1418,11 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
         case RFCTYPE_INT2:
             value = rfc_get_int2_value(function_handle, parameter_name_u);
             break;
+#if ZEND_ENABLE_ZVAL_LONG64
+        case RFCTYPE_INT8:
+            value = rfc_get_int8_value(function_handle, parameter_name_u);
+            break;
+#endif
         case RFCTYPE_STRUCTURE:
             value = rfc_get_structure_value(function_handle, parameter_name_u, rtrim_enabled);
             break;

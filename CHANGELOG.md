@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Throw `\TypeError` if wrong type is passed for an RFC field **BC break**
 - Add support for PHP 8.0
 - Map RFC type BCD to string **BC break**
+- Add support for `RFCTYPE_INT8`
 ### Removed
 - Remove support for PHP < 7.2
 

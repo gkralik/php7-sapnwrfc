@@ -22,6 +22,9 @@ rfc_set_value_return_t rfc_set_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
 rfc_set_value_return_t rfc_set_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
 rfc_set_value_return_t rfc_set_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
 rfc_set_value_return_t rfc_set_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+#if ZEND_ENABLE_ZVAL_LONG64
+rfc_set_value_return_t rfc_set_int8_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
+#endif
 rfc_set_value_return_t rfc_set_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
 rfc_set_value_return_t rfc_set_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
 rfc_set_value_return_t rfc_set_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, zval *value);
@@ -45,6 +48,9 @@ zval rfc_get_float_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
 zval rfc_get_int_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
 zval rfc_get_int1_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
 zval rfc_get_int2_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
+#if ZEND_ENABLE_ZVAL_LONG64
+zval rfc_get_int8_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
+#endif
 zval rfc_get_structure_value(DATA_CONTAINER_HANDLE h, SAP_UC *name, unsigned char rtrim_enabled);
 zval rfc_get_string_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
 zval rfc_get_xstring_value(DATA_CONTAINER_HANDLE h, SAP_UC *name);
