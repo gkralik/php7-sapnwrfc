@@ -1,5 +1,7 @@
 ---
 name: ❓ Question
+about: You have question about the extension?
+labels: question
 ---
 
 ### Question
