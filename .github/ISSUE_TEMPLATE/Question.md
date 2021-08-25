@@ -1,6 +1,6 @@
 ---
 name: ❓ Question
-about: You have question about the extension?
+about: You have a question about the extension?
 labels: question
 ---
 
