@@ -614,6 +614,7 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
     RFC_ERROR_INFO error_info;
     RFC_TABLE_HANDLE table_handle;
     zend_string *zname;
+    zend_string *type_name;
     int ret = RFC_SET_VALUE_OK;
 
     switch(field_desc.type) {
@@ -676,8 +677,14 @@ rfc_set_value_return_t rfc_set_field_value(DATA_CONTAINER_HANDLE h, RFC_FIELD_DE
             break;
         default:
             zname = sapuc_to_zend_string(field_desc.name);
-            sapnwrfc_throw_function_exception_ex("Unknown type for parameter \"%s\"", ZSTR_VAL(zname));
+            type_name = sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(field_desc.type));
+
+            sapnwrfc_throw_function_exception_ex("Unknown type \"%s\" for parameter \"%s\"",
+                ZSTR_VAL(type_name), ZSTR_VAL(zname));
+
             zend_string_release(zname);
+            zend_string_release(type_name);
+
             ret = RFC_SET_VALUE_ERROR;
     }
 
@@ -694,6 +701,7 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
     RFC_PARAMETER_DESC parameter_desc;
     RFC_TABLE_HANDLE table_handle;
     SAP_UC *parameter_name_u;
+    zend_string *type_name;
     int ret = RFC_SET_VALUE_OK;
 
     rc = RfcGetParameterDescByName(function_desc_handle,
@@ -767,7 +775,13 @@ rfc_set_value_return_t rfc_set_parameter_value(RFC_FUNCTION_HANDLE function_hand
             ret = rfc_set_xstring_value(function_handle, parameter_name_u, value);
             break;
         default:
-            sapnwrfc_throw_function_exception_ex("Unknown type for parameter \"%s\"", ZSTR_VAL(name));
+            type_name = sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type));
+
+            sapnwrfc_throw_function_exception_ex("Unknown type \"%s\" for parameter \"%s\"",
+                ZSTR_VAL(type_name), ZSTR_VAL(name));
+
+            zend_string_release(type_name);
+
             ret = RFC_SET_VALUE_ERROR;
     }
 
@@ -1279,6 +1293,7 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc, unsi
     RFC_RC rc = RFC_OK;
     RFC_ERROR_INFO error_info;
     zend_string *zname;
+    zend_string *type_name;
     RFC_TABLE_HANDLE table_handle;
     zval value;
 
@@ -1344,8 +1359,14 @@ zval rfc_get_field_value(RFC_STRUCTURE_HANDLE h, RFC_FIELD_DESC field_desc, unsi
             break;
         default:
             zname = sapuc_to_zend_string(field_desc.name);
-            sapnwrfc_throw_function_exception_ex("Unknown type for parameter \"%s\"", ZSTR_VAL(zname));
+            type_name = sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(field_desc.type));
+
+            sapnwrfc_throw_function_exception_ex("Unknown type \"%s\" for parameter \"%s\"",
+                ZSTR_VAL(type_name), ZSTR_VAL(zname));
+
             zend_string_release(zname);
+            zend_string_release(type_name);
+
             ZVAL_NULL(&value);
     }
 
@@ -1362,6 +1383,7 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
     RFC_PARAMETER_DESC parameter_desc;
     RFC_TABLE_HANDLE table_handle;
     SAP_UC *parameter_name_u;
+    zend_string *type_name;
     zval value;
 
     rc = RfcGetParameterDescByName(function_desc_handle, (parameter_name_u = zend_string_to_sapuc(name)), &parameter_desc, &error_info);
@@ -1433,7 +1455,13 @@ zval rfc_get_parameter_value(RFC_FUNCTION_HANDLE function_handle,
             value = rfc_get_xstring_value(function_handle, parameter_name_u);
             break;
         default:
-            sapnwrfc_throw_function_exception_ex("Unknown type for parameter \"%s\"", ZSTR_VAL(name));
+            type_name = sapuc_to_zend_string((SAP_UC *)RfcGetTypeAsString(parameter_desc.type));
+
+            sapnwrfc_throw_function_exception_ex("Unknown type \"%s\" for parameter \"%s\"",
+                ZSTR_VAL(type_name), ZSTR_VAL(name));
+
+            zend_string_release(type_name);
+
             ZVAL_NULL(&value);
     }
 
