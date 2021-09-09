@@ -79,6 +79,7 @@ PHP_METHOD(Connection, __construct);
 PHP_METHOD(Connection, getAttributes);
 PHP_METHOD(Connection, ping);
 PHP_METHOD(Connection, getFunction);
+PHP_METHOD(Connection, getSSOTicket);
 PHP_METHOD(Connection, close);
 PHP_METHOD(Connection, setIniPath);
 PHP_METHOD(Connection, reloadIniFile);
@@ -108,6 +109,9 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_Connection_getFunction, 0, 1, SAPNWRFC\\RemoteFunction, 0)
     ZEND_ARG_TYPE_INFO(0, functionName, IS_STRING, 0)
     ZEND_ARG_TYPE_INFO(0, invalidateCache, _IS_BOOL, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_getSSOTicket, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_close, _IS_BOOL, 0)
@@ -168,6 +172,7 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, getAttributes, arginfo_Connection_getAttributes, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, ping, arginfo_Connection_ping, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, getFunction, arginfo_Connection_getFunction, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, getSSOTicket, arginfo_Connection_getSSOTicket, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, close, arginfo_Connection_close, ZEND_ACC_PUBLIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, setIniPath, arginfo_Connection_setIniPath, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, reloadIniFile, arginfo_Connection_reloadIniFile, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
@@ -369,6 +374,61 @@ PHP_METHOD(Connection, __construct)
 
     // open connection
     sapnwrfc_open_connection(intern, connection_params);
+}
+
+PHP_METHOD(Connection, getSSOTicket)
+{
+    sapnwrfc_connection_object *intern;
+    zend_error_handling zeh;
+    RFC_RC rc = RFC_OK;
+    RFC_ERROR_INFO error_info;
+    unsigned int buf_len = 1;
+    SAP_UC *buf_sso_ticket;
+    zend_string *sso_ticket;
+
+    zend_replace_error_handling(EH_THROW, NULL, &zeh);
+    zend_parse_parameters_none();
+    zend_restore_error_handling(&zeh);
+
+    intern = SAPNWRFC_CONNECTION_OBJ_P(getThis());
+
+    if(intern->rfc_handle == NULL) {
+        // no connection handle
+        zend_throw_exception(sapnwrfc_connection_exception_ce, "Failed to retrieve SSO ticket: connection closed.", 0);
+
+        RETURN_NULL();
+    }
+
+    // determine the required buffer size
+    buf_sso_ticket = emalloc(1);
+    rc = RfcGetPartnerSSOTicket(intern->rfc_handle, buf_sso_ticket, &buf_len, &error_info);
+    if (rc != RFC_BUFFER_TOO_SMALL) {
+        // this is unexpected
+        efree(buf_sso_ticket);
+
+        sapnwrfc_throw_connection_exception(error_info, "Failed to retrieve SSO ticket.");
+
+        RETURN_NULL();
+    }
+
+    // resize the allocated buffer to buf_len (which is the required size including 
+    // the terminating NUL-byte)
+    buf_sso_ticket = erealloc(buf_sso_ticket, buf_len);
+
+    // fetch the SSO ticket
+    rc = RfcGetPartnerSSOTicket(intern->rfc_handle, buf_sso_ticket, &buf_len, &error_info);
+    if (rc != RFC_OK) {
+        efree(buf_sso_ticket);
+
+        sapnwrfc_throw_connection_exception(error_info, "Failed to retrieve SSO ticket.");
+
+        RETURN_NULL();
+    }
+
+    sso_ticket = sapuc_to_zend_string(buf_sso_ticket);
+    efree(buf_sso_ticket);
+
+    RETURN_STR(sso_ticket);
 }
 
 PHP_METHOD(Connection, close)

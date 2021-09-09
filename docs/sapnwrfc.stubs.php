@@ -104,6 +104,22 @@ class Connection
     public function getFunction(string $functionName): RemoteFunction {}
 
     /**
+     * Retrieve a SSO ticket from the connection.
+     *
+     * For this to work, the connection must be opened with parameter `GETSSO2=1`
+     * and the profile parameter `login/create_sso2_ticket` must be set to a value
+     * different from '0' in the backend.
+     *
+     * Note: To retrieve a SSO ticket from the connection, SDK version 7.50.1 or
+     * later is required.
+     *
+     * @return string The SSO ticket.
+     *
+     * @throws ConnectionException if no SSO ticket could be retrieved.
+     */
+    public function getSSOTicket(): string {}
+
+    /**
      * Close the connection.
      *
      * @return bool True if the connection was closed, false if the connection
