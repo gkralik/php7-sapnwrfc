@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="API" href="api.html" /><link rel="prev" title="Installation" href="installation.html" />
 
     <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Usage - php7-sapnwrfc 2.0.0-dev documentation</title>
+        <title>Usage - php7-sapnwrfc 2.0.0-beta1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
@@ -86,7 +86,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">php7-sapnwrfc 2.0.0-dev documentation</div></a>
+      <a href="index.html"><div class="brand">php7-sapnwrfc 2.0.0-beta1 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -100,7 +100,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">php7-sapnwrfc 2.0.0-dev documentation</span>
+  <span class="sidebar-brand-text">php7-sapnwrfc 2.0.0-beta1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -345,25 +345,31 @@ maps between RFC data types and builtin PHP data types as follows:</p>
 <td><p>Integer</p></td>
 <td><p>INT1 and INT2 are also mapped to integer</p></td>
 </tr>
-<tr class="row-even"><td><p>P</p></td>
+<tr class="row-even"><td><p>INT8</p></td>
+<td><p>INT8</p></td>
+<td><p>integer</p></td>
+<td><p>Integer (8 bytes)</p></td>
+<td><p>Only available on 64bit systems.</p></td>
+</tr>
+<tr class="row-odd"><td><p>P</p></td>
 <td><p>BCD</p></td>
 <td><p>string</p></td>
 <td><p>Packed number / BCD</p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>F</p></td>
+<tr class="row-even"><td><p>F</p></td>
 <td><p>FLOAT</p></td>
 <td><p>double</p></td>
 <td><p>Floating point number</p></td>
 <td></td>
 </tr>
-<tr class="row-even"><td><p>DECFLOAT16</p></td>
+<tr class="row-odd"><td><p>DECFLOAT16</p></td>
 <td><p>DECF16</p></td>
 <td><p>string</p></td>
 <td><p>Decimal floating point number</p></td>
 <td><p>Uses string to prevent rounding errors.</p></td>
 </tr>
-<tr class="row-odd"><td><p>DECFLOAT34</p></td>
+<tr class="row-even"><td><p>DECFLOAT34</p></td>
 <td><p>DECF34</p></td>
 <td><p>string</p></td>
 <td><p>Decimal floating point number</p></td>
