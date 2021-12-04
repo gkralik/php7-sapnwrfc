@@ -86,6 +86,28 @@ use_function_desc_cache
 
     *Default:* ``true``
 
+Retrieving a SSO ticket
+^^^^^^^^^^^^^^^^^^^^^^^
+
+A SSO ticket can be retrieved from an existing connection using ``SAPNWRFC\Connection::getSSOTicket()``:
+
+.. code-block:: php
+
+    <?php
+
+    // $connection is an existing connection with parameter GETSSO2=1
+
+    $ssoTicket = $connection->getSSOTicket();
+
+
+.. note::
+
+    For this to work, the following requirements must be met:
+      * The connection must have been opened with parameter ``GETSSO2=1``
+      * The profile parameter ``login/create_sso2_ticket`` must be set to a value different from ``0`` in the backend.
+      * The used SDK version must be 7.50.1 or later.
+
+
 Calling remote function modules
 -------------------------------
 

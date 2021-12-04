@@ -203,6 +203,28 @@ function modules.</p>
 </dd>
 </dl>
 </div>
+<div class="section" id="retrieving-a-sso-ticket">
+<h3>Retrieving a SSO ticket<a class="headerlink" href="#retrieving-a-sso-ticket" title="Permalink to this headline">¶</a></h3>
+<p>A SSO ticket can be retrieved from an existing connection using <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::getSSOTicket()</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="c1">// $connection is an existing connection with parameter GETSSO2=1</span>
+
+<span class="nv">$ssoTicket</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">getSSOTicket</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>For this to work, the following requirements must be met:</dt><dd><ul class="simple">
+<li><p>The connection must have been opened with parameter <code class="docutils literal notranslate"><span class="pre">GETSSO2=1</span></code></p></li>
+<li><p>The profile parameter <code class="docutils literal notranslate"><span class="pre">login/create_sso2_ticket</span></code> must be set to a value different from <code class="docutils literal notranslate"><span class="pre">0</span></code> in the backend.</p></li>
+<li><p>The used SDK version must be 7.50.1 or later.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
 </div>
 <div class="section" id="calling-remote-function-modules">
 <h2>Calling remote function modules<a class="headerlink" href="#calling-remote-function-modules" title="Permalink to this headline">¶</a></h2>
@@ -582,6 +604,7 @@ with detailed information: <code class="docutils literal notranslate"><span clas
 <li><a class="reference internal" href="#">Usage</a><ul>
 <li><a class="reference internal" href="#connecting-to-a-sap-system">Connecting to a SAP system</a><ul>
 <li><a class="reference internal" href="#connection-options">Connection options</a></li>
+<li><a class="reference internal" href="#retrieving-a-sso-ticket">Retrieving a SSO ticket</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#calling-remote-function-modules">Calling remote function modules</a><ul>
