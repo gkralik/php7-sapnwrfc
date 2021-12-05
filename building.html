@@ -157,49 +157,73 @@ above with <code class="docutils literal notranslate"><span class="pre">./config
 <p>We try to provide pre-built extensions for Windows users (see the
 <a class="reference external" href="https://github.com/gkralik/php7-sapnwrfc/releases">release</a> page).
 If you don’t find your desired version there or still want to build yourself, follow the instructions below.</p>
+<p>To build PHP 8+ for Windows, you need Visual Studio 2019. To build PHP 7.4, Visual Studio 2017 is required.
+The workload <em>Desktop development with C++</em> must be installed.</p>
+<p>For this guide, we assume the base directory for the build to be <code class="docutils literal notranslate"><span class="pre">C:\Workspace\php</span></code>
+and we want to build the extension for PHP 8.0.</p>
 <div class="section" id="set-up-a-build-environment">
 <h3>Set up a build environment<a class="headerlink" href="#set-up-a-build-environment" title="Permalink to this headline">¶</a></h3>
-<p>Make sure you have a valid <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">build enviroment as described here</a>.</p>
-<p>After you have set up the enviroment, try to build PHP itself:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ configure --disable-all --enable-cli
-$ nmake
-$ nmake snap
+<p>Make sure you have a valid <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild_sdk_2">build enviroment as described here</a>.</p>
+<p>First, open a command line (<code class="docutils literal notranslate"><span class="pre">cmd.exe</span></code>).</p>
+<p>Change to <code class="docutils literal notranslate"><span class="pre">C:\Workspace\php</span></code> and fetch the <a class="reference external" href="https://github.com/Microsoft/php-sdk-binary-tools">latest stable PHP SDK tag</a>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/Microsoft/php-sdk-binary-tools.git php-sdk
+$ cd php-sdk
+$ git checkout php-sdk-2.2.0
 </pre></div>
 </div>
-<p>If that works, you can go on. If not, double check your build environment.</p>
+<p>Now execute the starter script for the build environment and create the buildtree:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ phpsdk-vs16-x64.bat
+$ phpsdk_buildtree phpdev
+</pre></div>
+</div>
+<p>Clone the <a class="reference external" href="https://github.com/gkralik/php7-sapnwrfc">php7-sapnwrfc</a> repository
+(or download and extract a release ZIP) into the
+<code class="docutils literal notranslate"><span class="pre">php-sdk\phpdev\vs16\x64\modules\sapnwrfc</span></code> folder and check out the tag you want to build:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd php-sdk\phpdev\vs16\x64
+$ mkdir modules
+$ git clone https://github.com/gkralik/php7-sapnwrfc.git modules\sapnwrfc
+$ cd modules\sapnwrfc
+$ git checkout 2.0.0-beta2
+</pre></div>
+</div>
+<p>Download the PHP 8 source code from the <a class="reference external" href="https://windows.php.net/download/">PHP for Windows download page</a>
+and extract it into <code class="docutils literal notranslate"><span class="pre">php-sdk\phpdev\vs16\x64</span></code>.
+The source code should be in the <code class="docutils literal notranslate"><span class="pre">php-8.0.13-src</span></code> or similar folder.</p>
+<p>Alternatively, you can clone the <a class="reference external" href="https://github.com/php/php-src">php-src</a> repository and check out the desired tag.</p>
+<p>Now change to the PHP sources folder, install the PHP build dependencies:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd php-sdk\phpdev\vs16\x64\php-8.0.13-src
+$ phpsdk_deps -u
+</pre></div>
+</div>
+<p>Create the configure script and add the <code class="docutils literal notranslate"><span class="pre">modules</span></code> directory to the module search path:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ buildconf --add-modules-dir=..\modules
+$ configure --help
+</pre></div>
+</div>
+<p>The output of the <code class="docutils literal notranslate"><span class="pre">configure</span> <span class="pre">--help</span></code> command should now include a line <em>–with-sapnwrfc</em>.</p>
+<p>Finally, extract the <em>SAP NW RFC SDK</em> to <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk_750</span></code> (or any other path)
+and set the <em>PATH</em> for the current console session:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>set PATH=%PATH%;C:\nwrfcsdk_750\lib
+</pre></div>
+</div>
 </div>
 <div class="section" id="build-the-extension">
 <h3>Build the extension<a class="headerlink" href="#build-the-extension" title="Permalink to this headline">¶</a></h3>
-<p>Make sure that you dont mix up x86/x64 (PHP and <em>SAP NW RFC library</em> platforms must match).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ol class="arabic simple">
-<li><p>This guide assumes you want to build the x64 version.</p></li>
-<li><p>We also assume the SDK files are in C:nwrfcsdk</p></li>
-</ol>
-</div>
-<p>Copy all header files (<code class="docutils literal notranslate"><span class="pre">*.h</span></code>) from <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\include</span></code> to <code class="docutils literal notranslate"><span class="pre">C:\php-sdk\phpdev\vc14\x64\deps\include</span></code>.
-Copy all library files (<code class="docutils literal notranslate"><span class="pre">*.lib</span></code>) from <code class="docutils literal notranslate"><span class="pre">C:\nwrfcsdk\lib</span></code> to <code class="docutils literal notranslate"><span class="pre">C:\php-sdk\phpdev\vc14\x64\deps\lib.</span></code></p>
-<p>Download the latest release of this extension and extract it to <code class="docutils literal notranslate"><span class="pre">C:\php-sdk\phpdev\vc14\x64\php-7.0-src\ext\sapnwrfc</span></code>.</p>
-<p>Open the <em>Developer Command Prompt for VS2015</em> and execute the commands for
-steps 1-4 as described in the <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild">PHP Windows step by step build page</a>.</p>
-<p>The configure command (step 6) must be replaced with one of the following commands
-(depending on which version you want to build):</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>// for NTS (shared module)
-configure --disable-all --enable-cli --disable-zts --with-sapnwrfc=shared
-// for NTS (compile in)
-configure --disable-all --enable-cli --disable-zts --with-sapnwrfc
-
-// for TS (shared module)
-configure --disable-all --enable-cli --with-sapnwrfc=shared
-// for TS (compile in)
-configure --disable-all --enable-cli --with-sapnwrfc
+<p>From the PHP source folder, execute <code class="docutils literal notranslate"><span class="pre">configure</span></code>, then <code class="docutils literal notranslate"><span class="pre">nmake</span></code> to build the extension:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ configure --disable-all --enable-cli --enable-test-ini --with-sapnwrfc=shared,C:\nwrfcsdk_750
+$ nmake
 </pre></div>
 </div>
-<p>Then continue with steps 7-9.</p>
-<p>If you built a shared extension, the extension files should be available in one of the following locations:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release\php-7.0\ext for the NTS version
-C:\php-sdk\phpdev\vc14\x64\php-7.0-src\x64\Release_TS\php-7.0\ext for the TS version
+<p>To build a non-threadsafe version, add <code class="docutils literal notranslate"><span class="pre">--disable-zts</span></code> to the <code class="docutils literal notranslate"><span class="pre">configure</span></code> command.</p>
+<p>The extension DLL can be found in the <code class="docutils literal notranslate"><span class="pre">x64\Release_TS</span></code> (or <code class="docutils literal notranslate"><span class="pre">x64\Release</span></code> for NTS builds)
+folder and is named <code class="docutils literal notranslate"><span class="pre">php_sapnwrfc.dll</span></code>.</p>
+<p>To see if PHP can load the extension, execute the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ x64\Release_TS\php.exe -c x64\Release_TS\tmp-php.ini -m
+</pre></div>
+</div>
+<p>To execute tests, execute <code class="docutils literal notranslate"><span class="pre">nmake</span> <span class="pre">test</span></code>, passing in the tests folder of the extension.
+Executing the tests requires access to a SAP system and a configuration file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ nmake test TESTS=..\modules\sapnwrfc\tests NO_INTERACTION=1 SAPNWRFC_ONLINE=1 SAPNWRFC_CUSTOM=1
 </pre></div>
 </div>
 </div>
