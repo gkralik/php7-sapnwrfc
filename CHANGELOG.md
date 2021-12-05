@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ## [2.0.0-beta2] - 2021-12-05
+### Added
 - Add `Connection::getSSOTicket()` to retrieve SSO ticket from connection (#34).
 
 ## [2.0.0-beta1] - 2021-09-09
