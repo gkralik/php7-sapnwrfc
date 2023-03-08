@@ -411,7 +411,7 @@ PHP_METHOD(Connection, getSSOTicket)
         RETURN_NULL();
     }
 
-    // resize the allocated buffer to buf_len (which is the required size including 
+    // resize the allocated buffer to buf_len (which is the required size including
     // the terminating NUL-byte)
     buf_sso_ticket = erealloc(buf_sso_ticket, buf_len);
 
@@ -583,7 +583,7 @@ PHP_METHOD(Connection, getFunction)
 
     // add a 'name' property to the function object. this helps to identify the object
     // when dumping it with var_dump()
-    add_property_str(return_value, "name", zend_string_copy(function_name));
+    zend_update_property_str(sapnwrfc_function_ce, Z_OBJ_P(return_value), "name", sizeof("name")-1, zend_string_copy(function_name));
 
     // get nr of parameters
     rc = RfcGetParameterCount(func_intern->function_desc_handle, &func_intern->parameter_count, &error_info);
@@ -1054,6 +1054,12 @@ static void register_sapnwrfc_function_object()
     ce.create_object = sapnwrfc_function_object_create;
     sapnwrfc_function_ce = zend_register_internal_class(&ce);
     sapnwrfc_function_ce->ce_flags |= ZEND_ACC_FINAL;
+
+    zval property_name_default_value;
+    ZVAL_EMPTY_STRING(&property_name_default_value);
+    zend_string *property_name_name = zend_string_init("name", sizeof("name") - 1, 1);
+    zend_declare_typed_property(sapnwrfc_function_ce, property_name_name, &property_name_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING));
+    zend_string_release(property_name_name);
 }
 
 unsigned int rfc_clear_function_desc_cache(zend_string *function_name, zend_string *repository_id)
@@ -1062,7 +1068,7 @@ unsigned int rfc_clear_function_desc_cache(zend_string *function_name, zend_stri
     RFC_ERROR_INFO error_info;
     SAP_UC *function_name_u = NULL;
     SAP_UC *repository_id_u = NULL;
-    
+
     // TODO check the patchlevel to find out if we need the 6x \0 hack
     //      see SAP note 1818687 and https://archive.sap.com/discussions/thread/3328863
 
@@ -1075,7 +1081,7 @@ unsigned int rfc_clear_function_desc_cache(zend_string *function_name, zend_stri
     // (usually the repository ID is the sysId)
     if (repository_id) {
         rc = RfcRemoveFunctionDesc(
-            (repository_id_u = zend_string_to_sapuc(repository_id)), 
+            (repository_id_u = zend_string_to_sapuc(repository_id)),
             function_name_u,
             &error_info);
         free((void *) repository_id_u);
