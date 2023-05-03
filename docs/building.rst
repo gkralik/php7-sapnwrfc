@@ -77,7 +77,7 @@ Clone the `php7-sapnwrfc <https://github.com/gkralik/php7-sapnwrfc>`_ repository
     $ mkdir modules
     $ git clone https://github.com/gkralik/php7-sapnwrfc.git modules\sapnwrfc
     $ cd modules\sapnwrfc
-    $ git checkout 2.0.0-beta2
+    $ git checkout 2.0.0-beta3
 
 
 Download the PHP 8 source code from the `PHP for Windows download page <https://windows.php.net/download/>`_
