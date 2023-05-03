@@ -2,50 +2,48 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="API" href="api.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="API" href="api.html" />
 
-    <meta name="generator" content="sphinx-4.1.1, furo 2021.07.05.beta38"/>
-        <title>Building from source - php7-sapnwrfc 2.0.0-beta2 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
+        <title>Building from source - php7-sapnwrfc 2.0.0-beta3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
+    
     
 
 
 <style>
-  :root {
+  body {
     --color-code-background: #f8f8f8;
   --color-code-foreground: black;
   
   }
+  body[data-theme="dark"] {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
   @media (prefers-color-scheme: dark) {
-    :root {
+    body:not([data-theme="light"]) {
       --color-code-background: #202020;
   --color-code-foreground: #d0d0d0;
   
     }
   }
-
-  /* For allowing end-user-specific overrides */
-  .override-light {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  
-  }
-  .override-dark {
-    --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-  }
-</style><link media="(prefers-color-scheme: dark)" rel="stylesheet" href="_static/pygments_dark.css"></head>
-  <body dir="">
+</style></head>
+  <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
     
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-      <path stroke="none" d="M0 0h24v24H0z"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" />
       <line x1="4" y1="6" x2="20" y2="6" />
       <line x1="10" y1="12" x2="20" y2="12" />
       <line x1="6" y1="18" x2="20" y2="18" />
@@ -53,9 +51,8 @@
   </symbol>
   <symbol id="svg-menu" viewBox="0 0 24 24">
     <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-      class="feather feather-menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
       <line x1="3" y1="12" x2="21" y2="12"></line>
       <line x1="3" y1="6" x2="21" y2="6"></line>
       <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -63,18 +60,57 @@
   </symbol>
   <symbol id="svg-arrow-right" viewBox="0 0 24 24">
     <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-      class="feather feather-chevron-right">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
       <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
     </svg>
   </symbol>
 </svg>
 
 <input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
 <input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation"></label>
-<label class="overlay toc-overlay" for="__toc"></label>
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
 
 
 
@@ -82,14 +118,24 @@
   <header class="mobile-header">
     <div class="header-left">
       <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
         <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">php7-sapnwrfc 2.0.0-beta2 documentation</div></a>
+      <a href="index.html"><div class="brand">php7-sapnwrfc 2.0.0-beta3 documentation</div></a>
     </div>
     <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
     </div>
@@ -100,13 +146,14 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">php7-sapnwrfc 2.0.0-beta2 documentation</span>
+  <span class="sidebar-brand-text">php7-sapnwrfc 2.0.0-beta3 documentation</span>
   
-</a><form class="sidebar-search-container" method="get" action="search.html">
-  <input class="sidebar-search" placeholder=Search name="q">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
-</form><div class="sidebar-scroll"><div class="sidebar-tree">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
@@ -121,24 +168,36 @@
       
     </div>
   </aside>
-  <main class="main">
+  <div class="main">
     <div class="content">
-      <article role="main">
-        <label class="toc-overlay-icon toc-content-icon" for="__toc">
-          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-        </label>
-        <div class="section" id="building-from-source">
+      <div class="article-container">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="building-from-source">
 <span id="id1"></span><h1>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this headline">¶</a></h1>
 <p>Before attempting to build the extension, make sure the <em>SAP NW RFC library</em> is
 installed. See <a class="reference internal" href="installation.html#installing-nwrfcsdk"><span class="std std-ref">Installing the SAP NW RFC library</span></a> for instructions.</p>
-<div class="section" id="building-on-linux">
+<section id="building-on-linux">
 <h2>Building on Linux<a class="headerlink" href="#building-on-linux" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/gkralik/php7-sapnwrfc.git
-$ <span class="nb">cd</span> php7-sapnwrfc
-$ phpize
-$ ./configure
-$ make
-$ sudo make install
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/gkralik/php7-sapnwrfc.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>php7-sapnwrfc
+$<span class="w"> </span>phpize
+$<span class="w"> </span>./configure
+$<span class="w"> </span>make
+$<span class="w"> </span>sudo<span class="w"> </span>make<span class="w"> </span>install
 </pre></div>
 </div>
 <p>The build script looks for the <em>SAP NW RFC library</em> in the following locations
@@ -151,8 +210,8 @@ by default:</p>
 </div>
 <p>If you installed the library in another location, replace the <code class="docutils literal notranslate"><span class="pre">./configure</span></code> step
 above with <code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">--with-sapnwrfc=/path/to/rfc-library</span></code>.</p>
-</div>
-<div class="section" id="building-on-windows">
+</section>
+<section id="building-on-windows">
 <h2>Building on Windows<a class="headerlink" href="#building-on-windows" title="Permalink to this headline">¶</a></h2>
 <p>We try to provide pre-built extensions for Windows users (see the
 <a class="reference external" href="https://github.com/gkralik/php7-sapnwrfc/releases">release</a> page).
@@ -161,7 +220,7 @@ If you don’t find your desired version there or still want to build yourself, 
 The workload <em>Desktop development with C++</em> must be installed.</p>
 <p>For this guide, we assume the base directory for the build to be <code class="docutils literal notranslate"><span class="pre">C:\Workspace\php</span></code>
 and we want to build the extension for PHP 8.0.</p>
-<div class="section" id="set-up-a-build-environment">
+<section id="set-up-a-build-environment">
 <h3>Set up a build environment<a class="headerlink" href="#set-up-a-build-environment" title="Permalink to this headline">¶</a></h3>
 <p>Make sure you have a valid <a class="reference external" href="https://wiki.php.net/internals/windows/stepbystepbuild_sdk_2">build enviroment as described here</a>.</p>
 <p>First, open a command line (<code class="docutils literal notranslate"><span class="pre">cmd.exe</span></code>).</p>
@@ -183,7 +242,7 @@ $ phpsdk_buildtree phpdev
 $ mkdir modules
 $ git clone https://github.com/gkralik/php7-sapnwrfc.git modules\sapnwrfc
 $ cd modules\sapnwrfc
-$ git checkout 2.0.0-beta2
+$ git checkout 2.0.0-beta3
 </pre></div>
 </div>
 <p>Download the PHP 8 source code from the <a class="reference external" href="https://windows.php.net/download/">PHP for Windows download page</a>
@@ -206,8 +265,8 @@ and set the <em>PATH</em> for the current console session:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>set PATH=%PATH%;C:\nwrfcsdk_750\lib
 </pre></div>
 </div>
-</div>
-<div class="section" id="build-the-extension">
+</section>
+<section id="build-the-extension">
 <h3>Build the extension<a class="headerlink" href="#build-the-extension" title="Permalink to this headline">¶</a></h3>
 <p>From the PHP source folder, execute <code class="docutils literal notranslate"><span class="pre">configure</span></code>, then <code class="docutils literal notranslate"><span class="pre">nmake</span></code> to build the extension:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ configure --disable-all --enable-cli --enable-test-ini --with-sapnwrfc=shared,C:\nwrfcsdk_750
@@ -226,11 +285,12 @@ Executing the tests requires access to a SAP system and a configuration file:</p
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ nmake test TESTS=..\modules\sapnwrfc\tests NO_INTERACTION=1 SAPNWRFC_ONLINE=1 SAPNWRFC_CUSTOM=1
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
-      </article>
+        </article>
+      </div>
       <footer>
         
         <div class="related-pages">
@@ -249,14 +309,10 @@ Executing the tests requires access to a SAP system and a configuration file:</p
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2016 - 2021 Gregor Kralik
-            |
-            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
-              and
-              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            |
-            <a class="muted-link" href="_sources/building.rst.txt"
+              Copyright &#169; 2016 - 2021 Gregor Kralik |
+          Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+          <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            | <a class="muted-link" href="_sources/building.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -293,11 +349,11 @@ Executing the tests requires access to a SAP system and a configuration file:</p
       
       
     </aside>
-  </main>
+  </div>
 </div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/main.js"></script>
+    <script src="_static/scripts/furo.js"></script>
     </body>
 </html>
