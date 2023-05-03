@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Changed
 - Update build instructions for Windows (#90)
+## Fixed
+- "Fix creation of dynamic property deprecation for PHP 8.2" for RemoteFunction:$name (#144, @kea)
 
 ## [2.0.0-beta2] - 2021-12-05
 ### Added
