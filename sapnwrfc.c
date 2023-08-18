@@ -583,7 +583,11 @@ PHP_METHOD(Connection, getFunction)
 
     // add a 'name' property to the function object. this helps to identify the object
     // when dumping it with var_dump()
+#if PHP_VERSION_ID >= 80000
     zend_update_property_str(sapnwrfc_function_ce, Z_OBJ_P(return_value), "name", sizeof("name")-1, zend_string_copy(function_name));
+#else
+    add_property_str(return_value, "name", zend_string_copy(function_name));
+#endif
 
     // get nr of parameters
     rc = RfcGetParameterCount(func_intern->function_desc_handle, &func_intern->parameter_count, &error_info);
@@ -1055,11 +1059,13 @@ static void register_sapnwrfc_function_object()
     sapnwrfc_function_ce = zend_register_internal_class(&ce);
     sapnwrfc_function_ce->ce_flags |= ZEND_ACC_FINAL;
 
+#if PHP_VERSION_ID >= 80000
     zval property_name_default_value;
     ZVAL_EMPTY_STRING(&property_name_default_value);
     zend_string *property_name_name = zend_string_init("name", sizeof("name") - 1, 1);
     zend_declare_typed_property(sapnwrfc_function_ce, property_name_name, &property_name_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING));
     zend_string_release(property_name_name);
+#endif
 }
 
 unsigned int rfc_clear_function_desc_cache(zend_string *function_name, zend_string *repository_id)
