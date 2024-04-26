@@ -1063,7 +1063,7 @@ static void register_sapnwrfc_function_object()
     zval property_name_default_value;
     ZVAL_EMPTY_STRING(&property_name_default_value);
     zend_string *property_name_name = zend_string_init("name", sizeof("name") - 1, 1);
-    zend_declare_typed_property(sapnwrfc_function_ce, property_name_name, &property_name_default_value, ZEND_ACC_PRIVATE, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING));
+    zend_declare_typed_property(sapnwrfc_function_ce, property_name_name, &property_name_default_value, ZEND_ACC_PUBLIC, NULL, (zend_type) ZEND_TYPE_INIT_MASK(MAY_BE_STRING));
     zend_string_release(property_name_name);
 #endif
 }
