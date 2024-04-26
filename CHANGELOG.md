@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Fixed
 - Fix a build error with PHP < 8.0 (#149, @kea)
+- Fix: failing test `tests/function_description/003_returns_function_interface.phpt`
 
 ## [2.0.0-beta3] - 2023-05-03
 ### Changed

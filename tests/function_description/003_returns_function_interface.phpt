@@ -22,7 +22,9 @@ $resptextDesc = $desc['RESPTEXT'];
 
 var_dump($resptextDesc['name'] === 'RESPTEXT');
 var_dump($resptextDesc['type'] === 'RFCTYPE_CHAR');
-var_dump($resptextDesc['description'] === 'Exporting response message');
+// description is 'Exporting response message' or 'Exporting response text' depending on the system,
+// so don't compare the value or the test might fail
+var_dump(is_string($resptextDesc['description']));
 var_dump($resptextDesc['direction'] === 'RFC_EXPORT');
 var_dump(is_long($resptextDesc['ucLength']));
 var_dump(is_long($resptextDesc['nucLength']));
