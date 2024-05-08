@@ -33,5 +33,5 @@ test($f, 0);
 TypeError: %s must be of%S type array, null given
 TypeError: %s must be of%S type array, string given
 TypeError: %s must be of%S type array, %r(stdClass|object)%r given
-TypeError: %s must be of%S type array, bool given
+TypeError: %s must be of%S type array, %r(bool|false)%r given
 TypeError: %s must be of%S type array, int given

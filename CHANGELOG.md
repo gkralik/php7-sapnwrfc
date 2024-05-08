@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 - Fix a build error with PHP < 8.0 (#149, @kea)
 - Fix: make RemoteFunction::$name public again on PHP >= 8.0
 - Fix: failing test `tests/function_description/003_returns_function_interface.phpt`
+- Fix: failing test `tests/083_remote_function_invoke_takes_optional_options_array.phpt` - changed TypeError message
 
 ## [2.0.0-beta3] - 2023-05-03
 ### Changed
