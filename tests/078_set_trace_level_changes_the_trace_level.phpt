@@ -37,6 +37,7 @@ var_dump(count($files) > 0);
 int(0)
 bool(true)
 --CLEAN--
+<?php
 // remove trace files
 $files = glob('*.trc');
 if(count($files) > 0) {
