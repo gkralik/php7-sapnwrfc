@@ -12,6 +12,8 @@ To start using ``php-sapnwrfc``, follow the :ref:`quick-start`.
 
    The extension is tested with PHP 8.1+ using SAP NW RFC SDK version 7.50.
 
+   Do not get confused by by the repository name, the repository is called `php7-sapnwrfc` for historical reasons.
+
 .. note::
 
    This documentation is updated continually and thus always reflects
