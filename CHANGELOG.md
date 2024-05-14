@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Stub file for IDE parsers/static analysers
 
+### Changed
+- Improve exception messages in `Connection::getSSOTicket()`.
+
 ### Fixed
 - Fix a build error with PHP < 8.0 (#149, @kea)
 - Fix: make RemoteFunction::$name public again on PHP >= 8.0

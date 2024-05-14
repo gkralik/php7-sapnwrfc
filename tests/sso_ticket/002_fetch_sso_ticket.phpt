@@ -13,9 +13,12 @@ $config = require(__DIR__ . '/../sapnwrfc.config.inc');
 $config['GETSSO2'] = '1';
 
 $c = new \SAPNWRFC\Connection($config);
-
-$ssoTicket = $c->getSSOTicket();
-var_dump(is_string($ssoTicket));
+try {
+    $ssoTicket = $c->getSSOTicket();
+    var_dump(is_string($ssoTicket));
+} catch (\SAPNWRFC\ConnectionException $ex) {
+    var_dump($ex);
+}
 --XFAIL--
 This test might fail if the profile parameter login/create_sso2_ticket is set to 0.
 --EXPECT--

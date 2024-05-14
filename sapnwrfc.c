@@ -402,11 +402,30 @@ PHP_METHOD(Connection, getSSOTicket)
     // determine the required buffer size
     buf_sso_ticket = emalloc(1);
     rc = RfcGetPartnerSSOTicket(intern->rfc_handle, buf_sso_ticket, &buf_len, &error_info);
+
+    // Check if we got a SSO ticket.
+    // If RfcGetPartnerSSOTicket returns an RFC_ILLEGAL_STATE error, we did not get a ticket.
+    // This can either be because the GETSSO2 connection parameter is not set
+    // or the profile parameter `login/create_sso2_ticket` is set to 0.
+    if (rc == RFC_ILLEGAL_STATE) {
+        efree(buf_sso_ticket);
+
+        sapnwrfc_throw_connection_exception(
+            error_info,
+            "Failed to retrieve SSO ticket: no ticket returned. "
+            "Make sure the GETSSO2 connecton parameter is set and the login/create_sso2_ticket profile parameter is set to a value different to 0."
+        );
+
+        RETURN_NULL();
+    }
+
+    // If the call did not return a RFC_ILLEGAL_STATE error, we expect a RFC_BUFFER_TOO_SMALL error.
+    // This is expected because we only allocated 1 byte in the call to RfcGetPartnerSSOTicket.
     if (rc != RFC_BUFFER_TOO_SMALL) {
         // this is unexpected
         efree(buf_sso_ticket);
 
-        sapnwrfc_throw_connection_exception(error_info, "Failed to retrieve SSO ticket.");
+        sapnwrfc_throw_connection_exception(error_info, "Failed to retrieve SSO ticket: unexpected error.");
 
         RETURN_NULL();
     }
