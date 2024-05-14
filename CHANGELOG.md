@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Stub file for IDE parsers/static analysers
+
 ### Fixed
 - Fix a build error with PHP < 8.0 (#149, @kea)
 - Fix: make RemoteFunction::$name public again on PHP >= 8.0
