@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Improve exception messages in `Connection::getSSOTicket()`.
+- Update type for `Exception::$errorInfo`
 
 ### Fixed
 - Fix a build error with PHP < 8.0 (#149, @kea)

@@ -19,10 +19,8 @@ class Exception extends \RuntimeException
      * available:
      *    "abapMsgClass", "abapMsgType", "abapMsgNumber", "abapMsgV1",
      *    "abapMsgV2", "abapMsgV3", "abapMsgV4"
-     *
-     * @var array
      */
-    protected $errorInfo;
+    protected ?array $errorInfo;
 
     /**
      * Getter for the errorInfo property.
