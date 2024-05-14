@@ -17,8 +17,6 @@ create github release
 ```
 
 commit/tag template:
-    release x.y.z
-    
-    Changes:
-      - ...
-      
+    Release version x.y.z
+
+    See CHANGELOG.md for changes.
