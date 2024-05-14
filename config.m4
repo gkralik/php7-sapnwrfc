@@ -1,9 +1,9 @@
-dnl Copyright (c) 2016 - 2021 Gregor Kralik <g.kralik (at) gmail.com>
+dnl Copyright (c) 2026 - 2024 Gregor Kralik <g.kralik+php-sapnwrfc (at) gmail.com>
 dnl
 dnl This source code is licensed under the MIT license found in the
 dnl LICENSE file in the root directory of this source tree.
 dnl
-dnl Author: Gregor Kralik <g.kralik@gmail.com>
+dnl Author: Gregor Kralik <g.kralik+php-sapnwrfc (at) gmail.com>
 
 dnl config.m4 for extension sapnwrfc
 

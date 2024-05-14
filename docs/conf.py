@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'php7-sapnwrfc'
-copyright = '2016 - 2021 Gregor Kralik'
+copyright = '2026 - 2024 Gregor Kralik'
 author = 'Gregor Kralik'
 
 # The version info for the project you're documenting, acts as replacement for
