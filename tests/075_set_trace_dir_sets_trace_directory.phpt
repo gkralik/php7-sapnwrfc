@@ -37,6 +37,10 @@ if(count($files) > 0) {
     }, $files);
 }
 
+// on Windows, the dev_rfc.log ends up in the traces dir,
+// so remove it if present so rmdir() does not fail
+@unlink($dir . DIRECTORY_SEPARATOR . 'dev_rfc.log');
+
 rmdir($dir);
 --EXPECT--
 bool(true)
