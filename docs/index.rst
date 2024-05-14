@@ -14,6 +14,9 @@ To start using ``php-sapnwrfc``, follow the :ref:`quick-start`.
 
    Do not get confused by by the repository name, the repository is called `php7-sapnwrfc` for historical reasons.
 
+   The extension should still build for PHP 7.3 and 7.4, but this is no longer supported and might break
+   in the future.
+
 .. note::
 
    This documentation is updated continually and thus always reflects

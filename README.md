@@ -11,6 +11,11 @@ If you find this project useful consider giving me a cup of coffee using the "Do
 
 The extension is tested with PHP 8.1+ using SAP NW RFC SDK version 7.50.
 
+The extension should still build for PHP 7.3 and 7.4, but this is no longer supported and might break
+in the future.
+
+The repository is called `php7-sapnwrfc` for historical reasons only.
+
 ### Older versions
 
 The `1.x` branch supports PHP 7.2+ with SAP NW RFC SDK version 7.20 supported up to release 1.3.
