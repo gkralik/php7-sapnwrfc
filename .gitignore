@@ -23,6 +23,7 @@ dev_rfc.trc
 dist/
 !docs/Makefile
 install-sh
+internal/
 libtool
 ltmain.sh
 missing
