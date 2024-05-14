@@ -29,6 +29,7 @@ missing
 mkinstalldirs
 modules/
 run-tests.php
+*.dep
 *.info
 *.la
 *.lo
