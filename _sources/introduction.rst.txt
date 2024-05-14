@@ -1,7 +1,7 @@
 Introduction
 ============
 
-The ``php7-sapnwrfc`` extension wraps the *SAP NW RFC library* and
+The ``php-sapnwrfc`` extension wraps the *SAP NW RFC library* and
 uses the provided methods to allow PHP developers to call 
 remote-enabled ABAP modules.
 
