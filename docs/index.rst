@@ -1,22 +1,20 @@
-php7-sapnwrfc - RFC connector for PHP 7/8
+php-sapnwrfc - RFC connector for PHP 8
 =========================================
 
-The `php7-sapnwrfc extension <https://github.com/gkralik/php7-sapnwrfc>`_ 
+The `php-sapnwrfc extension <https://github.com/gkralik/php7-sapnwrfc>`_
 provides an interface to use the *SAP NetWeaver RFC library* to call
 ABAP function modules via the SAP Remote Function Call (RFC) protocol.
 
-To start using ``php7-sapnwrfc``, follow the :ref:`quick-start`.
+To start using ``php-sapnwrfc``, follow the :ref:`quick-start`.
 
 .. admonition:: Supported versions
    :class: important
 
-   The extension is tested with PHP 7.3, 7.4 and 8.0 using SAP NW RFC SDK version 7.50.
-
-   Support for PHP 8 is experimental and available in the `main` branch of the repository.
+   The extension is tested with PHP 8.1+ using SAP NW RFC SDK version 7.50.
 
 .. note::
 
-   This documentation is updated continually and thus always reflects 
+   This documentation is updated continually and thus always reflects
    the latest development version of the extension.
 
 If you find this project useful, consider buying me a cup of coffee.
@@ -41,8 +39,8 @@ Documentation
 Contributing
 ------------
 
-Contribution to the project (be it by reporting/fixing bugs, writing documentaton, 
-helping with testing) is very welcome. Just `open an issue <https://github.com/gkralik/php7-sapnwrfc/issues>`_ 
+Contribution to the project (be it by reporting/fixing bugs, writing documentaton,
+helping with testing) is very welcome. Just `open an issue <https://github.com/gkralik/php7-sapnwrfc/issues>`_
 or a `pull request <https://github.com/gkralik/php7-sapnwrfc/pulls>`_ on GitHub.
 
 License
@@ -76,8 +74,8 @@ This software is licensed under the MIT license:
 Legal notice
 ------------
 
-SAP and other SAP products and services mentioned herein are trademarks or 
-registered trademarks of SAP SE (or an SAP affiliate company) in Germany 
+SAP and other SAP products and services mentioned herein are trademarks or
+registered trademarks of SAP SE (or an SAP affiliate company) in Germany
 and other countries.
 
 

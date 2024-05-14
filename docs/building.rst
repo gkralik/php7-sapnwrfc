@@ -11,8 +11,8 @@ Building on Linux
 
 .. code-block:: shell
 
-    $ git clone https://github.com/gkralik/php7-sapnwrfc.git
-    $ cd php7-sapnwrfc
+    $ git clone https://github.com/gkralik/php7-sapnwrfc.git php-sapnwrfc
+    $ cd php-sapnwrfc
     $ phpize
     $ ./configure
     $ make

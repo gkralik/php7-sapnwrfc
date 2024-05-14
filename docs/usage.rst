@@ -1,7 +1,7 @@
 Usage
 =====
 
-This guide describes commonly used functions of the ``php7-sapnwrfc`` extension.
+This guide describes commonly used functions of the ``php-sapnwrfc`` extension.
 For a more detailed overview of available methods, refer to the :doc:`API overview </api>`. 
 
 For getting started right away, refer to the :ref:`quick-start`.
