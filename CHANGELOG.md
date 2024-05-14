@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [2.0.0] - 2024-05-14
 ### Added
 - Stub file for IDE parsers/static analyzers
 
@@ -172,7 +174,8 @@ marked with **BC break**.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0-beta3...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0-beta3...2.0.0
 [2.0.0-beta3]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0-beta2...2.0.0-beta3
 [2.0.0-beta2]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0-beta1...2.0.0-beta2
 [2.0.0-beta1]: https://github.com/gkralik/php7-sapnwrfc/compare/1.4.0...2.0.0-beta1
