@@ -15,13 +15,13 @@ if (PHP_SAPNWRFC != "no") {
     var sdk_include_search_paths = [
         "C:\\nwrfcsdk\\include",
         "C:\\nwrfcsdk_750\\include",
-        PHP_SAPNWRFC
+        PHP_SAPNWRFC + "\\include"
     ];
 
 	var sdk_lib_search_paths = [
-        "C:\\nwrfcsdk",
-        "C:\\nwrfcsdk_750",
-        PHP_SAPNWRFC
+        "C:\\nwrfcsdk\\lib",
+        "C:\\nwrfcsdk_750\\lib",
+        PHP_SAPNWRFC + "\\lib"
     ];
 
     if (

@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Fix: failing test `tests/function_description/003_returns_function_interface.phpt`
 - Fix: failing test `tests/083_remote_function_invoke_takes_optional_options_array.phpt` - changed TypeError message
 - Fix: borked test `tests/078_set_trace_level_changes_the_trace_level.phpt` - invalid CLEAN script
+- Fix: header and library lookup paths for Windows builds
 
 ## [2.0.0-beta3] - 2023-05-03
 ### Changed
