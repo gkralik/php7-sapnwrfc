@@ -249,7 +249,9 @@ static zend_object *sapnwrfc_function_object_create(zend_class_entry *ce)
     object_properties_init(&intern->zobj, ce);
     intern->zobj.handlers = &sapnwrfc_function_object_handlers;
 
+    // initialize parameter status hash table
     ALLOC_HASHTABLE(intern->parameter_status);
+    zend_hash_init(intern->parameter_status, 0, NULL, NULL, 0);
 
     return &intern->zobj;
 }
@@ -270,9 +272,13 @@ static void sapnwrfc_function_object_free(zend_object *object)
     intern->parameter_count = 0;
 
     zend_hash_destroy(intern->parameter_status);
-    efree(intern->parameter_status);
+    FREE_HASHTABLE(intern->parameter_status);
 
-    zend_string_release(intern->name);
+    // Check if name is set before freeing.
+    // When RemoteFunction is mocked for testing, name could be NULL
+    if (intern->name) {
+        zend_string_release(intern->name);
+    }
 
     /* call Zend's free handler, which will free the object properties */
     zend_object_std_dtor(&intern->zobj);
@@ -616,8 +622,6 @@ PHP_METHOD(Connection, getFunction)
         RETURN_NULL();
     }
 
-    // initialize parameter status hash table
-    zend_hash_init(func_intern->parameter_status, func_intern->parameter_count, NULL, NULL, 0);
     ZVAL_TRUE(&zv_true);
 
     for (i = 0; i < func_intern->parameter_count; i++) {
@@ -1076,7 +1080,6 @@ static void register_sapnwrfc_function_object()
     INIT_CLASS_ENTRY(ce, "SAPNWRFC\\RemoteFunction", sapnwrfc_function_class_functions);
     ce.create_object = sapnwrfc_function_object_create;
     sapnwrfc_function_ce = zend_register_internal_class(&ce);
-    sapnwrfc_function_ce->ce_flags |= ZEND_ACC_FINAL;
 
 #if PHP_VERSION_ID >= 80000
     zval property_name_default_value;

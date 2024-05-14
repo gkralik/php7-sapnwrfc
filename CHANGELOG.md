@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Remove `ZEND_ACC_FINAL` from `RemoteFunction` to make it mockable (#133)
+
+## Fixed
+- Fix: segfault when freeing a manually created `RemoteFunction` object (#133)
 
 ## [2.0.0] - 2024-05-14
 ### Added
