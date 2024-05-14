@@ -31,6 +31,7 @@ modules/
 run-tests.php
 *.dep
 *.info
+*.gcno
 *.la
 *.lo
 *.loT
