@@ -1,5 +1,5 @@
 php-sapnwrfc - RFC connector for PHP 8
-=========================================
+======================================
 
 The `php-sapnwrfc extension <https://github.com/gkralik/php7-sapnwrfc>`_
 provides an interface to use the *SAP NetWeaver RFC library* to call

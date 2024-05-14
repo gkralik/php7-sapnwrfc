@@ -1,4 +1,4 @@
-# Change Log
+# Changelog
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Improve exception messages in `Connection::getSSOTicket()`
 - Update type for `Exception::$errorInfo`
+- Rewrite and improve the Windows build instructions (#157)
 
 ### Fixed
 - Fix a build error with PHP < 8.0 (#149, @kea)
