@@ -3,10 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- Stub file for IDE parsers/static analysers
+- Stub file for IDE parsers/static analyzers
 
 ### Changed
-- Improve exception messages in `Connection::getSSOTicket()`.
+- Improve exception messages in `Connection::getSSOTicket()`
 - Update type for `Exception::$errorInfo`
 
 ### Fixed
