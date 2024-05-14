@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fix a build error with PHP < 8.0 (#149, @kea)
-- Fix: make RemoteFunction::$name public again on PHP >= 8.0
+- Fix: make `RemoteFunction::$name` public again on PHP >= 8.0
 - Fix: failing test `tests/function_description/003_returns_function_interface.phpt`
 - Fix: failing test `tests/083_remote_function_invoke_takes_optional_options_array.phpt` - changed TypeError message
 - Fix: borked test `tests/078_set_trace_level_changes_the_trace_level.phpt` - invalid CLEAN script
