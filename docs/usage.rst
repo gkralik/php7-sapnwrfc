@@ -2,7 +2,7 @@ Usage
 =====
 
 This guide describes commonly used functions of the ``php-sapnwrfc`` extension.
-For a more detailed overview of available methods, refer to the :doc:`API overview </api>`. 
+For a more detailed overview of available methods, refer to the :doc:`API overview </api>`.
 
 For getting started right away, refer to the :ref:`quick-start`.
 
@@ -77,7 +77,7 @@ use_function_desc_cache
 
         Setting this option to ``false`` can result in degraded performance as the
         function description has to be fetched from the backend every time ``Connection::getFunction()``
-        is called. 
+        is called.
 
     .. seealso::
 
@@ -122,7 +122,7 @@ the name of the remote function module:
 .. code-block:: php
 
     <?php
-    
+
     $remoteFunction = $connection->getFunction('RFC_PING');
 
 If the lookup is successful, an object of type ``SAPNWRFC\RemoteFunction`` is returned
@@ -272,7 +272,7 @@ The *SAP NW RFC library* supports the activation and deactivation of parameters
 of a function module. This is especially useful if a function module has a lot of
 (possibly big) return values that you are not interested in.
 
-To activate or deactivate a parameter, we call the method 
+To activate or deactivate a parameter, we call the method
 ``SAPNWRFC\RemoteFunction::setParameterActive($parameterName, $isActive)``
 on the remote function object. We can use ``SAPNWRFC\RemoteFunction::isParameterActive($parameterName)``
 to check if a parameter is active or not.
@@ -317,15 +317,20 @@ backend while a script is still running (missing/garbage return values, etc.).
 
 In addition to setting the ``use_function_desc_cache`` option on the connection
 level the cache can also be cleared for individual function modules using the
-function ``\SAPNWRFC\clearFunctionDescCache($functionName, $repositoryId = null)``.
+function ``\SAPNWRFC\clearFunctionDescCache($functionName, $repositoryId)``.
+Pass the system ID as the repository ID (unless you know what you are doing).
 
 .. code-block:: php
 
     <?php
 
+    // Clearing the system ID cache
+    $sysId = $connection->getAttributes()['sysId'];
+    \SAPNWRFC\clearFunctionDescCache('STFC_STRUCTURE', $sysId);
+
+    // Clearing the default cache
     \SAPNWRFC\clearFunctionDescCache('STFC_STRUCTURE');
-    // or using the system ID
-    \SAPNWRFC\clearFunctionDescCache('STFC_STRUCTURE', 'X01');
+
 
 .. warning::
 
@@ -362,7 +367,7 @@ We can set the desired trace level via the ``trace`` parameter when
 establishing the connection or change it at any time using the
 ``SAPNWRFC\Connection::setTraceLevel($level)`` method.
 
-The extension defines constants on the ``SAPNWRFC\Connection`` class 
+The extension defines constants on the ``SAPNWRFC\Connection`` class
 for the four trace levels (from least to most verbose): ``TRACE_LEVEL_OFF``,
 ``TRACE_LEVEL_BRIEF``, ``TRACE_LEVEL_VERBOSE``, ``TRACE_LEVEL_FULL``.
 
@@ -393,8 +398,8 @@ adds an additional ``getErrorInfo()`` method to the standard methods and propert
 provided by ``RuntimeException``.
 
 ``getErrorInfo()`` returns an array with detailed error information and contains
-at least the keys ``code``, ``key`` and ``message``. 
+at least the keys ``code``, ``key`` and ``message``.
 
 Depending on the type of error, the following additional keys might be available
-with detailed information: ``abapMsgClass``, ``abapMsgType``, ``abapMsgNumber``, 
+with detailed information: ``abapMsgClass``, ``abapMsgType``, ``abapMsgNumber``,
 ``abapMsgV1``, ``abapMsgV2``, ``abapMsgV3``, ``abapMsgV4``.

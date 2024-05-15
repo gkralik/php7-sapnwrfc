@@ -263,10 +263,9 @@ static void sapnwrfc_function_object_free(zend_object *object)
 
     intern = SAPNWRFC_FUNCTION_OBJ(object);
 
-    if (intern->function_desc_handle) {
-        (void) RfcDestroyFunctionDesc(intern->function_desc_handle, &error_info);
-        intern->function_desc_handle = NULL;
-    }
+    // Just unset the function_desc_handle here, don't call RfcDestroyFunctionDesc
+    // This causes problems if we want to look up the same function multiple times.
+    intern->function_desc_handle = NULL;
 
     intern->rfc_handle = NULL;
     intern->parameter_count = 0;
