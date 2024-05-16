@@ -597,7 +597,7 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value, 
             return RFC_SET_VALUE_ERROR;
         }
 
-        memcpy(field_desc.name, field_name_u, sizeof(RFC_ABAP_NAME)); // RFC_CHAR [30+1]
+        memcpy(field_desc.name, field_name_u, strlenU(field_name_u));
         free((char *)field_name_u);
 
         if (rfc_set_field_value(row, field_desc, val) == RFC_SET_VALUE_ERROR) {

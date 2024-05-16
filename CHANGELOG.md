@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Fix an issue where looking up a function module fails if a previous `RemoteFunction` object has been unset
+- Fix an invalid read in `rfc_set_table_row`
 
 ## Fixed
 - Fix: segfault when freeing a manually created `RemoteFunction` object (#133)
