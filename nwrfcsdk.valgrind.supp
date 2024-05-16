@@ -1,0 +1,35 @@
+{
+   ignore_libsapnwrfc_leaks
+   Memcheck:Leak
+   ...
+   obj:*/libsapnwrfc.so
+}
+
+{
+   ignore_libsapnwrfc_conditional_jumps
+   Memcheck:Cond
+   ...
+   obj:*/libsapnwrfc.so
+}
+
+{
+   ignore_libsapucum_leaks
+   Memcheck:Leak
+   ...
+   obj:*/libsapucum.so
+}
+
+{
+   ignore_libsapucum_conditional_jumps
+   Memcheck:Cond
+   ...
+   obj:*/libsapucum.so
+}
+
+#{
+#   ignore_cond_jump_strlenU16
+#   Memcheck:Cond
+#   fun:strlenU16
+#   fun:sapuc_to_zend_string
+#   ...
+#}

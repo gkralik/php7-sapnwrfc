@@ -1,0 +1,332 @@
+# from https://gist.githubusercontent.com/jpauli/9a1f37b43e9ff97d40ec76f40618fb58/raw/ca646968d73577e9907a781c9f3774ad0366758a/PHP%2520useful%2520valgrind%2520suppressions
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:init_op_array
+   fun:compile_file
+   obj:*
+   ...
+   fun:zend_execute_scripts
+   fun:php_execute_script
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:xmlInitParser
+   fun:php_libxml_initialize
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:php_libxml_initialize
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:xmlInitCharEncodingHandlers
+   fun:xmlInitParser
+   fun:php_libxml_initialize
+   ...
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:xmlNewRMutex
+   fun:xmlInitializeDict
+   fun:xmlInitParser
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:xmlNewMutex
+   fun:xmlInitMemory
+   ...
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:zm_startup_intl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   fun:php_cli_startup
+   fun:main
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_estrndup
+   fun:lex_scan
+   fun:zendlex
+   fun:zendparse
+   fun:compile_file
+   ...
+   fun:zend_execute_scripts
+   fun:php_execute_script
+   ...
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:uprv_getDefaultLocaleID_44
+   fun:_ZN6icu_4427locale_set_default_internalEPKc
+   fun:_ZN6icu_446Locale10getDefaultEv
+   fun:locale_get_default_44
+   fun:zm_startup_intl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   ...
+   fun:main
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_estrndup
+   fun:zend_scan_escape_string
+   fun:lex_scan
+   fun:zendlex
+   fun:zendparse
+   fun:compile_file
+   ...
+   fun:phar_compile_file
+   fun:zend_execute_scripts
+   fun:php_execute_script
+   ...
+   fun:main
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   ...
+   fun:SSL_library_init
+   fun:zm_startup_openssl
+   ...
+   fun:zend_startup_modules
+   fun:php_module_startup
+   ...
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   obj:*
+   fun:ERR_get_state
+   fun:ERR_clear_error
+   fun:ENGINE_load_builtin_engines
+   fun:Curl_ossl_init
+   fun:curl_global_init
+   fun:zm_startup_curl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   fun:php_cli_startup
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   ...
+   fun:_dlerror_run
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   ...
+   fun:SSL_COMP_get_compression_methods
+   fun:SSL_library_init
+   fun:zm_startup_openssl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:*
+   ...
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   ...
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_new
+   obj:*
+   ...
+   fun:ERR_get_state
+   fun:ERR_clear_error
+   fun:ENGINE_load_builtin_engines
+   fun:Curl_ossl_init
+   fun:curl_global_init
+   fun:zm_startup_curl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   fun:php_cli_startup
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:CRYPTO_malloc
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:PQconnectPoll
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:PQconnectdb
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_new
+   obj:*
+   ...
+   fun:ERR_get_state
+   fun:ERR_clear_error
+   fun:ENGINE_load_builtin_engines
+   fun:Curl_ossl_init
+   fun:curl_global_init
+   fun:zm_startup_curl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   fun:php_cli_startup
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:pass_two
+   fun:compile_file
+   ...
+   fun:zend_execute_scripts
+   fun:php_execute_script
+   ...
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_ZN6icu_447UMemorynwEm
+   fun:_ZN6icu_4427locale_set_default_internalEPKc
+   fun:_ZN6icu_446Locale10getDefaultEv
+   fun:locale_get_default_44
+   fun:zm_startup_intl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   fun:php_cli_startup
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:ERR_get_state
+   fun:ERR_clear_error
+   fun:ENGINE_load_builtin_engines
+   fun:Curl_ossl_init
+   fun:curl_global_init
+   fun:zm_startup_curl
+   fun:zend_startup_module_ex
+   fun:zend_hash_apply
+   fun:zend_startup_modules
+   fun:php_module_startup
+   fun:php_cli_startup
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:compile_file
+   obj:*
+   ...
+   fun:zend_execute_scripts
+   fun:php_execute_script
+   fun:do_cli
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Value8
+   ...
+   obj:*instantclient*
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   ...
+   obj:*instantclient*
+}
+
+# from https://gist.github.com/nikic/8d404c6799a1532b0c10280f5e57a888
+{
+   String_Equality_Intentionally_Reads_Uninit_Memory
+   Memcheck:Cond
+   fun:zend_string_equal_val
+}
