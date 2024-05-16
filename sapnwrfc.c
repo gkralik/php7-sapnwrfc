@@ -258,7 +258,6 @@ static zend_object *sapnwrfc_function_object_create(zend_class_entry *ce)
 
 static void sapnwrfc_function_object_free(zend_object *object)
 {
-    RFC_ERROR_INFO error_info;
     sapnwrfc_function_object *intern;
 
     intern = SAPNWRFC_FUNCTION_OBJ(object);
