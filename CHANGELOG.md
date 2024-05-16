@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Fix an issue where looking up a function module fails if a previous `RemoteFunction` object has been unset
 - Fix an invalid read in `rfc_set_table_row`
 - Remove the incorrect stub file
+- Always return true for `Connection::setTraceDir()` and `Connection::setTraceLevel()`
 
 ## [2.0.0] - 2024-05-14
 ### Added

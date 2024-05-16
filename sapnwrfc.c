@@ -124,11 +124,11 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_reloadIniFile, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceDir, 0, 1, _IS_BOOL, 1)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceDir, 0, 1, IS_TRUE, 0)
     ZEND_ARG_TYPE_INFO(0, path, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceLevel, 0, 1, _IS_BOOL, 1)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceLevel, 0, 1, IS_TRUE, 0)
     ZEND_ARG_TYPE_INFO(0, level, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
@@ -712,6 +712,8 @@ PHP_METHOD(Connection, setTraceDir)
 
         return;
     }
+
+    ZVAL_TRUE(return_value);
 }
 
 PHP_METHOD(Connection, setTraceLevel)
@@ -741,6 +743,8 @@ PHP_METHOD(Connection, setTraceLevel)
 
         return;
     }
+
+    ZVAL_TRUE(return_value);
 }
 
 // Connection class methods
