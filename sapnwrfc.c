@@ -336,15 +336,19 @@ static void sapnwrfc_open_connection(sapnwrfc_connection_object *intern, HashTab
 
     if (!intern->rfc_handle) {
         sapnwrfc_throw_connection_exception(error_info, "Could not open connection");
+
+        return;
     }
 
-    // lookup the system ID. it is used as a key for the function desc cache
+    // Store the system ID - it is used as a key for the function desc cache
     rc = RfcGetConnectionAttributes(intern->rfc_handle, &attributes, &error_info);
-    if (rc == RFC_OK && attributes.sysId != NULL) {
-        intern->system_id = sapuc_to_zend_string(attributes.sysId);
-    } else {
-        intern->system_id = NULL;
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_connection_exception(error_info, "Failed to read connection attibutes");
+
+        return;
     }
+
+    intern->system_id = sapuc_to_zend_string(attributes.sysId);
 }
 
 PHP_METHOD(Connection, __construct)
