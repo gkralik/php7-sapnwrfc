@@ -20,6 +20,7 @@ configure.in
 configure.ac
 coverage_html/
 dev_rfc.trc
+dev_rfc.log
 dist/
 !docs/Makefile
 install-sh
