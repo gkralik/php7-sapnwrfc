@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 - Connection attributes: add `partnerIP` and `partnerIPv6` (added in SDK 7.50.6, `null` for earlier SDK versions)
 
 ### Changed
-- Remove `ZEND_ACC_FINAL` from `RemoteFunction` to make it mockable (#133)
+- Remove `ZEND_ACC_FINAL` from `RemoteFunction` to make it mockable (#133, **BC break**)
 
 ### Fixed
 - Fix: segfault when freeing a manually created `RemoteFunction` object (#133)
