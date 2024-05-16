@@ -66,12 +66,10 @@ if test "$PHP_SAPNWRFC" != "no"; then
 		PHP_ADD_INCLUDE(ext)
 	])
 
-	# check for RfcGetPartnerSSOTicket
-	# not needed, has always been available
-	#AC_CHECK_FUNC([RfcGetPartnerSSOTicket], [
-	#		AC_DEFINE([HAVE_RFC_GET_PARTNER_SSO_TICKET], [1], [Define to 1 if RfcGetPartnerSSOTicket is available])
-	#	]
-	#)
+	# Check for RFC_ATTRIBUTES.partnerIP and RFC_ATTRIBUTES.partnerIPv6 (added in SDK 7.50.6)
+	# Defines HAVE_RFC_ATTRIBUTES_PARTNER_IP and HAVE_RFC_ATTRIBUTES_PARTNER_IPV6
+	AC_CHECK_MEMBERS([RFC_ATTRIBUTES.partnerIP, RFC_ATTRIBUTES.partnerIPv6], [], [], [[#include "$SAPNWRFC_INCLUDE_DIR/sapnwrfc.h"]] )
+
 	# set up CFLAGS
 	PHP_SAPNWRFC_CFLAGS="-DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -std=gnu11 -DSAPwithUNICODE -Wall"
 

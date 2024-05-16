@@ -36,7 +36,12 @@ var_dump(array_key_exists("cpicConvId", $a));
 var_dump(array_key_exists("progName", $a));
 var_dump(array_key_exists("partnerBytesPerChar", $a));
 var_dump(array_key_exists("partnerSystemCodepage", $a));
+var_dump(array_key_exists("partnerIP", $a)); // SDK >= 7.50.6
+var_dump(array_key_exists("partnerIPv6", $a)); // SDK >= 7.50.6
+
 --EXPECT--
+bool(true)
+bool(true)
 bool(true)
 bool(true)
 bool(true)

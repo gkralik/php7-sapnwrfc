@@ -532,6 +532,21 @@ PHP_METHOD(Connection, getAttributes)
     add_assoc_str(return_value, "progName", sapuc_to_zend_string(attributes.progName));
     add_assoc_str(return_value, "partnerBytesPerChar", sapuc_to_zend_string(attributes.partnerBytesPerChar));
     add_assoc_str(return_value, "partnerSystemCodepage", sapuc_to_zend_string(attributes.partnerSystemCodepage));
+
+    // partnerIP and partnerIPv6 are availabe for SDK >= 7.50.6.
+    // Set null if not available.
+#ifdef HAVE_RFC_ATTRIBUTES_PARTNERIP
+    add_assoc_str(return_value, "partnerIP", sapuc_to_zend_string(attributes.partnerIP));
+#else
+    add_assoc_null(return_value, "partnerIP");
+#endif
+
+#ifdef HAVE_RFC_ATTRIBUTES_PARTNERIPV6
+    add_assoc_str(return_value, "partnerIPv6", sapuc_to_zend_string(attributes.partnerIP));
+#else
+    add_assoc_null(return_value, "partnerIPv6");
+#endif
+
 }
 
 PHP_METHOD(Connection, ping)
