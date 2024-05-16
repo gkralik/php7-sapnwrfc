@@ -174,7 +174,6 @@ rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     RFC_STRUCTURE_HANDLE table_row;
     zend_string *zname;
     HashTable *value_hash;
-    zend_string *key;
     zval *val;
 
     zname = sapuc_to_zend_string(name);
@@ -191,7 +190,7 @@ rfc_set_value_return_t rfc_set_table_value(DATA_CONTAINER_HANDLE h, SAP_UC *name
     }
 
     value_hash = Z_ARRVAL_P(value);
-    ZEND_HASH_FOREACH_STR_KEY_VAL(value_hash, key, val) {
+    ZEND_HASH_FOREACH_VAL(value_hash, val) {
         table_row = RfcAppendNewRow(h, &error_info);
         if (table_row == NULL) {
             sapnwrfc_throw_function_exception(error_info, "Failed to append TABLE row for parameter \"%s\"", ZSTR_VAL(zname));
@@ -563,7 +562,6 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value, 
     SAP_UC * field_name_u;
     HashTable *value_hash;
     zend_string *key;
-    zend_ulong num_key;
     zval *val;
 
     // if the value is a reference, get the reference value first
@@ -584,7 +582,7 @@ rfc_set_value_return_t rfc_set_table_row(RFC_STRUCTURE_HANDLE row, zval *value, 
 
     value_hash = Z_ARRVAL_P(value);
 
-    ZEND_HASH_FOREACH_KEY_VAL(value_hash, num_key, key, val) {
+    ZEND_HASH_FOREACH_STR_KEY_VAL(value_hash, key, val) {
         if (!key) { // not string
             zend_type_error("All TABLE parameter keys must be of type string");
             return RFC_SET_VALUE_ERROR;
