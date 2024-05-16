@@ -2,7 +2,7 @@
 setTraceLevel() changes the trace level.
 --SKIPIF--
 <?php
-require_once(__DIR__ . '/skipif.inc');
+require_once(__DIR__ . '/../skipif.inc');
 skipif_online_tests_disabled();
 ?>
 --FILE--
@@ -16,7 +16,7 @@ if(count($files) > 0) {
     }, $files);
 }
 
-$config = require(__DIR__ . '/sapnwrfc.config.inc');
+$config = require(__DIR__ . '/../sapnwrfc.config.inc');
 $config['trace'] = \SAPNWRFC\Connection::TRACE_LEVEL_OFF;
 $c = new \SAPNWRFC\Connection($config);
 

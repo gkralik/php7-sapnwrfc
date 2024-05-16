@@ -2,12 +2,12 @@
 setTraceDir() sets trace directory.
 --SKIPIF--
 <?php
-require_once(__DIR__ . '/skipif.inc');
+require_once(__DIR__ . '/../skipif.inc');
 skipif_online_tests_disabled();
 ?>
 --FILE--
 <?php
-$dir = __DIR__ . DIRECTORY_SEPARATOR . 'traces';
+$dir = __DIR__ . DIRECTORY_SEPARATOR . '_traces';
 
 if(!is_dir($dir)) {
     mkdir($dir);
@@ -15,7 +15,7 @@ if(!is_dir($dir)) {
 
 \SAPNWRFC\Connection::setTraceDir($dir);
 
-$config = require(__DIR__ . '/sapnwrfc.config.inc');
+$config = require(__DIR__ . '/../sapnwrfc.config.inc');
 $config['trace'] = \SAPNWRFC\Connection::TRACE_LEVEL_FULL;
 $c = new \SAPNWRFC\Connection($config);
 $f = $c->getFunction('RFC_PING');
@@ -27,7 +27,7 @@ var_dump(count($files) > 0);
 
 --CLEAN--
 <?php
-$dir = __DIR__ . DIRECTORY_SEPARATOR . 'traces';
+$dir = __DIR__ . DIRECTORY_SEPARATOR . '_traces';
 
 // remove trace files
 $files = glob($dir . DIRECTORY_SEPARATOR . '*.trc');

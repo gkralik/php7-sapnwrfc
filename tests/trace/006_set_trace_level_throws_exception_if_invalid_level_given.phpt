@@ -2,7 +2,7 @@
 setTraceLevel() throws ConnectionException if given an invalid trace level.
 --SKIPIF--
 <?php
-require_once(__DIR__ . '/skipif.inc');
+require_once(__DIR__ . '/../skipif.inc');
 ?>
 --FILE--
 <?php
