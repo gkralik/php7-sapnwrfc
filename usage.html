@@ -333,6 +333,22 @@ function modules.</p>
 </dd>
 </dl>
 </section>
+<section id="setting-the-global-logon-timeout">
+<h3>Setting the global logon timeout<a class="headerlink" href="#setting-the-global-logon-timeout" title="Link to this heading">¶</a></h3>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.1.0.</span></p>
+</div>
+<p>The global logon timeout can be set using <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::setGlobalLogonTimeout()</span></code>:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="c1">// Set the logon timeout to 10 seconds</span>
+<span class="nx">SAPNWRFC\Connection</span><span class="o">::</span><span class="na">setGlobalLogonTimeout</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This controls how long the logon in the ABAP backend can take when opening a connection.
+The valid range of values is 1 - 3600 seconds, with the default being 60 seconds.</p>
+<p>The timeout can also be set via <code class="docutils literal notranslate"><span class="pre">RFC_GLOBAL_LOGON_TIMEOUT</span></code> in the <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> section of the <em>sapnwrfc.ini</em> file.</p>
+</section>
 <section id="retrieving-a-sso-ticket">
 <h3>Retrieving a SSO ticket<a class="headerlink" href="#retrieving-a-sso-ticket" title="Link to this heading">¶</a></h3>
 <p>A SSO ticket can be retrieved from an existing connection using <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::getSSOTicket()</span></code>:</p>
@@ -742,6 +758,7 @@ with detailed information: <code class="docutils literal notranslate"><span clas
 <li><a class="reference internal" href="#">Usage</a><ul>
 <li><a class="reference internal" href="#connecting-to-a-sap-system">Connecting to a SAP system</a><ul>
 <li><a class="reference internal" href="#connection-options">Connection options</a></li>
+<li><a class="reference internal" href="#setting-the-global-logon-timeout">Setting the global logon timeout</a></li>
 <li><a class="reference internal" href="#retrieving-a-sso-ticket">Retrieving a SSO ticket</a></li>
 </ul>
 </li>

@@ -86,6 +86,26 @@ use_function_desc_cache
 
     *Default:* ``true``
 
+Setting the global logon timeout
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. versionadded:: 2.1.0
+
+The global logon timeout can be set using ``SAPNWRFC\Connection::setGlobalLogonTimeout()``:
+
+.. code-block:: php
+
+    <?php
+
+    // Set the logon timeout to 10 seconds
+    SAPNWRFC\Connection::setGlobalLogonTimeout(10);
+
+This controls how long the logon in the ABAP backend can take when opening a connection.
+The valid range of values is 1 - 3600 seconds, with the default being 60 seconds.
+
+The timeout can also be set via ``RFC_GLOBAL_LOGON_TIMEOUT`` in the ``DEFAULT`` section of the *sapnwrfc.ini* file.
+
+
 Retrieving a SSO ticket
 ^^^^^^^^^^^^^^^^^^^^^^^
 

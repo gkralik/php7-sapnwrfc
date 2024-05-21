@@ -468,6 +468,21 @@
     <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">setTraceLevel</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$level</span><span class="p">)</span><span class="o">:</span> <span class="nx">bool</span> <span class="p">{}</span>
 
     <span class="sd">/**</span>
+<span class="sd">     * Sets the global logon timeout in seconds.</span>
+<span class="sd">	 *</span>
+<span class="sd">	 * Sets the timeout for how long the logon in the ABAP backend can take when opening a connection.</span>
+<span class="sd">	 * The default value is 60 seconds.</span>
+<span class="sd">	 *</span>
+<span class="sd">	 * The timeout can also be set via &lt;code&gt;RFC_GLOBAL_LOGON_TIMEOUT&lt;/code&gt; in the &lt;code&gt;DEFAULT&lt;/code&gt;</span>
+<span class="sd">     * section of the &lt;em&gt;sapnwrfc.ini&lt;/em&gt; file.</span>
+<span class="sd">     *</span>
+<span class="sd">     * @param int $timeout Timeout in seconds (1 - 3600).</span>
+<span class="sd">     *</span>
+<span class="sd">     * @throws ConnectionException if timeout cannot be set or is out of range.</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">setGlobalLogonTimeout</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$timeout</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span> <span class="p">{}</span>
+
+    <span class="sd">/**</span>
 <span class="sd">     * Get the extension version.</span>
 <span class="sd">     *</span>
 <span class="sd">     * @return string The extension version.</span>
