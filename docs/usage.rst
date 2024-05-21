@@ -329,9 +329,6 @@ Function module details
 The ``SAPNWRFC\RemoteFunction`` object defines a public ``name`` property and
 a getter ``getName()`` fetch the name of the function module it represents.
 
-Additionally, a property for each parameter of the function module is defined
-on the object that can be used to get detailed information about the parameter.
-
 To get detailed information about a function module, including it's parameters,
 the ``SAPNWRFC\RemoteFunction::getFunctionDescription()`` method can be used:
 
