@@ -323,6 +323,66 @@ to check if a parameter is active or not.
     ]);
 
 
+Function module details
+^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``SAPNWRFC\RemoteFunction`` object defines a public ``name`` property and
+a getter ``getName()`` fetch the name of the function module it represents.
+
+Additionally, a property for each parameter of the function module is defined
+on the object that can be used to get detailed information about the parameter.
+
+To get detailed information about a function module, including it's parameters,
+the ``SAPNWRFC\RemoteFunction::getFunctionDescription()`` method can be used:
+
+.. code-block:: php
+
+    <?php
+
+    $function = $connection->getFunction('STFC_STRUCTURE');
+
+    $desc = $function->getFunctionDescription();
+
+    // $desc = [
+    //     'ECHOSTRUCT'   => [
+    //         'name'        => 'ECHOSTRUCT',
+    //         'type'        => 'RFCTYPE_STRUCTURE',
+    //         'direction'   => 'RFC_EXPORT',
+    //         'description' => 'Exporting structure',
+    //         'ucLength'    => 264,
+    //         'nucLength'   => 144,
+    //         'decimals'    => 0,
+    //         'optional'    => false,
+    //         'default'     => '',
+    //         'typedef'     => [
+    //             'RFCFLOAT' => [
+    //                 'name'      => 'RFCFLOAT',
+    //                 'type'      => 'RFCTYPE_FLOAT',
+    //                 'ucLength'  => 8,
+    //                 'ucOffset'  => 0,
+    //                 'nucLength' => 8,
+    //                 'nucOffset' => 0,
+    //                 'decimals'  => 16,
+    //             ],
+    //             /* ... */
+    //         ],
+    //     ],
+    //     'RESPTEXT'     => [
+    //         'name'        => 'RESPTEXT',
+    //         'type'        => 'RFCTYPE_CHAR',
+    //         'direction'   => 'RFC_EXPORT',
+    //         'description' => 'Exporting response text',
+    //         'ucLength'    => 510,
+    //         'nucLength'   => 255,
+    //         'decimals'    => 0,
+    //         'optional'    => false,
+    //         'default'     => '',
+    //     ],
+    //     'IMPORTSTRUCT' => [ /* ... */],
+    //     'RFCTABLE'     => [ /* ... */],
+    // ];
+
+
 .. _manually_clearing_function_desc_cache:
 
 Manually clearing the function module description cache
@@ -367,15 +427,6 @@ Pass the system ID as the repository ID (unless you know what you are doing).
 
         // $oldFn still uses the old function description!
 
-
-Function module details
-^^^^^^^^^^^^^^^^^^^^^^^
-
-The ``SAPNWRFC\RemoteFunction`` object defines a ``name`` property containing
-the name of the function module it represents.
-
-Additionally, a property for each parameter of the function module is defined
-on the object that can be used to get detailed information about the parameter.
 
 Trace levels
 ------------

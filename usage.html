@@ -606,6 +606,61 @@ to check if a parameter is active or not.</p>
 </pre></div>
 </div>
 </section>
+<section id="function-module-details">
+<h3>Function module details<a class="headerlink" href="#function-module-details" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\RemoteFunction</span></code> object defines a public <code class="docutils literal notranslate"><span class="pre">name</span></code> property and
+a getter <code class="docutils literal notranslate"><span class="pre">getName()</span></code> fetch the name of the function module it represents.</p>
+<p>Additionally, a property for each parameter of the function module is defined
+on the object that can be used to get detailed information about the parameter.</p>
+<p>To get detailed information about a function module, including it’s parameters,
+the <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\RemoteFunction::getFunctionDescription()</span></code> method can be used:</p>
+<div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
+
+<span class="nv">$function</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">getFunction</span><span class="p">(</span><span class="s1">&#39;STFC_STRUCTURE&#39;</span><span class="p">);</span>
+
+<span class="nv">$desc</span> <span class="o">=</span> <span class="nv">$function</span><span class="o">-&gt;</span><span class="na">getFunctionDescription</span><span class="p">();</span>
+
+<span class="c1">// $desc = [</span>
+<span class="c1">//     &#39;ECHOSTRUCT&#39;   =&gt; [</span>
+<span class="c1">//         &#39;name&#39;        =&gt; &#39;ECHOSTRUCT&#39;,</span>
+<span class="c1">//         &#39;type&#39;        =&gt; &#39;RFCTYPE_STRUCTURE&#39;,</span>
+<span class="c1">//         &#39;direction&#39;   =&gt; &#39;RFC_EXPORT&#39;,</span>
+<span class="c1">//         &#39;description&#39; =&gt; &#39;Exporting structure&#39;,</span>
+<span class="c1">//         &#39;ucLength&#39;    =&gt; 264,</span>
+<span class="c1">//         &#39;nucLength&#39;   =&gt; 144,</span>
+<span class="c1">//         &#39;decimals&#39;    =&gt; 0,</span>
+<span class="c1">//         &#39;optional&#39;    =&gt; false,</span>
+<span class="c1">//         &#39;default&#39;     =&gt; &#39;&#39;,</span>
+<span class="c1">//         &#39;typedef&#39;     =&gt; [</span>
+<span class="c1">//             &#39;RFCFLOAT&#39; =&gt; [</span>
+<span class="c1">//                 &#39;name&#39;      =&gt; &#39;RFCFLOAT&#39;,</span>
+<span class="c1">//                 &#39;type&#39;      =&gt; &#39;RFCTYPE_FLOAT&#39;,</span>
+<span class="c1">//                 &#39;ucLength&#39;  =&gt; 8,</span>
+<span class="c1">//                 &#39;ucOffset&#39;  =&gt; 0,</span>
+<span class="c1">//                 &#39;nucLength&#39; =&gt; 8,</span>
+<span class="c1">//                 &#39;nucOffset&#39; =&gt; 0,</span>
+<span class="c1">//                 &#39;decimals&#39;  =&gt; 16,</span>
+<span class="c1">//             ],</span>
+<span class="c1">//             /* ... */</span>
+<span class="c1">//         ],</span>
+<span class="c1">//     ],</span>
+<span class="c1">//     &#39;RESPTEXT&#39;     =&gt; [</span>
+<span class="c1">//         &#39;name&#39;        =&gt; &#39;RESPTEXT&#39;,</span>
+<span class="c1">//         &#39;type&#39;        =&gt; &#39;RFCTYPE_CHAR&#39;,</span>
+<span class="c1">//         &#39;direction&#39;   =&gt; &#39;RFC_EXPORT&#39;,</span>
+<span class="c1">//         &#39;description&#39; =&gt; &#39;Exporting response text&#39;,</span>
+<span class="c1">//         &#39;ucLength&#39;    =&gt; 510,</span>
+<span class="c1">//         &#39;nucLength&#39;   =&gt; 255,</span>
+<span class="c1">//         &#39;decimals&#39;    =&gt; 0,</span>
+<span class="c1">//         &#39;optional&#39;    =&gt; false,</span>
+<span class="c1">//         &#39;default&#39;     =&gt; &#39;&#39;,</span>
+<span class="c1">//     ],</span>
+<span class="c1">//     &#39;IMPORTSTRUCT&#39; =&gt; [ /* ... */],</span>
+<span class="c1">//     &#39;RFCTABLE&#39;     =&gt; [ /* ... */],</span>
+<span class="c1">// ];</span>
+</pre></div>
+</div>
+</section>
 <section id="manually-clearing-the-function-module-description-cache">
 <span id="manually-clearing-function-desc-cache"></span><h3>Manually clearing the function module description cache<a class="headerlink" href="#manually-clearing-the-function-module-description-cache" title="Link to this heading">¶</a></h3>
 <div class="versionadded">
@@ -643,13 +698,6 @@ existing <code class="docutils literal notranslate"><span class="pre">RemoteFunc
 </pre></div>
 </div>
 </div>
-</section>
-<section id="function-module-details">
-<h3>Function module details<a class="headerlink" href="#function-module-details" title="Link to this heading">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\RemoteFunction</span></code> object defines a <code class="docutils literal notranslate"><span class="pre">name</span></code> property containing
-the name of the function module it represents.</p>
-<p>Additionally, a property for each parameter of the function module is defined
-on the object that can be used to get detailed information about the parameter.</p>
 </section>
 </section>
 <section id="trace-levels">
@@ -769,8 +817,8 @@ with detailed information: <code class="docutils literal notranslate"><span clas
 <li><a class="reference internal" href="#parameter-type-mappings">Parameter type mappings</a></li>
 <li><a class="reference internal" href="#passing-options-when-calling-function-modules">Passing options when calling function modules</a></li>
 <li><a class="reference internal" href="#activating-deactivating-parameters">Activating/Deactivating parameters</a></li>
-<li><a class="reference internal" href="#manually-clearing-the-function-module-description-cache">Manually clearing the function module description cache</a></li>
 <li><a class="reference internal" href="#function-module-details">Function module details</a></li>
+<li><a class="reference internal" href="#manually-clearing-the-function-module-description-cache">Manually clearing the function module description cache</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#trace-levels">Trace levels</a></li>
