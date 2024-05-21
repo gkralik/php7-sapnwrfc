@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 Possibly breaking changes are marked with **BC break**.
 
 ## [Unreleased]
+
+
+## [2.1.0] - 2024-05-21
 ### Added
 - Connection attributes: add `partnerIP` and `partnerIPv6` (added in SDK 7.50.6, `null` for earlier SDK versions)
 - Add trace level `TRACE_LEVEL_DETAILED` (3), change `TRACE_LEVEL_FULL` to 4 (requires SDK 7.50.9)
@@ -190,7 +193,8 @@ marked with **BC break**.
 ### Added
 - Initial working release of the extension
 
-[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/gkralik/php7-sapnwrfc/compare/2.1.0...HEAD
+[2.1.0]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0-beta3...2.0.0
 [2.0.0-beta3]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0-beta2...2.0.0-beta3
 [2.0.0-beta2]: https://github.com/gkralik/php7-sapnwrfc/compare/2.0.0-beta1...2.0.0-beta2
