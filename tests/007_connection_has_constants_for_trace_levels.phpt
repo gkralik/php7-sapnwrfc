@@ -9,9 +9,11 @@ require_once(__DIR__ . '/skipif.inc');
 var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_OFF);
 var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_BRIEF);
 var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_VERBOSE);
+var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_DETAILED);
 var_dump(\SAPNWRFC\Connection::TRACE_LEVEL_FULL);
 --EXPECT--
 int(0)
 int(1)
 int(2)
 int(3)
+int(4)

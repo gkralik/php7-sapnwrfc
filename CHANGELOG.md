@@ -1,9 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+Possibly breaking changes are marked with **BC break**.
+
 ## [Unreleased]
 ### Added
 - Connection attributes: add `partnerIP` and `partnerIPv6` (added in SDK 7.50.6, `null` for earlier SDK versions)
+- Add trace level `TRACE_LEVEL_DETAILED` (3), change `TRACE_LEVEL_FULL` to 4 (requires SDK 7.50.9)
 
 ### Changed
 - Remove `ZEND_ACC_FINAL` from `RemoteFunction` to make it mockable (#133, **BC break**)

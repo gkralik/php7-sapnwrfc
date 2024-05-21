@@ -57,10 +57,39 @@ class FunctionCallException extends Exception {}
 
 class Connection
 {
-    const TRACE_LEVEL_OFF = 0;
-    const TRACE_LEVEL_BRIEF = 1;
-    const TRACE_LEVEL_VERBOSE = 2;
-    const TRACE_LEVEL_FULL = 3;
+    /**
+     * Off. Only severe errors are logged to the dev_rfc.log file.
+     * @var int
+     */
+    public const TRACE_LEVEL_OFF = 0;
+
+    /**
+     * Brief. All API calls (except for the setter and getter functions) and important attributes like codepages,
+     * RFC headers, logon parameters are traced. Trace is written to a file named rfc<pid>.trc or
+     * rfc<pid>_<tid>.trc, depending on whether tracing is done on a "per-process" basis or a "per-thread" basis.
+     * <pid> is the current process ID, <tid> the current thread ID.
+     * @var int
+     */
+    public const TRACE_LEVEL_BRIEF = 1;
+
+    /**
+     * Verbose. In addition to 1, the values of the "scalar" RFC parameters as well as the contents of the network
+     * containers are traced. Scalar parameters are primitive types (CHAR, INT, FLOAT, etc) and flat structures.
+     * @var int
+     */
+    public const TRACE_LEVEL_VERBOSE = 2;
+
+    /**
+     * Detailed. In addition to 2 the contents of nested structures and tables and hexdumps are traced.
+     * @var int
+     */
+    public const TRACE_LEVEL_DETAILED = 3;
+
+    /**
+     * Full. In addition to 3 all API calls of setter and getter functions and table operations are traced.
+     * @var int
+     */
+    public const TRACE_LEVEL_FULL = 4;
 
     /**
      * Connect to the system using the given parameters.

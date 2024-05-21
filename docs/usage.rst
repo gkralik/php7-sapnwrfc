@@ -368,8 +368,14 @@ establishing the connection or change it at any time using the
 ``SAPNWRFC\Connection::setTraceLevel($level)`` method.
 
 The extension defines constants on the ``SAPNWRFC\Connection`` class
-for the four trace levels (from least to most verbose): ``TRACE_LEVEL_OFF``,
-``TRACE_LEVEL_BRIEF``, ``TRACE_LEVEL_VERBOSE``, ``TRACE_LEVEL_FULL``.
+for the five trace levels (from least to most verbose): ``TRACE_LEVEL_OFF``,
+``TRACE_LEVEL_BRIEF``, ``TRACE_LEVEL_VERBOSE``, ``TRACE_LEVEL_DETAILED`` and
+``TRACE_LEVEL_FULL``.
+
+.. note::
+   .. versionchanged:: 2.1.0
+      ``TRACE_LEVEL_DETAILED`` is available starting with SDK version 7.50.9.
+      Earlier SDK versions only have the ``TRACE_LEVEL_FULL`` level.
 
 Additionally, we can set the directory for the generated trace file
 using ``SAPNWRFC\Connection::setTraceDir($path)``. The default location

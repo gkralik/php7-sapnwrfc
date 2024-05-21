@@ -1083,10 +1083,12 @@ static void register_sapnwrfc_connection_object()
     ce.create_object = sapnwrfc_connection_object_create;
     sapnwrfc_connection_ce = zend_register_internal_class(&ce);
 
+    // Register constants for trace levels (see RfcSetTraceLevel in sapnwrfc.h).
     zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_OFF", sizeof("TRACE_LEVEL_OFF") - 1, 0);
     zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_BRIEF", sizeof("TRACE_LEVEL_BRIEF") - 1, 1);
     zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_VERBOSE", sizeof("TRACE_LEVEL_VERBOSE") - 1, 2);
-    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_FULL", sizeof("TRACE_LEVEL_FULL") - 1, 3);
+    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_DETAILED", sizeof("TRACE_LEVEL_DETAILED") - 1, 3);
+    zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_FULL", sizeof("TRACE_LEVEL_FULL") - 1, 4);
 }
 
 static void register_sapnwrfc_function_object()
