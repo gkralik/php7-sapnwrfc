@@ -207,6 +207,21 @@ class Connection
     public static function setTraceLevel(int $level): bool {}
 
     /**
+     * Sets the global logon timeout in seconds.
+	 *
+	 * Sets the timeout for how long the logon in the ABAP backend can take when opening a connection.
+	 * The default value is 60 seconds.
+	 *
+	 * The timeout can also be set via <code>RFC_GLOBAL_LOGON_TIMEOUT</code> in the <code>DEFAULT</code>
+     * section of the <em>sapnwrfc.ini</em> file.
+     *
+     * @param int $timeout Timeout in seconds (1 - 3600).
+     *
+     * @throws ConnectionException if timeout cannot be set or is out of range.
+     */
+    public static function setGlobalLogonTimeout(int $timeout): void {}
+
+    /**
      * Get the extension version.
      *
      * @return string The extension version.

@@ -85,6 +85,7 @@ PHP_METHOD(Connection, setIniPath);
 PHP_METHOD(Connection, reloadIniFile);
 PHP_METHOD(Connection, setTraceDir);
 PHP_METHOD(Connection, setTraceLevel);
+PHP_METHOD(Connection, setGlobalLogonTimeout);
 PHP_METHOD(Connection, version);
 PHP_METHOD(Connection, rfcVersion);
 
@@ -132,6 +133,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setTraceLevel, 0, 1, 
     ZEND_ARG_TYPE_INFO(0, level, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_Connection_setGlobalLogonTimeout, 0, 1, IS_VOID, 0)
+    ZEND_ARG_TYPE_INFO(0, timeout, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO(arginfo_Connection_version, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
@@ -178,6 +184,7 @@ static zend_function_entry sapnwrfc_connection_class_functions[] = {
     PHP_ME(Connection, reloadIniFile, arginfo_Connection_reloadIniFile, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, setTraceDir, arginfo_Connection_setTraceDir, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, setTraceLevel, arginfo_Connection_setTraceLevel, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
+    PHP_ME(Connection, setGlobalLogonTimeout, arginfo_Connection_setGlobalLogonTimeout, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, version, arginfo_Connection_version, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_ME(Connection, rfcVersion, arginfo_Connection_rfcVersion, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC | ZEND_ACC_HAS_RETURN_TYPE)
     PHP_FE_END
@@ -762,6 +769,30 @@ PHP_METHOD(Connection, setTraceLevel)
     ZVAL_TRUE(return_value);
 }
 
+PHP_METHOD(Connection, setGlobalLogonTimeout)
+{
+    RFC_ERROR_INFO error_info;
+    RFC_RC rc = RFC_OK;
+    zend_long timeout;
+
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_LONG(timeout)
+    ZEND_PARSE_PARAMETERS_END();
+
+    if (timeout < 1 || timeout > 3600) {
+        zend_throw_exception(sapnwrfc_connection_exception_ce, "Failed to set logon timeout. Value out of range (expected 1 - 3600)", 0);
+
+        return;
+    }
+
+    rc = RfcSetGlobalLogonTimeout((unsigned)timeout, &error_info);
+    if (rc != RFC_OK) {
+        sapnwrfc_throw_connection_exception(error_info, "Failed to set logon timeout");
+
+        return;
+    }
+}
+
 // Connection class methods
 PHP_METHOD(Connection, version)
 {
@@ -1089,6 +1120,7 @@ static void register_sapnwrfc_connection_object()
     zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_VERBOSE", sizeof("TRACE_LEVEL_VERBOSE") - 1, 2);
     zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_DETAILED", sizeof("TRACE_LEVEL_DETAILED") - 1, 3);
     zend_declare_class_constant_long(sapnwrfc_connection_ce, "TRACE_LEVEL_FULL", sizeof("TRACE_LEVEL_FULL") - 1, 4);
+
 }
 
 static void register_sapnwrfc_function_object()
