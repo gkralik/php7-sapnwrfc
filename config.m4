@@ -60,7 +60,8 @@ if test "$PHP_SAPNWRFC" != "no"; then
 
 	PHP_SUBST(SAPNWRFC_SHARED_LIBADD)
 
-	# check for uchar.h
+	# Check for uchar.h
+	# If not found, include the uchar.h from SAP note 2573953
 	AC_CHECK_HEADER([uchar.h], [], [
 		AC_MSG_NOTICE([using bundled uchar.h])
 		PHP_ADD_INCLUDE(ext)
