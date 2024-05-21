@@ -17,7 +17,7 @@ function test($param) {
 }
 
 test(-1);
-test(4);
+test(5);
 --EXPECT--
 fail
 fail

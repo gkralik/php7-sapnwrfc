@@ -746,8 +746,8 @@ PHP_METHOD(Connection, setTraceLevel)
     }
     zend_restore_error_handling(&zeh);
 
-    if (level < 0 || level > 3) {
-        zend_throw_exception(sapnwrfc_connection_exception_ce, "Failed to set trace level. Value out of range (expected 0 - 3)", 0);
+    if (level < 0 || level > 4) {
+        zend_throw_exception(sapnwrfc_connection_exception_ce, "Failed to set trace level. Value out of range (expected 0 - 4)", 0);
 
         return;
     }
