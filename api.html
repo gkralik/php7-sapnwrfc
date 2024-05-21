@@ -271,20 +271,20 @@
 
 <span class="sd">/**</span>
 <span class="sd"> * Clear the function desc cache for $functionName.</span>
-<span class="sd"> * </span>
+<span class="sd"> *</span>
 <span class="sd"> * Clears the default repository. If $repositoryId is passed, the cache</span>
 <span class="sd"> * repository matching $repository is cleard as well.</span>
-<span class="sd"> * </span>
+<span class="sd"> *</span>
 <span class="sd"> * @since 1.3.0</span>
-<span class="sd"> * </span>
+<span class="sd"> *</span>
 <span class="sd"> * @param string $functionName Function name.</span>
 <span class="sd"> * @param string $repositoryId The cache repository to use. Defaults to null.</span>
 <span class="sd"> *                             If passed, the repository is cleared in addition</span>
 <span class="sd"> *                             to the default repository.</span>
-<span class="sd"> * </span>
+<span class="sd"> *</span>
 <span class="sd"> * @return bool True if the call succeeded (this does not necessarily mean</span>
 <span class="sd"> *              that a cache entry was found).</span>
-<span class="sd"> * </span>
+<span class="sd"> *</span>
 <span class="sd"> */</span>
 <span class="k">function</span> <span class="nf">clearFunctionDescCache</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$functionName</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$repositoryId</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span><span class="o">:</span> <span class="nx">bool</span> <span class="p">{}</span>
 
@@ -309,7 +309,7 @@
 <span class="sd">     *</span>
 <span class="sd">     * @returns array|null</span>
 <span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getErrorInfo</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span> <span class="p">{}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getErrorInfo</span><span class="p">()</span><span class="o">:</span> <span class="o">?</span><span class="k">array</span> <span class="p">{}</span>
 <span class="p">}</span>
 
 <span class="k">class</span> <span class="nc">ConnectionException</span> <span class="k">extends</span> <span class="nx">Exception</span> <span class="p">{}</span>
@@ -318,10 +318,39 @@
 
 <span class="k">class</span> <span class="nc">Connection</span>
 <span class="p">{</span>
-    <span class="k">const</span> <span class="no">TRACE_LEVEL_OFF</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">const</span> <span class="no">TRACE_LEVEL_BRIEF</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">const</span> <span class="no">TRACE_LEVEL_VERBOSE</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">const</span> <span class="no">TRACE_LEVEL_FULL</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="sd">/**</span>
+<span class="sd">     * Off. Only severe errors are logged to the dev_rfc.log file.</span>
+<span class="sd">     * @var int</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="no">TRACE_LEVEL_OFF</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Brief. All API calls (except for the setter and getter functions) and important attributes like codepages,</span>
+<span class="sd">     * RFC headers, logon parameters are traced. Trace is written to a file named rfc&lt;pid&gt;.trc or</span>
+<span class="sd">     * rfc&lt;pid&gt;_&lt;tid&gt;.trc, depending on whether tracing is done on a &quot;per-process&quot; basis or a &quot;per-thread&quot; basis.</span>
+<span class="sd">     * &lt;pid&gt; is the current process ID, &lt;tid&gt; the current thread ID.</span>
+<span class="sd">     * @var int</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="no">TRACE_LEVEL_BRIEF</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Verbose. In addition to 1, the values of the &quot;scalar&quot; RFC parameters as well as the contents of the network</span>
+<span class="sd">     * containers are traced. Scalar parameters are primitive types (CHAR, INT, FLOAT, etc) and flat structures.</span>
+<span class="sd">     * @var int</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="no">TRACE_LEVEL_VERBOSE</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Detailed. In addition to 2 the contents of nested structures and tables and hexdumps are traced.</span>
+<span class="sd">     * @var int</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="no">TRACE_LEVEL_DETAILED</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * Full. In addition to 3 all API calls of setter and getter functions and table operations are traced.</span>
+<span class="sd">     * @var int</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">const</span> <span class="no">TRACE_LEVEL_FULL</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
 
     <span class="sd">/**</span>
 <span class="sd">     * Connect to the system using the given parameters.</span>
@@ -355,14 +384,15 @@
     <span class="sd">/**</span>
 <span class="sd">     * Lookup a RFC function and return a RemoteFunction object.</span>
 <span class="sd">     *</span>
-<span class="sd">     * @param string $functionnName Name of the function.</span>
+<span class="sd">     * @param string $functionnName   Name of the function.</span>
+<span class="sd">     * @param bool   $invalidateCache If true, invalidates the function desc cache.</span>
 <span class="sd">     *</span>
 <span class="sd">     * @return RemoteFunction A RemoteFunction class for the RFC function.</span>
 <span class="sd">     *</span>
 <span class="sd">     * @throws FunctionCallException if the lookup fails or an error is</span>
 <span class="sd">     *                               returned during parameter parsing.</span>
 <span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">getFunction</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$functionName</span><span class="p">)</span><span class="o">:</span> <span class="nx">RemoteFunction</span> <span class="p">{}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">getFunction</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$functionName</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$invalidateCache</span> <span class="o">=</span> <span class="k">false</span><span class="p">)</span><span class="o">:</span> <span class="nx">RemoteFunction</span> <span class="p">{}</span>
 
     <span class="sd">/**</span>
 <span class="sd">     * Retrieve a SSO ticket from the connection.</span>
@@ -420,7 +450,7 @@
 <span class="sd">     *</span>
 <span class="sd">     * @param string $path Path to trace directory (must exist).</span>
 <span class="sd">     *</span>
-<span class="sd">     * @return bool True if path was set.</span>
+<span class="sd">     * @return true True if path was set (BC).</span>
 <span class="sd">     *</span>
 <span class="sd">     * @throws ConnectionException if path could not be set.</span>
 <span class="sd">     */</span>
@@ -431,7 +461,7 @@
 <span class="sd">     *</span>
 <span class="sd">     * @param int $level Trace level.</span>
 <span class="sd">     *</span>
-<span class="sd">     * @return bool True if level was set.</span>
+<span class="sd">     * @return true True if trace level was set (BC).</span>
 <span class="sd">     *</span>
 <span class="sd">     * @throws ConnectionException if level could not be set.</span>
 <span class="sd">     */</span>
@@ -475,7 +505,7 @@
 <span class="sd">     *</span>
 <span class="sd">     * @throws FunctionCallException if the parameter status could not be set.</span>
 <span class="sd">     */</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="nf">setParameterActive</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$parameterName</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$isActive</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">setParameterActive</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$parameterName</span><span class="p">,</span> <span class="nx">bool</span> <span class="nv">$isActive</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span> <span class="p">{}</span>
 
     <span class="sd">/**</span>
 <span class="sd">     * Check if a parameter is active or inactive.</span>
@@ -488,9 +518,9 @@
 
     <span class="sd">/**</span>
 <span class="sd">     * Get the function&#39;s parameter description.</span>
-<span class="sd">     * </span>
+<span class="sd">     *</span>
 <span class="sd">     * @return array The parameter descriptions, indexed by parameter name.</span>
-<span class="sd">     * </span>
+<span class="sd">     *</span>
 <span class="sd">     * @throws FunctionCallException if the interface description cannot be retrieved.</span>
 <span class="sd">     */</span>
     <span class="k">public</span> <span class="k">function</span> <span class="nf">getFunctionDescription</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span> <span class="p">{}</span>

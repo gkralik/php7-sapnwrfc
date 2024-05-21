@@ -601,12 +601,16 @@ lead to unexpected results when the function module signature changes in the
 backend while a script is still running (missing/garbage return values, etc.).</p>
 <p>In addition to setting the <code class="docutils literal notranslate"><span class="pre">use_function_desc_cache</span></code> option on the connection
 level the cache can also be cleared for individual function modules using the
-function <code class="docutils literal notranslate"><span class="pre">\SAPNWRFC\clearFunctionDescCache($functionName,</span> <span class="pre">$repositoryId</span> <span class="pre">=</span> <span class="pre">null)</span></code>.</p>
+function <code class="docutils literal notranslate"><span class="pre">\SAPNWRFC\clearFunctionDescCache($functionName,</span> <span class="pre">$repositoryId)</span></code>.
+Pass the system ID as the repository ID (unless you know what you are doing).</p>
 <div class="highlight-php notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;?php</span>
 
+<span class="c1">// Clearing the system ID cache</span>
+<span class="nv">$sysId</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">getAttributes</span><span class="p">()[</span><span class="s1">&#39;sysId&#39;</span><span class="p">];</span>
+<span class="nx">\SAPNWRFC\clearFunctionDescCache</span><span class="p">(</span><span class="s1">&#39;STFC_STRUCTURE&#39;</span><span class="p">,</span> <span class="nv">$sysId</span><span class="p">);</span>
+
+<span class="c1">// Clearing the default cache</span>
 <span class="nx">\SAPNWRFC\clearFunctionDescCache</span><span class="p">(</span><span class="s1">&#39;STFC_STRUCTURE&#39;</span><span class="p">);</span>
-<span class="c1">// or using the system ID</span>
-<span class="nx">\SAPNWRFC\clearFunctionDescCache</span><span class="p">(</span><span class="s1">&#39;STFC_STRUCTURE&#39;</span><span class="p">,</span> <span class="s1">&#39;X01&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -640,8 +644,16 @@ connection and/or function call problems.</p>
 establishing the connection or change it at any time using the
 <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::setTraceLevel($level)</span></code> method.</p>
 <p>The extension defines constants on the <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection</span></code> class
-for the four trace levels (from least to most verbose): <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_OFF</span></code>,
-<code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_BRIEF</span></code>, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_VERBOSE</span></code>, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_FULL</span></code>.</p>
+for the five trace levels (from least to most verbose): <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_OFF</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_BRIEF</span></code>, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_VERBOSE</span></code>, <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_DETAILED</span></code> and
+<code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_FULL</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.1.0: </span><code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_DETAILED</span></code> is available starting with SDK version 7.50.9.
+Earlier SDK versions only have the <code class="docutils literal notranslate"><span class="pre">TRACE_LEVEL_FULL</span></code> level.</p>
+</div>
+</div>
 <p>Additionally, we can set the directory for the generated trace file
 using <code class="docutils literal notranslate"><span class="pre">SAPNWRFC\Connection::setTraceDir($path)</span></code>. The default location
 for the trace file is the current working directory.</p>
