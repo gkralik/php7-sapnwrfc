@@ -428,7 +428,7 @@ PHP_METHOD(Connection, getSSOTicket)
         sapnwrfc_throw_connection_exception(
             error_info,
             "Failed to retrieve SSO ticket: no ticket returned. "
-            "Make sure the GETSSO2 connecton parameter is set and the login/create_sso2_ticket profile parameter is set to a value different to 0."
+            "Make sure the GETSSO2 connection parameter is set and the login/create_sso2_ticket profile parameter is set to a value different to 0."
         );
 
         RETURN_NULL();
