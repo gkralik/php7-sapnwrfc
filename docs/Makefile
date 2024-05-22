@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
-SPHINXPROJ    = php7-sapnwrfc
+SPHINXPROJ    = php-sapnwrfc
 SOURCEDIR     = .
 BUILDDIR      = _build
 

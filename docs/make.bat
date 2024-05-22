@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=php7-sapnwrfc
+set SPHINXPROJ=php-sapnwrfc
 
 if "%1" == "" goto help
 
