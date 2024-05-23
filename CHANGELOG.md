@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 Possibly breaking changes are marked with **BC break**.
 
 ## [Unreleased]
+### Fixed
+- Throw `FunctionCallException` when connection closed in `RemoteFunction::setParameterActive()`, `RemoteFunction::isParameterActive()`
 
 
 ## [2.1.0] - 2024-05-21

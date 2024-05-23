@@ -1011,20 +1011,28 @@ PHP_METHOD(RemoteFunction, invoke)
 PHP_METHOD(RemoteFunction, setParameterActive)
 {
     sapnwrfc_function_object *intern;
-    zend_error_handling zeh;
+
     zend_string *parameter_name;
     zend_bool parameter_active;
+
+    RFC_RC rc;
+    RFC_ERROR_INFO error_info;
+    int is_valid;
     zval tmp;
 
-    zend_replace_error_handling(EH_THROW, NULL, &zeh);
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "Sb", &parameter_name, &parameter_active) == FAILURE) {
-        zend_restore_error_handling(&zeh);
-
-        return;
-    }
-    zend_restore_error_handling(&zeh);
+    ZEND_PARSE_PARAMETERS_START(2, 2)
+        Z_PARAM_STR(parameter_name)
+        Z_PARAM_BOOL(parameter_active)
+    ZEND_PARSE_PARAMETERS_END();
 
     intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
+
+    rc = RfcIsConnectionHandleValid(intern->rfc_handle, &is_valid, &error_info);
+    if (rc != RFC_OK || is_valid == 0) {
+        sapnwrfc_throw_function_exception_ex("Failed to set status of parameter %s: connection closed.", ZSTR_VAL(parameter_name));
+
+        RETURN_NULL();
+    }
 
     ZVAL_BOOL(&tmp, parameter_active);
     zend_hash_update(intern->parameter_status, parameter_name, &tmp);
@@ -1033,24 +1041,31 @@ PHP_METHOD(RemoteFunction, setParameterActive)
 PHP_METHOD(RemoteFunction, isParameterActive)
 {
     sapnwrfc_function_object *intern;
-    zend_error_handling zeh;
+
     zend_string *parameter_name;
+
+    RFC_RC rc;
+    RFC_ERROR_INFO error_info;
+    int is_valid;
     zval *tmp;
 
-    zend_replace_error_handling(EH_THROW, NULL, NULL);
-    if (zend_parse_parameters(ZEND_NUM_ARGS(), "S", &parameter_name) == FAILURE) {
-        zend_restore_error_handling(&zeh);
-
-        return;
-    }
-    zend_restore_error_handling(&zeh);
+    ZEND_PARSE_PARAMETERS_START(1, 1)
+        Z_PARAM_STR(parameter_name)
+    ZEND_PARSE_PARAMETERS_END();
 
     intern = SAPNWRFC_FUNCTION_OBJ_P(getThis());
+
+    rc = RfcIsConnectionHandleValid(intern->rfc_handle, &is_valid, &error_info);
+    if (rc != RFC_OK || is_valid == 0) {
+        sapnwrfc_throw_function_exception_ex("Failed to set status of parameter %s: connection closed.", ZSTR_VAL(parameter_name));
+
+        RETURN_NULL();
+    }
 
     tmp = zend_hash_find(intern->parameter_status, parameter_name);
 
     if(tmp == NULL) {
-        zend_throw_exception_ex(sapnwrfc_function_exception_ce, 0, "Failed to get status for parameter %s: invalid parameter name", ZSTR_VAL(parameter_name));
+        sapnwrfc_throw_function_exception_ex("Failed to get status for parameter %s: parameter not found", ZSTR_VAL(parameter_name));
 
         RETURN_NULL();
     }

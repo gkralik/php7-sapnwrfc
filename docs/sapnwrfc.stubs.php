@@ -257,7 +257,7 @@ class RemoteFunction
      * @param string $parameterName The parameter to modify.
      * @param bool   $isActive      True to activate the parameter, false to deactivate.
      *
-     * @throws FunctionCallException if the parameter status could not be set.
+     * @throws FunctionCallException if the parameter status could not be set or the connection is already closed.
      */
     public function setParameterActive(string $parameterName, bool $isActive): void {}
 
@@ -267,6 +267,7 @@ class RemoteFunction
      * @param string $parameterName The parameter to check.
      *
      * @return bool True if parameter is active, false if not.
+     * @throws FunctionCallException if the connection is already closed.
      */
     public function isParameterActive(string $parameterName): bool {}
 

@@ -11,7 +11,7 @@ $config = require(__DIR__ . '/sapnwrfc.config.inc');
 $c = new \SAPNWRFC\Connection($config);
 
 try {
-    $f = $c->getFunction('RFC_STRUCTURE');
+    $f = $c->getFunction('STFC_STRUCTURE');
     $c->close();
     $f->setParameterActive('IMPORTSTRUCT', false);
     echo "fail";
