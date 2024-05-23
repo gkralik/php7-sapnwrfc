@@ -1,6 +1,6 @@
 .deps
 .libs/
-.vagrant/
+.venv/
 Makefile
 Makefile.fragments
 Makefile.global
